@@ -42,6 +42,7 @@
 		59B5C27A250EB6600056F0EC /* RantModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B5C279250EB6600056F0EC /* RantModel.swift */; };
 		59EA61A125259F0D0084E712 /* RantFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59EA61A025259F0D0084E712 /* RantFeed.swift */; };
 		59EA62172525FA8F0084E712 /* RantInFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59EA62162525FA8F0084E712 /* RantInFeedView.swift */; };
+		59EA621F25265B9D0084E712 /* WrapStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59EA621E25265B9D0084E712 /* WrapStack.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -80,6 +81,7 @@
 		59B5C279250EB6600056F0EC /* RantModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RantModel.swift; sourceTree = "<group>"; };
 		59EA61A025259F0D0084E712 /* RantFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RantFeed.swift; sourceTree = "<group>"; };
 		59EA62162525FA8F0084E712 /* RantInFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RantInFeedView.swift; sourceTree = "<group>"; };
+		59EA621E25265B9D0084E712 /* WrapStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrapStack.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +133,7 @@
 				5948D92E250E6EA000373317 /* UndismissableSheet.swift */,
 				599420DA250F4AC50044565A /* ColorFromHexString.swift */,
 				5903172F2524B9CF00CA9E99 /* ParallaxScrollViewPort.swift */,
+				59EA621E25265B9D0084E712 /* WrapStack.swift */,
 				5948D921250E6D4700373317 /* Assets.xcassets */,
 				5948D926250E6D4700373317 /* Info.plist */,
 				5948D923250E6D4700373317 /* Preview Content */,
@@ -284,6 +287,7 @@
 				5999E0EE251E4F160096470D /* Profile.swift in Sources */,
 				59EA61A125259F0D0084E712 /* RantFeed.swift in Sources */,
 				5948D91E250E6D4200373317 /* devRantAvatarEditorApp.swift in Sources */,
+				59EA621F25265B9D0084E712 /* WrapStack.swift in Sources */,
 				59EA62172525FA8F0084E712 /* RantInFeedView.swift in Sources */,
 				5903172A2524A06B00CA9E99 /* View+hideNavigationBarWithoutLosingSwipeBack.swift in Sources */,
 				598FDA552510AADC00ED2C13 /* CollectionDetailView.swift in Sources */,

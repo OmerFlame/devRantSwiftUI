@@ -16,7 +16,61 @@ enum TestEnum: String, CaseIterable {
 }
 
 struct RantInFeedView: View {
+    @State private var totalHeight = CGFloat.zero
+    
     @State var rantContents: RantInFeed
+    
+    private func viewHeightReader(_ binding: Binding<CGFloat>) -> some View {
+        return GeometryReader { geometry -> Color in
+            let rect = geometry.frame(in: .local)
+            DispatchQueue.main.async {
+                binding.wrappedValue = rect.size.height
+            }
+            return .clear
+        }
+    }
+    
+    func item(for text: String) -> some View {
+        Text(text)
+            .padding(.all, 5)
+            .font(.footnote)
+            .background(Color(UIColor(hex: self.rantContents.user_avatar.b)!))
+            .foregroundColor(Color.white)
+            .cornerRadius(5)
+    }
+    
+    private func generateContent(in g: GeometryProxy) -> some View {
+        var width = CGFloat.zero
+        var height = CGFloat.zero
+
+        return ZStack(alignment: .topLeading) {
+            ForEach(self.rantContents.tags, id: \.self) { item in
+                self.item(for: item)
+                    .padding([.horizontal, .vertical], 2)
+                    .alignmentGuide(.leading, computeValue: { d in
+                        if (abs(width - d.width) > g.size.width)
+                        {
+                            width = 0
+                            height -= d.height
+                        }
+                        let result = width
+                        if item == self.rantContents.tags.last! {
+                            width = 0 //last item
+                        } else {
+                            width -= d.width
+                        }
+                        return result
+                    })
+                    .alignmentGuide(.top, computeValue: {d in
+                        let result = height
+                        if item == self.rantContents.tags.last! {
+                            height = 0 // last item
+                        }
+                        return result
+                    })
+                }
+        }
+    }
     
     var body: some View {
         HStack {
@@ -24,7 +78,7 @@ struct RantInFeedView: View {
                 HStack(alignment: .top) { // START MAIN HSTACK
                     VStack { // UPVOTE / DOWNVOTE VSTACK
                         Button(action: {}, label: {
-                                if self.rantContents.vote_state == 1 {
+                            if self.rantContents.vote_state == 1 {
                                 Image(systemName: "plus.circle.fill").font(.system(size: 25)).accentColor(Color(UIColor(hex: self.rantContents.user_avatar.b)!))
                             } else if self.rantContents.vote_state == 0 {
                                 Image(systemName: "plus.circle.fill").accentColor(.gray).font(.system(size: 25))
@@ -44,39 +98,21 @@ struct RantInFeedView: View {
                         })
                     } // END UPVOTE / DOWNVOTE VSTACK
                     
-                    VStack(alignment: .leading) {
+                    
+                    VStack {
                         HStack {
                             Text(self.rantContents.text)
-                                .fixedSize(horizontal: false, vertical: true)
+                                .padding(.trailing)
                             
                             Spacer()
                         }
                         
-                        VStack(alignment: .leading) {
-                            HStack {
-                                ForEach(self.rantContents.tags, id: \.self) { tag in
-                                    
-                                    HStack {
-                                        Text(tag).font(.footnote).underline().padding(.trailing).fixedSize(horizontal: false, vertical: true)
-                                            .scaledToFit()
-                                        //Spacer()
-                                    }
-                                    //Spacer()
-                                }
-                            }
-                        }.padding(.bottom)
-                        .padding(.top, 5)
-                        .scaledToFit()
+                        VStack {
+                            TagCloudView(tags: self.rantContents.tags)
+                        }
                     }
-                    
-                    
-                }.padding(.leading)
-                
-                Divider()
-                    .padding(.bottom)
-            }.padding(.top)
-            
-            Spacer()
+                }.padding([.top, .leading])
+            }
         } // END MAIN HSTACK
     }
 }
@@ -93,7 +129,7 @@ struct RantInFeedView_Previews: PreviewProvider {
                                                     height: 1000
                                                  )),
                                                 num_comments: 1,
-                                                tags: ["undefinedjfjfjfjfjffjfjffjfjfjfjffjfjfj", "linusgh", "torvalds", "mugg"],
+                                                tags: ["undefined", "linusgh", "torvalds", "mug"],
                                                 vote_state: 0,
                                                 edited: false,
                                                 link: "rants/327111/my-girlfriend-got-me-this-mug-shes-the-one",
