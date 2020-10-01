@@ -112,6 +112,8 @@ struct RantInFeedView: View {
                         }
                     }
                 }.padding([.top, .leading])
+                
+                Divider()
             }
         } // END MAIN HSTACK
     }

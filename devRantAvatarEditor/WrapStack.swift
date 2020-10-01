@@ -60,7 +60,7 @@ struct TagCloudView: View {
     private func item(for text: String) -> some View {
         Text(text)
             .padding(.all, 5)
-            .font(.body)
+            .font(.footnote)
             .background(Color.blue)
             .foregroundColor(Color.white)
             .cornerRadius(5)
