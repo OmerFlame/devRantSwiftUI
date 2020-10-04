@@ -41,8 +41,8 @@ struct RantFeed: Codable {
     let wrw: Int
     let dpp: Int?
     
-    let num_notifs: Int
-    let unread: RantFeedUnread
+    let num_notifs: Int?
+    let unread: RantFeedUnread?
     let news: RantFeedNews?
     
     private enum CodingKeys: String, CodingKey {
@@ -65,8 +65,8 @@ struct RantFeed: Codable {
         set = try values.decode(String.self, forKey: .set)
         wrw = try values.decode(Int.self, forKey: .wrw)
         dpp = try? values.decode(Int.self, forKey: .dpp)
-        num_notifs = try values.decode(Int.self, forKey: .num_notifs)
-        unread = try values.decode(RantFeedUnread.self, forKey: .unread)
+        num_notifs = try? values.decode(Int.self, forKey: .num_notifs)
+        unread = try? values.decode(RantFeedUnread.self, forKey: .unread)
         news = try? values.decode(RantFeedNews.self, forKey: .news)
     }
 }
