@@ -40,6 +40,10 @@
 		59B5C274250E78A90056F0EC /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B5C273250E78A90056F0EC /* User.swift */; };
 		59B5C277250EB1CD0056F0EC /* Rant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B5C276250EB1CD0056F0EC /* Rant.swift */; };
 		59B5C27A250EB6600056F0EC /* RantModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B5C279250EB6600056F0EC /* RantModel.swift */; };
+		59B85B2E25345BAB00B2CAC9 /* QuickLook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B85B2D25345BAB00B2CAC9 /* QuickLook.swift */; };
+		59B85B3125345BD500B2CAC9 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B85B3025345BD500B2CAC9 /* File.swift */; };
+		59B85B342534629000B2CAC9 /* FileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B85B332534629000B2CAC9 /* FileCell.swift */; };
+		59D822CB2534EBD70015E2D5 /* RantResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D822CA2534EBD70015E2D5 /* RantResponse.swift */; };
 		59EA61A125259F0D0084E712 /* RantFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59EA61A025259F0D0084E712 /* RantFeed.swift */; };
 		59EA62172525FA8F0084E712 /* RantInFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59EA62162525FA8F0084E712 /* RantInFeedView.swift */; };
 		59EA621F25265B9D0084E712 /* WrapStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59EA621E25265B9D0084E712 /* WrapStack.swift */; };
@@ -79,6 +83,10 @@
 		59B5C273250E78A90056F0EC /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		59B5C276250EB1CD0056F0EC /* Rant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rant.swift; sourceTree = "<group>"; };
 		59B5C279250EB6600056F0EC /* RantModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RantModel.swift; sourceTree = "<group>"; };
+		59B85B2D25345BAB00B2CAC9 /* QuickLook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickLook.swift; sourceTree = "<group>"; };
+		59B85B3025345BD500B2CAC9 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		59B85B332534629000B2CAC9 /* FileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCell.swift; sourceTree = "<group>"; };
+		59D822CA2534EBD70015E2D5 /* RantResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RantResponse.swift; sourceTree = "<group>"; };
 		59EA61A025259F0D0084E712 /* RantFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RantFeed.swift; sourceTree = "<group>"; };
 		59EA62162525FA8F0084E712 /* RantInFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RantInFeedView.swift; sourceTree = "<group>"; };
 		59EA621E25265B9D0084E712 /* WrapStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrapStack.swift; sourceTree = "<group>"; };
@@ -185,9 +193,11 @@
 				598FDA532510AACD00ED2C13 /* Collection */,
 				59B5C276250EB1CD0056F0EC /* Rant.swift */,
 				598FDA4E251092F100ED2C13 /* CollectionView.swift */,
-				59627A4B250F9B3B00233F48 /* Comment.swift */,
 				597EC1B925100BE800EB42C6 /* GeometryContainer.swift */,
 				59EA62162525FA8F0084E712 /* RantInFeedView.swift */,
+				59627A4B250F9B3B00233F48 /* Comment.swift */,
+				59B85B2D25345BAB00B2CAC9 /* QuickLook.swift */,
+				59B85B332534629000B2CAC9 /* FileCell.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -200,6 +210,8 @@
 				5999E0ED251E4F160096470D /* Profile.swift */,
 				5999E0F0251E50180096470D /* RantInFeed.swift */,
 				59EA61A025259F0D0084E712 /* RantFeed.swift */,
+				59B85B3025345BD500B2CAC9 /* File.swift */,
+				59D822CA2534EBD70015E2D5 /* RantResponse.swift */,
 			);
 			path = "Data Structures";
 			sourceTree = "<group>";
@@ -284,12 +296,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				5948D920250E6D4200373317 /* ContentView.swift in Sources */,
+				59B85B342534629000B2CAC9 /* FileCell.swift in Sources */,
 				5999E0EE251E4F160096470D /* Profile.swift in Sources */,
 				59EA61A125259F0D0084E712 /* RantFeed.swift in Sources */,
 				5948D91E250E6D4200373317 /* devRantAvatarEditorApp.swift in Sources */,
 				59EA621F25265B9D0084E712 /* WrapStack.swift in Sources */,
 				59EA62172525FA8F0084E712 /* RantInFeedView.swift in Sources */,
 				5903172A2524A06B00CA9E99 /* View+hideNavigationBarWithoutLosingSwipeBack.swift in Sources */,
+				59D822CB2534EBD70015E2D5 /* RantResponse.swift in Sources */,
 				598FDA552510AADC00ED2C13 /* CollectionDetailView.swift in Sources */,
 				598FDA522510A9A200ED2C13 /* View+Extension.swift in Sources */,
 				598FDA5A2510AF3500ED2C13 /* CollectionViewLayout.swift in Sources */,
@@ -311,8 +325,10 @@
 				599420DB250F4AC50044565A /* ColorFromHexString.swift in Sources */,
 				59627A4A250F925A00233F48 /* CommentModel.swift in Sources */,
 				59627A4E250FA4C100233F48 /* RantView.swift in Sources */,
+				59B85B2E25345BAB00B2CAC9 /* QuickLook.swift in Sources */,
 				5903172D2524A15700CA9E99 /* View+navigationAllowSwipeBackWhenHidden.swift in Sources */,
 				598FDA572510AB5700ED2C13 /* SwiftUICollectionView.swift in Sources */,
+				59B85B3125345BD500B2CAC9 /* File.swift in Sources */,
 				59B5C274250E78A90056F0EC /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -447,7 +463,8 @@
 				DEVELOPMENT_TEAM = 666F768P5J;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = devRantAvatarEditor/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -471,7 +488,8 @@
 				DEVELOPMENT_TEAM = 666F768P5J;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = devRantAvatarEditor/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

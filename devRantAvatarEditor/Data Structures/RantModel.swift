@@ -10,16 +10,6 @@ import Foundation
 public struct RantModel: Codable, Identifiable {
     public let uuid = UUID()
     
-    public struct Link: Codable {
-        let type: String
-        let url: String
-        let short_url: String
-        let title: String
-        let start: Int
-        let end: Int
-        let special: Int
-    }
-    
     
     public let id: Int
     let text: String
@@ -27,7 +17,7 @@ public struct RantModel: Codable, Identifiable {
     
     let created_time: Int
     
-    let attached_image: Polytype
+    let attached_image: AttachedImage?
     
     let num_comments: Int
     
@@ -61,7 +51,7 @@ public struct RantModel: Codable, Identifiable {
     
     let user_dpp: Int?
     
-    let comments: [CommentModel?]
+    let comments: [CommentModel]?
     
     enum CodingKeys: String, CodingKey {
         case id,
@@ -90,6 +80,91 @@ public struct RantModel: Codable, Identifiable {
              user_avatar_lg,
              user_dpp,
              comments
+    }
+    
+    init(id: Int,
+         text: String,
+         score: Int,
+         created_time: Int,
+         attached_image: AttachedImage?,
+         num_comments: Int,
+         tags: [String],
+         vote_state: Int,
+         edited: Bool,
+         link: String?,
+         rt: Int,
+         rc: Int,
+         links: [Link]?,
+         special: Int?,
+         c_type_long: String?,
+         c_description: String?,
+         c_tech_stack: String?,
+         c_team_size: String?,
+         c_url: String?,
+         user_id: Int,
+         user_username: String,
+         user_score: Int,
+         user_avatar: UserAvatar,
+         user_avatar_lg: UserAvatar,
+         user_dpp: Int?,
+         comments: [CommentModel]?) {
+        
+        self.id = id
+        self.text = text
+        self.score = score
+        self.created_time = created_time
+        self.attached_image = attached_image
+        self.num_comments = num_comments
+        self.tags = tags
+        self.vote_state = vote_state
+        self.edited = edited
+        self.link = link
+        self.rt = rt
+        self.rc = rc
+        self.links = links
+        self.special = special
+        self.c_type_long = c_type_long
+        self.c_description = c_description
+        self.c_tech_stack = c_tech_stack
+        self.c_team_size = c_team_size
+        self.c_url = c_url
+        self.user_id = user_id
+        self.user_username = user_username
+        self.user_score = user_score
+        self.user_avatar = user_avatar
+        self.user_avatar_lg = user_avatar_lg
+        self.user_dpp = user_dpp
+        self.comments = comments
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        id = try values.decode(Int.self, forKey: .id)
+        text = try values.decode(String.self, forKey: .text)
+        score = try values.decode(Int.self, forKey: .score)
+        created_time = try values.decode(Int.self, forKey: .created_time)
+        attached_image = try? values.decode(AttachedImage.self, forKey: .attached_image)
+        num_comments = try values.decode(Int.self, forKey: .num_comments)
+        tags = try values.decode([String].self, forKey: .tags)
+        vote_state = try values.decode(Int.self, forKey: .vote_state)
+        edited = try values.decode(Bool.self, forKey: .edited)
+        link = try? values.decode(String.self, forKey: .link)
+        rt = try values.decode(Int.self, forKey: .rt)
+        rc = try values.decode(Int.self, forKey: .rc)
+        links = try? values.decode([Link].self, forKey: .links)
+        special = try? values.decode(Int.self, forKey: .special)
+        c_type_long = try? values.decode(String.self, forKey: .c_type_long)
+        c_description = try? values.decode(String.self, forKey: .c_description)
+        c_tech_stack = try? values.decode(String.self, forKey: .c_tech_stack)
+        c_team_size = try? values.decode(String.self, forKey: .c_team_size)
+        c_url = try? values.decode(String.self, forKey: .c_url)
+        user_id = try values.decode(Int.self, forKey: .user_id)
+        user_username = try values.decode(String.self, forKey: .user_username)
+        user_score = try values.decode(Int.self, forKey: .user_score)
+        user_avatar = try values.decodeIfPresent(UserAvatar.self, forKey: .user_avatar)!
+        user_avatar_lg = try values.decode(UserAvatar.self, forKey: .user_avatar_lg)
+        user_dpp = try? values.decode(Int.self, forKey: .user_dpp)
+        comments = try? values.decode([CommentModel].self, forKey: .comments)
     }
 }
 
@@ -133,4 +208,14 @@ struct AttachedImage: Codable {
 struct UserAvatar: Codable {
     let b: String
     let i: String?
+}
+
+public struct Link: Codable {
+    let type: String
+    let url: String
+    let short_url: String
+    let title: String
+    let start: Int
+    let end: Int
+    let special: Int
 }

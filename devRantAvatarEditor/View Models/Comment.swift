@@ -59,7 +59,7 @@ public struct Comment: View {
                                     
                             ZStack(alignment: .leading) {
                                     RoundedRectangle(cornerRadius: 5).fill(self.highlightColor)
-                                Text("+" + String(self.commentContents.score)).colorInvert().padding(.init(top: 2.5, leading: 5, bottom: 2.5, trailing: 5)).font(.caption)
+                                Text("+" + String(self.commentContents.user_score)).colorInvert().padding(.init(top: 2.5, leading: 5, bottom: 2.5, trailing: 5)).font(.caption)
                             }.fixedSize()
                                     
                         }.scaledToFit()
@@ -98,25 +98,8 @@ public struct Comment: View {
             }.padding([]) // END VSTACK
                     
             Spacer()
-        }.padding([.top, .leading]).fixedSize(horizontal: false, vertical: true)//.padding([.leading])
+        }.padding([.leading]).fixedSize(horizontal: false, vertical: true)//.padding([.leading])
         //.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
                 
-    }
-}
-
-struct Comment_Previews: PreviewProvider {
-    static var previews: some View {
-        Comment(highlightColor: Color(UIColor(hex: "d55161")!), commentContents: CommentModel(id: 327120,
-                                                                         rant_id: 327111,
-                                                                         body: "Wow its picture where torvalds show fuck off to nvidia cool",
-                                                                         score: 8,
-                                                                         created_time: 1481230451,
-                                                                         vote_state: 0,
-                                                                         user_id: 19218,
-                                                                         user_username: "Haxk20",
-                                                                         user_avatar: UserAvatar(
-                                                                             b: "7bc8a4",
-                                                                             i: "v-37_c-3_b-1_g-m_9-2_1-2_16-14_3-3_8-3_7-3_5-4_12-2_6-3_10-1_2-109_22-1_18-4_19-5_4-4_20-15_21-4.jpg"
-                                                                         )))
     }
 }

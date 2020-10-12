@@ -108,7 +108,7 @@ struct RantInFeedView: View {
                         }
                         
                         VStack {
-                            TagCloudView(tags: self.rantContents.tags)
+                            TagCloudView(tags: self.rantContents.tags, color: Color.blue)
                         }
                     }
                 }.padding([.top, .leading])

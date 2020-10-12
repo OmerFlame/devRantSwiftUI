@@ -112,7 +112,7 @@ class APIRequest {
             logIn(username: UserDefaults.standard.string(forKey: "Username")!, password: UserDefaults.standard.string(forKey: "Password")!)
         }
         
-        var extractedCredentials: RantFeed?
+        var extractedData: RantFeed?
         
         self.resourceURL = URL(string: "https://devrant.com/api/devrant/rants?app=3&token_id=\(String(UserDefaults.standard.integer(forKey: "TokenID")))&token_key=\(UserDefaults.standard.string(forKey: "TokenKey")!)&user_id=\(String(UserDefaults.standard.integer(forKey: "UserID")))&range=week&limit=20")
         self.request = URLRequest(url: self.resourceURL)
@@ -136,29 +136,56 @@ class APIRequest {
                     
                     let decoder = JSONDecoder()
                     
-                    extractedCredentials = try! decoder.decode(RantFeed.self, from: dataFromString!)
+                    extractedData = try! decoder.decode(RantFeed.self, from: dataFromString!)
                     completionSemaphore.signal()
                 }
             }
         }
         
-        /*defer {
-            completionSemaphore.wait()
-            let dataFromString = receivedRawJSON.data(using: .utf8)
-            
-            let decoder = JSONDecoder()
-            
-            do {
-                extractedCredentials = try decoder.decode(RantFeed.self, from: dataFromString!)
-                print("SUCCESS")
-            } catch let error {
-                print("ERROR: \(error.localizedDescription)")
+        task.resume()
+        
+        completionSemaphore.wait()
+        return extractedData!
+    }
+    
+    func getRantFromID(id: Int) throws -> RantResponse? {
+        self.resourceURL = URL(string: "https://devrant.com/api/devrant/rants/\(String(id))?app=3")
+        self.request = URLRequest(url: self.resourceURL)
+        request.httpMethod = "GET"
+        request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        
+        let completionSemaphore = DispatchSemaphore(value: 0)
+        var receivedRawJSON = String()
+        
+        var extractedData: RantResponse?
+        
+        let task = URLSession.shared.dataTask(with: self.request) { data, response, error in
+            if response != nil {
+                if let data = data, let body = String(data: data, encoding: .utf8) {
+                    receivedRawJSON = body
+                    
+                    print(body)
+                    
+                    completionSemaphore.signal()
+                }
             }
-        }*/
+        }
         
         task.resume()
         
         completionSemaphore.wait()
-        return extractedCredentials!
+        
+        let decoder = JSONDecoder()
+        let dataFromString = receivedRawJSON.data(using: .utf8)
+        
+        do {
+            extractedData = try decoder.decode(RantResponse.self, from: dataFromString!)
+            
+            return extractedData!
+        } catch let error {
+            print(error.localizedDescription)
+            
+            throw APIError.decodingError
+        }
     }
 }

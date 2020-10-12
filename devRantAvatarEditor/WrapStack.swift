@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TagCloudView: View {
     var tags: [String]
+    var color: Color
 
     @State private var totalHeight
           //= CGFloat.zero       // << variant for ScrollView/List
@@ -17,20 +18,20 @@ struct TagCloudView: View {
     var body: some View {
         VStack {
             GeometryReader { geometry in
-                self.generateContent(in: geometry)
+                self.generateContent(in: geometry, color: self.color)
             }
         }
         .frame(height: totalHeight)// << variant for ScrollView/List
         //.frame(maxHeight: totalHeight) // << variant for VStack
     }
 
-    private func generateContent(in g: GeometryProxy) -> some View {
+    private func generateContent(in g: GeometryProxy, color: Color) -> some View {
         var width = CGFloat.zero
         var height = CGFloat.zero
 
         return ZStack(alignment: .topLeading) {
             ForEach(self.tags, id: \.self) { tag in
-                self.item(for: tag)
+                self.item(for: tag, color: color)
                     .padding([.horizontal, .vertical], 4)
                     .alignmentGuide(.leading, computeValue: { d in
                         if (abs(width - d.width) > g.size.width)
@@ -57,11 +58,11 @@ struct TagCloudView: View {
         }.background(viewHeightReader($totalHeight))
     }
 
-    private func item(for text: String) -> some View {
+    private func item(for text: String, color: Color) -> some View {
         Text(text)
             .padding(.all, 5)
             .font(.footnote)
-            .background(Color.blue)
+            .background(color)
             .foregroundColor(Color.white)
             .cornerRadius(5)
     }
@@ -81,7 +82,7 @@ struct TestTagCloudView : View {
     var body: some View {
         VStack {
             //Text("Header").font(.largeTitle)
-            TagCloudView(tags: ["undefined", "linusgh", "torvalds", "mug", "test", "test 2"])
+            TagCloudView(tags: ["undefined", "linusgh", "torvalds", "mug", "test", "test 2"], color: Color.red)
             //Text("Some other text")
             //Divider()
             //Text("Some other cloud")

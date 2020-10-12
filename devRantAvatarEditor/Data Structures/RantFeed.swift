@@ -70,3 +70,4 @@ struct RantFeed: Codable {
         news = try? values.decode(RantFeedNews.self, forKey: .news)
     }
 }
+
