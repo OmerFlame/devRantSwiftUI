@@ -20,7 +20,7 @@ class FileCell: UICollectionViewCell {
         
         super.init(frame: .infinite)
         
-        self.contentMode = .left
+        self.contentMode = .center
         self.isOpaque = false
         self.clipsToBounds = true
         self.autoresizesSubviews = true
@@ -45,8 +45,8 @@ class FileCell: UICollectionViewCell {
         
         contentView.addSubview(thumbnailImageView!)
         
-        thumbnailImageView?.layer.cornerCurve = .continuous
-        thumbnailImageView?.layer.cornerRadius = 15
+        //thumbnailImageView?.layer.cornerCurve = .continuous
+        //thumbnailImageView?.layer.cornerRadius = 15
         //thumbnailImageView?.layer.borderColor = UIColor.systemBlue.cgColor
         //thumbnailImageView?.layer.borderWidth = 10
     }
@@ -64,8 +64,8 @@ class FileCell: UICollectionViewCell {
                 self?.thumbnailImageView!.image = image
                 
                 self?.thumbnailImageView?.frame.size = CGSize(
-                    width: file.size!.width / 2,
-                    height: file.size!.height / 2)
+                    width: file.size!.width,
+                    height: file.size!.height)
             }
         }
         

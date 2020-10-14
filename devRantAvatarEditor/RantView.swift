@@ -50,20 +50,49 @@ struct RantView: View {
             ScrollView {
                 VStack(alignment: .leading) {
                     Rant(rantContents: (self.rant?.rant)!)
+                        .padding([.trailing])
+                        //.fixedSize(horizontal: false, vertical: true)
                 
                     ForEach((self.rant?.comments)!) { comment in
                         Comment(highlightColor: Color(UIColor(hex: comment.user_avatar.b)!), commentContents: comment)
                             .frame(alignment: .topLeading)
-                            .padding([.leading, .trailing])
+                            .padding([.trailing])
                     }
+                    
+                    let attachedImage = AttachedImage(
+                        url: "https://img.devrant.com/devrant/rant/r_3240155_Re4L3.jpg",
+                        width: 491,
+                        height: 487
+                    )
+                    let files = File.loadFiles(images: [attachedImage])
+                    let resizeMultiplier: CGFloat = getImageResizeMultiplier(imageWidth: files[0].size!.width, imageHeight: files[0].size!.height, multiplier: 1)
+                    let finalWidth = files[0].size!.width / resizeMultiplier
+                    let finalHeight = files[0].size!.height / resizeMultiplier
+                    
+                    UIPreviewViewRepresentable(images: [attachedImage])
+                        .frame(width: finalWidth, height: finalHeight)
+                        .background(Color(UIColor.systemBackground))
                 }
+                //.padding(.leading)
             }
+            .navigationBarTitle("Rant by \((self.rant?.rant.user_username)!)")
+            .onAppear {
+                print("View appeared!")
+            }
+        }
+    }
+    
+    private func getImageResizeMultiplier(imageWidth: CGFloat, imageHeight: CGFloat, multiplier: Int) -> CGFloat {
+        if imageWidth / CGFloat(multiplier) < UIScreen.main.bounds.width && imageHeight / CGFloat(multiplier) < UIScreen.main.bounds.height {
+            return CGFloat(multiplier)
+        } else {
+            return getImageResizeMultiplier(imageWidth: imageWidth, imageHeight: imageHeight, multiplier: multiplier + 2)
         }
     }
 }
 
 struct RantView_Previews: PreviewProvider {
     static var previews: some View {
-        RantView(rantID: 327111, apiRequest: APIRequest(userIDUserDefaultsIdentifier: "UserID", tokenIDUserDefaultsIdentifier: "TokenID", tokenKeyUserDefaultsIdentifier: "TokenKey"))
+        RantView(rantID: 3240155, apiRequest: APIRequest(userIDUserDefaultsIdentifier: "UserID", tokenIDUserDefaultsIdentifier: "TokenID", tokenKeyUserDefaultsIdentifier: "TokenKey"))
     }
 }

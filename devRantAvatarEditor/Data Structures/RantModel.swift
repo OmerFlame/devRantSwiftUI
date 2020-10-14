@@ -143,7 +143,13 @@ public struct RantModel: Codable, Identifiable {
         text = try values.decode(String.self, forKey: .text)
         score = try values.decode(Int.self, forKey: .score)
         created_time = try values.decode(Int.self, forKey: .created_time)
-        attached_image = try? values.decode(AttachedImage.self, forKey: .attached_image)
+        
+        do {
+            attached_image = try values.decode(AttachedImage.self, forKey: .attached_image)
+        } catch {
+            attached_image = nil
+        }
+        
         num_comments = try values.decode(Int.self, forKey: .num_comments)
         tags = try values.decode([String].self, forKey: .tags)
         vote_state = try values.decode(Int.self, forKey: .vote_state)

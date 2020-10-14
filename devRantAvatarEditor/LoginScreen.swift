@@ -72,11 +72,12 @@ struct LoginScreen: View {
 }
 
 /*struct LoginScreen_Previews: PreviewProvider {
+    
     static var previews: some View {
-        LoginScreen()
+        LoginScreen(showVar: <#Binding<Bool>#>, apiRequest: APIRequest(userIDUserDefaultsIdentifier: "UserID", tokenIDUserDefaultsIdentifier: "TokenID", tokenKeyUserDefaultsIdentifier: "TokenKey"))
     }
-}
-*/
+}*/
+
 
 class credentials: ObservableObject {
     @Published var userID = UserDefaults.standard.integer(forKey: "UserID")

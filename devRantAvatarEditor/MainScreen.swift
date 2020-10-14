@@ -72,8 +72,8 @@ struct MainScreen: View {
                                 label: {
                                     Text("Navigate")
                                 })
-                        }.navigationBarTitle(Text("devRant"))
-                        .navigationBarTitleDisplayMode(.inline)
+                        }.navigationBarTitle(Text("Home"))
+                        //.navigationBarTitleDisplayMode(.inline)
                         .toolbar {
                             ToolbarItem(placement: .primaryAction) {
                                 Menu(content: {

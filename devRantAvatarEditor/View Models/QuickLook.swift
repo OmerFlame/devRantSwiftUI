@@ -64,6 +64,8 @@ class UIPreviewView: UIViewController, UICollectionViewDelegate, UICollectionVie
         collectionView?.layer.cornerCurve = .continuous
         collectionView?.layer.cornerRadius = 15
         
+        collectionView?.isScrollEnabled = false
+        
         view.contentMode = .left
         
         collectionView?.dataSource = self
@@ -116,10 +118,10 @@ class UIPreviewView: UIViewController, UICollectionViewDelegate, UICollectionVie
     }
     
     private func getImageResizeMultiplier(imageWidth: CGFloat, imageHeight: CGFloat, multiplier: Int) -> CGFloat {
-        if imageWidth / CGFloat(multiplier) < 420.0 && imageHeight / CGFloat(multiplier) < 315.0 {
+        if imageWidth / CGFloat(multiplier) < UIScreen.main.bounds.width && imageHeight / CGFloat(multiplier) < UIScreen.main.bounds.size.height {
             return CGFloat(multiplier)
         } else {
-            return getImageResizeMultiplier(imageWidth: imageWidth, imageHeight: imageHeight, multiplier: multiplier + 1)
+            return getImageResizeMultiplier(imageWidth: imageWidth, imageHeight: imageHeight, multiplier: multiplier + 2)
         }
     }
     
@@ -131,7 +133,7 @@ class UIPreviewView: UIViewController, UICollectionViewDelegate, UICollectionVie
         tappedCell = collectionView.cellForItem(at: indexPath) as? FileCell
         
         quickLookViewController.currentPreviewItemIndex = indexPath.row
-        present(quickLookViewController, animated: true)
+        present(quickLookViewController, animated: false)
     }
 }
 
@@ -142,7 +144,7 @@ extension UIPreviewView: QLPreviewControllerDataSource {
     }
     
     func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
-        files[index]
+        files[index].previewItemURL as QLPreviewItem
     }
 }
 
@@ -206,13 +208,56 @@ struct QLView: View {
         
         UIPreviewViewRepresentable(images: [self.attachedImage])
             .frame(width: finalWidth, height: finalHeight)
+            .background(Color(UIColor.systemBackground))
     }
     
     private func getImageResizeMultiplier(imageWidth: CGFloat, imageHeight: CGFloat, multiplier: Int) -> CGFloat {
-        if imageWidth / CGFloat(multiplier) < 420.0 && imageHeight / CGFloat(multiplier) < 315.0 {
+        if imageWidth / CGFloat(multiplier) < UIScreen.main.bounds.width && imageHeight / CGFloat(multiplier) < UIScreen.main.bounds.height {
             return CGFloat(multiplier)
         } else {
-            return getImageResizeMultiplier(imageWidth: imageWidth, imageHeight: imageHeight, multiplier: multiplier + 1)
+            return getImageResizeMultiplier(imageWidth: imageWidth, imageHeight: imageHeight, multiplier: multiplier + 2)
+        }
+    }
+}
+
+struct SecondaryQLView: View {
+    let attachedImage: AttachedImage
+    
+    @State var url = URL(string: "")
+    
+    @State var pendingURL: URL
+    
+    //@State var fileCell = SecondaryFileCell()
+    
+    var body: some View {
+        let file = File.loadFiles(images: [self.attachedImage])[0]
+        //self.pendingURL = file.url
+        let resizeMultiplier: CGFloat = getImageResizeMultiplier(imageWidth: CGFloat(self.attachedImage.width!), imageHeight: CGFloat(self.attachedImage.height!), multiplier: 1)
+        let finalWidth = CGFloat(self.attachedImage.width!) / resizeMultiplier
+        let finalHeight = CGFloat(self.attachedImage.height!) / resizeMultiplier
+        
+        ThumbnailImageView(url: self.pendingURL, size: CGSize(width: finalWidth, height: finalHeight))
+            .foregroundColor(Color(UIColor.systemBackground))
+            .fixedSize(horizontal: false, vertical: true)
+            .scaledToFit()
+            .frame(width: finalWidth,
+                   height: finalHeight)
+            .quickLookPreview($url)
+            .onTapGesture {
+                self.url = self.pendingURL
+            }
+            .clipShape(RoundedRectangle(cornerRadius: 15))
+            .onAppear {
+                print(self.pendingURL.relativePath)
+            }
+            //.scaledToFill()
+    }
+    
+    private func getImageResizeMultiplier(imageWidth: CGFloat, imageHeight: CGFloat, multiplier: Int) -> CGFloat {
+        if imageWidth / CGFloat(multiplier) < UIScreen.main.bounds.width && imageHeight / CGFloat(multiplier) < UIScreen.main.bounds.height {
+            return CGFloat(multiplier)
+        } else {
+            return getImageResizeMultiplier(imageWidth: imageWidth, imageHeight: imageHeight, multiplier: multiplier + 2)
         }
     }
 }

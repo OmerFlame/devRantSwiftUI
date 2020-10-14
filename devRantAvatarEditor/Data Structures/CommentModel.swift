@@ -40,6 +40,35 @@ struct CommentModel: Codable, Identifiable {
              attached_image
     }
     
+    init(id: Int,
+         rant_id: Int,
+         body: String,
+         score: Int,
+         created_time: Int,
+         vote_state: Int,
+         links: [Link]?,
+         user_id: Int,
+         user_username: String,
+         user_score: Int,
+         user_avatar: UserAvatar,
+         user_dpp: Int?,
+         attached_image: AttachedImage?) {
+        
+        self.id = id
+        self.rant_id = rant_id
+        self.body = body
+        self.score = score
+        self.created_time = created_time
+        self.vote_state = vote_state
+        self.links = links
+        self.user_id = user_id
+        self.user_username = user_username
+        self.user_score = user_score
+        self.user_avatar = user_avatar
+        self.user_dpp = user_dpp
+        self.attached_image = attached_image
+    }
+    
     public init(decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         id = try values.decode(Int.self, forKey: .id)

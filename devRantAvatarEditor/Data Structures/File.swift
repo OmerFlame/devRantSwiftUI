@@ -8,13 +8,12 @@
 import UIKit
 import QuickLook
 
-class File: NSObject {
-    let url: URL
+struct File {
+    var url: URL
     var size: CGSize? = nil
     
     init(url: URL, size: CGSize) {
         self.url = url
-        super.init()
         self.size = size
     }
     
@@ -22,20 +21,19 @@ class File: NSObject {
         self.url = url
     }
     
+    init() {
+        self.url = URL(string: "")!
+    }
+    
     var name: String {
         "Picture"
     }
-}
-
-// MARK: - QLPreviewItem
-extension File: QLPreviewItem {
-    var previewItemURL: URL? {
+    
+    var previewItemURL: URL {
         url
     }
     
-    var previewItemTitle: String? {
-        "Picture"
-    }
+    var previewItemTitle = "Picture"
 }
 
 // MARK: - QuickLookThumbnailing
@@ -59,6 +57,52 @@ extension File {
                 print(error)
             }
         }
+    }
+    
+    func generateThumbnail(thumbnailSize: CGSize, completion: @escaping (UIImage) -> Void) {
+        let scale = UIScreen.main.scale
+        
+        let request = QLThumbnailGenerator.Request(
+            fileAt: url,
+            size: thumbnailSize,
+            scale: scale,
+            representationTypes: .all
+        )
+        
+        let generator = QLThumbnailGenerator.shared
+        generator.generateRepresentations(for: request) { thumbnail, _, error in
+            if let thumbnail = thumbnail {
+                completion(thumbnail.uiImage)
+            } else if let error = error {
+                print(error)
+            }
+        }
+    }
+    
+    func getThumbnail(size: CGSize) -> CGImage {
+        let completionSempaphore = DispatchSemaphore(value: 0)
+        
+        let scale = UIScreen.main.scale
+        
+        let request = QLThumbnailGenerator.Request(
+            fileAt: url,
+            size: size,
+            scale: scale,
+            representationTypes: .all)
+        
+        let generator = QLThumbnailGenerator.shared
+        
+        var finalThumbnail: CGImage? = nil
+        generator.generateRepresentations(for: request) { thumbnail, _, error in
+            if let thumbnail = thumbnail {
+                finalThumbnail = thumbnail.cgImage
+                
+                completionSempaphore.signal()
+            }
+        }
+        
+        completionSempaphore.wait()
+        return finalThumbnail!
     }
 }
 
@@ -92,9 +136,11 @@ extension File {
             
             var previewURL = FileManager.default.temporaryDirectory.appendingPathComponent(filename)
             try! receivedData?.write(to: previewURL, options: .atomic)
-            previewURL.hasHiddenExtension = true
+            //previewURL.hasHiddenExtension = true
             
-            finalArray.append(File(url: previewURL, size: CGSize(width: image.width!, height: image.height!)))
+            let finalFile = File(url: previewURL, size: CGSize(width: image.width!, height: image.height!))
+            
+            finalArray.append(finalFile)
             
             if idx == images.endIndex - 1 {
                 completionSemaphore.signal()

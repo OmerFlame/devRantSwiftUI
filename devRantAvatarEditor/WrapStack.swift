@@ -12,8 +12,8 @@ struct TagCloudView: View {
     var color: Color
 
     @State private var totalHeight
-          //= CGFloat.zero       // << variant for ScrollView/List
-        = CGFloat.infinity   // << variant for VStack
+          = CGFloat.zero       // << variant for ScrollView/List
+        //= CGFloat.infinity   // << variant for VStack
 
     var body: some View {
         VStack {
