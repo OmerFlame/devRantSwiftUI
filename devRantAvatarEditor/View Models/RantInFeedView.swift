@@ -8,13 +8,6 @@
 import SwiftUI
 import FancyScrollView
 
-enum TestEnum: String, CaseIterable {
-    case test1 = "Test 1"
-    case test2 = "Test 2"
-    case test3 = "Test 3"
-    case test4 = "Test 4"
-}
-
 struct RantInFeedView: View {
     @State private var totalHeight = CGFloat.zero
     
@@ -83,7 +76,7 @@ struct RantInFeedView: View {
                             } else if self.rantContents.vote_state == 0 {
                                 Image(systemName: "plus.circle.fill").accentColor(.gray).font(.system(size: 25))
                             } else {
-                                Image(systemName: "plus.circle.fill").disabled(true).font(.system(size: 25))
+                                Image(systemName: "plus.circle.fill").accentColor(.gray).font(.system(size: 25))
                             }
                         })
                         Text(String(self.rantContents.score)).font(.subheadline)
@@ -93,10 +86,10 @@ struct RantInFeedView: View {
                             } else if self.rantContents.vote_state == 0 {
                                 Image(systemName: "minus.circle.fill").accentColor(.gray).font(.system(size: 25))
                             } else {
-                                Image(systemName: "minus.circle.fill").disabled(true).font(.system(size: 25))
+                                Image(systemName: "minus.circle.fill").font(.system(size: 25))
                             }
                         })
-                    } // END UPVOTE / DOWNVOTE VSTACK
+                    }.disabled(self.rantContents.vote_state == -2) // END UPVOTE / DOWNVOTE VSTACK
                     
                     
                     VStack {
@@ -108,7 +101,7 @@ struct RantInFeedView: View {
                         }
                         
                         VStack {
-                            TagCloudView(tags: self.rantContents.tags, color: Color.blue)
+                            TagCloudView(tags: self.rantContents.tags, color: Color(UIColor(hex: self.rantContents.user_avatar.b)!))
                         }
                     }
                 }.padding([.top, .leading])

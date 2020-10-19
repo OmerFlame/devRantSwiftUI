@@ -7,102 +7,6 @@
 
 import SwiftUI
 
-/*public struct Comment: View {
-    
-    let highlightColor: Color
-    @State var commentContents: CommentModel
-        
-    public var body: some View {
-        HStack(alignment: .top) {
-            VStack {
-                Button(action: {}, label: {
-                    if self.commentContents.vote_state == 1 {
-                        Image(systemName: "plus.circle.fill").font(.system(size: 25)).accentColor(self.highlightColor)
-                    } else if self.commentContents.vote_state == 0 {
-                        Image(systemName: "plus.circle.fill").accentColor(.gray).font(.system(size: 25))
-                    } else {
-                        Image(systemName: "plus.circle.fill").disabled(true).font(.system(size: 25))
-                    }
-                })
-                Text(String(self.commentContents.score)).font(.subheadline)
-                Button(action: {}, label: {
-                    if self.commentContents.vote_state == -1 {
-                        Image(systemName: "minus.circle.fill").font(.system(size: 25)).accentColor(self.highlightColor)
-                    } else if self.commentContents.vote_state == 0 {
-                        Image(systemName: "minus.circle.fill").accentColor(.gray).font(.system(size: 25))
-                    } else {
-                        Image(systemName: "minus.circle.fill").disabled(true).font(.system(size: 25))
-                    }
-                })
-            }
-                    
-            //Spacer()
-                    
-            VStack(alignment: .leading) {
-                HStack {
-                    if self.commentContents.user_avatar.i == nil {
-                        let color = UIColor(hex: self.commentContents.user_avatar.b)
-                        
-                                
-                                
-                        Circle()
-                            .size(CGSize(width: 45, height: 45))
-                            .fill(Color(color!))
-                    } else {
-                        ImageView(withURL: "https://avatars.devrant.com/" + self.commentContents.user_avatar.i!, width: 45, height: 45)
-                                .clipShape(Circle())
-                                
-                        VStack(alignment: .leading, spacing: -1.0) {
-                            Text(self.commentContents.user_username).fixedSize().scaledToFit()
-                                    
-                            ZStack(alignment: .leading) {
-                                    RoundedRectangle(cornerRadius: 5).fill(self.highlightColor)
-                                Text("+" + String(self.commentContents.user_score)).colorInvert().padding(.init(top: 2.5, leading: 5, bottom: 2.5, trailing: 5)).font(.caption)
-                            }.fixedSize()
-                                    
-                        }.scaledToFit()
-                                
-                            //Spacer()
-                    }
-                            
-                        //Spacer()
-                            
-                }//.frame(width: geometry.size.width, alignment: .leading)
-                .scaledToFill()
-                        
-                        
-                        
-                VStack(alignment: .leading) {
-                    Text(self.commentContents.body)
-                        //.padding(.leading)
-                        .font(.body)
-                        //.lineLimit(100)
-                        .frame(minWidth: 0, maxWidth: .infinity)
-                        .fixedSize(horizontal: false, vertical: true)
-                        //.frame(alignment: .leading)
-                        //.scaledToFill()
-                        .layoutPriority(1)
-                            
-                            
-                            
-                        //.frame(alignment: .leading)
-                            
-                    //Spacer()
-                }.scaledToFit().frame(minWidth: 0, maxWidth: .infinity)
-                        
-                Divider()
-                        
-                //Spacer()
-            }.padding([]) // END VSTACK
-                    
-            Spacer()
-        }.padding([.leading]).fixedSize(horizontal: false, vertical: true)//.padding([.leading])
-        //.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                
-    }
-}
-*/
-
 public struct Comment: View {
     let highlightColor: Color
     @State var commentContents: CommentModel
@@ -137,47 +41,53 @@ public struct Comment: View {
                     //.scaledToFill()
                     
                     VStack {
-                        HStack {
-                            if self.commentContents.user_avatar.i == nil {
-                                let color = UIColor(hex: self.commentContents.user_avatar.b)
-                                
-                                Circle()
-                                    .size(CGSize(width: 45, height: 45))
-                                    .fill(Color(color!))
-                                    .frame(width: 45, height: 45)
-                                    //.padding(.trailing)
-                                
-                                VStack(alignment: .leading, spacing: 1.0) {
-                                    Text(self.commentContents.user_username).fixedSize(horizontal: false, vertical: true)
-                                        .scaledToFill()
-                                    
-                                    ZStack(alignment: .leading) {
-                                        RoundedRectangle(cornerRadius: 5).fill(Color(color!))
-                                        Text("+" + String(self.commentContents.user_score)).padding(.init(top: 2.5, leading: 5, bottom: 2.5, trailing: 5)).font(.caption).foregroundColor(.white)
-                                    }.fixedSize()
-                                }.scaledToFit()
-                                
-                                Spacer()
-                            } else {
-                                ImageView(withURL: "https://avatars.devrant.com/" + self.commentContents.user_avatar.i!, width: 45, height: 45)
-                                        .clipShape(Circle())
-                                
-                                VStack(alignment: .leading, spacing: 1.0) {
-                                    Text(self.commentContents.user_username)
-                                        .fixedSize()
-                                        .scaledToFill()
-                                        .frame(alignment: .leading)
+                        NavigationLink(
+                            
+                            destination: ProfileView(userID: self.commentContents.user_id),
+                            label: {
+                                HStack {
+                                    if self.commentContents.user_avatar.i == nil {
+                                        let color = UIColor(hex: self.commentContents.user_avatar.b)
                                         
-                                    ZStack(alignment: .leading) {
-                                            RoundedRectangle(cornerRadius: 5).fill(Color(UIColor(hex: self.commentContents.user_avatar.b)!))
-                                        Text("+" + String(self.commentContents.user_score)).padding(.init(top: 2.5, leading: 5, bottom: 2.5, trailing: 5)).font(.caption).foregroundColor(.white)
-                                    }.fixedSize()
-                                }.scaledToFit()
-                                
-                                
-                                Spacer()
+                                        Circle()
+                                            .size(CGSize(width: 45, height: 45))
+                                            .fill(Color(color!))
+                                            .frame(width: 45, height: 45)
+                                            //.padding(.trailing)
+                                        
+                                        VStack(alignment: .leading, spacing: 1.0) {
+                                            Text(self.commentContents.user_username).fixedSize(horizontal: false, vertical: true)
+                                                .scaledToFill()
+                                            
+                                            ZStack(alignment: .leading) {
+                                                RoundedRectangle(cornerRadius: 5).fill(Color(color!))
+                                                Text("+" + String(self.commentContents.user_score)).padding(.init(top: 2.5, leading: 5, bottom: 2.5, trailing: 5)).font(.caption).foregroundColor(.white)
+                                            }.fixedSize()
+                                        }.scaledToFit()
+                                        
+                                        Spacer()
+                                    } else {
+                                        ImageView(withURL: "https://avatars.devrant.com/" + self.commentContents.user_avatar.i!, width: 45, height: 45)
+                                                .clipShape(Circle())
+                                        
+                                        VStack(alignment: .leading, spacing: 1.0) {
+                                            Text(self.commentContents.user_username)
+                                                .fixedSize()
+                                                .scaledToFill()
+                                                //.frame(alignment: .leading)
+                                                
+                                            ZStack(alignment: .leading) {
+                                                    RoundedRectangle(cornerRadius: 5).fill(Color(UIColor(hex: self.commentContents.user_avatar.b)!))
+                                                Text("+" + String(self.commentContents.user_score)).padding(.init(top: 2.5, leading: 5, bottom: 2.5, trailing: 5)).font(.caption).foregroundColor(.white)
+                                            }.fixedSize()
+                                        }.scaledToFit()
+                                        
+                                        
+                                        Spacer()
+                                    }
+                                }
                             }
-                        }
+                        ).buttonStyle(PlainButtonStyle())
                         
                         HStack {
                             Text(self.commentContents.body)
@@ -188,8 +98,14 @@ public struct Comment: View {
                         }
                         
                         if self.commentContents.attached_image != nil {
+                            let resizeMultiplier = self.getImageResizeMultiplier(
+                                imageWidth: CGFloat(self.commentContents.attached_image!.width!),
+                                imageHeight: CGFloat(self.commentContents.attached_image!.height!), multiplier: 1)
+                            
+                            let url = File.loadFiles(images: [self.commentContents.attached_image!])[0].url
+                            
                             HStack {
-                                QLView(attachedImage: self.commentContents.attached_image!)
+                                SecondaryQLView(attachedImage: self.commentContents.attached_image!, pendingURL: url)
                                 
                                 Spacer()
                             }
@@ -201,6 +117,14 @@ public struct Comment: View {
                         //Spacer()
                 }.padding([.leading, .top])//.fixedSize(horizontal: false, vertical: true)
             }
+        }
+    }
+    
+    private func getImageResizeMultiplier(imageWidth: CGFloat, imageHeight: CGFloat, multiplier: Int) -> CGFloat {
+        if imageWidth / CGFloat(multiplier) < UIScreen.main.bounds.width && imageHeight / CGFloat(multiplier) < UIScreen.main.bounds.height {
+            return CGFloat(multiplier)
+        } else {
+            return getImageResizeMultiplier(imageWidth: imageWidth, imageHeight: imageHeight, multiplier: multiplier + 2)
         }
     }
 }

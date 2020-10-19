@@ -28,16 +28,16 @@ class APIRequest {
     let tokenIDUserDefaultsIdentifier: String!
     let tokenKeyUserDefaultsIdentifier: String!
     
-    init(userIDUserDefaultsIdentifier: String, tokenIDUserDefaultsIdentifier: String, tokenKeyUserDefaultsIdentifier: String) {
+    init() {
         //self._success = success
         //self._authTokenID = authTokenID
         //self._authTokenKey = authTokenKey
         //self._authTokenExpireTime = authTokenExpireTime
         //self._authTokenUserID = authTokenUserID
         
-        self.userIDUserDefaultsIdentifier = userIDUserDefaultsIdentifier
-        self.tokenIDUserDefaultsIdentifier = tokenIDUserDefaultsIdentifier
-        self.tokenKeyUserDefaultsIdentifier = tokenKeyUserDefaultsIdentifier
+        self.userIDUserDefaultsIdentifier = "UserID"
+        self.tokenIDUserDefaultsIdentifier = "TokenID"
+        self.tokenKeyUserDefaultsIdentifier = "TokenKey"
     }
     
     func logIn(username: String, password: String) {
@@ -187,5 +187,69 @@ class APIRequest {
             
             throw APIError.decodingError
         }
+    }
+    
+    func getProfileFromID(_ profileID: Int, userContentType: ProfileContentTypes, skip: Int) throws -> ProfileResponse? {
+        let userID = UserDefaults.standard.integer(forKey: "UserID")
+        let tokenID = UserDefaults.standard.integer(forKey: "TokenID")
+        let tokenKey = UserDefaults.standard.string(forKey: "TokenKey")
+        
+        let resourceURL = URL(string: "https://devrant.com/api/users/\(String(profileID))?app=3&skip=\(String(skip))&content=\(String(userContentType.rawValue))&user_id=\(String(userID))&token_id=\(String(tokenID))&token_key=\(String(tokenKey!))")
+        self.request = URLRequest(url: resourceURL!)
+        self.request.httpMethod = "GET"
+        self.request.addValue("application/x-www-form/urlencoded", forHTTPHeaderField: "Content-Type")
+        
+        let completionSemaphore = DispatchSemaphore(value: 0)
+        var receivedRawJSON = String()
+        
+        var extractedData: ProfileResponse?
+        
+        let task = URLSession.shared.dataTask(with: self.request) { data, response, error in
+            if response != nil {
+                if let data = data, let body = String(data: data, encoding: .utf8) {
+                    receivedRawJSON = body
+                    
+                    print(body)
+                    
+                    completionSemaphore.signal()
+                }
+            }
+        }
+        
+        task.resume()
+        
+        completionSemaphore.wait()
+        
+        let decoder = JSONDecoder()
+        let dataFromString = receivedRawJSON.data(using: .utf8)
+        
+        do {
+            extractedData = try decoder.decode(ProfileResponse.self, from: dataFromString!)
+            
+            return extractedData!
+        } catch DecodingError.dataCorrupted(let context) {
+            print(context)
+            
+            throw APIError.decodingError
+        } catch DecodingError.keyNotFound(let key, let context) {
+            print("Key: '\(key)' not found: ", context.debugDescription)
+            
+            throw APIError.decodingError
+        } catch DecodingError.valueNotFound(let value, let context) {
+            print("Value: '\(value)' not found: ", context.debugDescription)
+            
+            throw APIError.decodingError
+        } catch DecodingError.typeMismatch(let type, let context) {
+            print("Type '\(type)' mismatch: ", context.debugDescription)
+            print("codingPath: ", context.codingPath)
+            
+            throw APIError.decodingError
+        } catch let error {
+            print(error.localizedDescription)
+            
+            throw APIError.decodingError
+        }
+        
+        return nil
     }
 }

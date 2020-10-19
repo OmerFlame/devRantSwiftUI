@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 class FileCell: UICollectionViewCell {
     static let reuseIdentifier = String(describing: FileCell.self)
@@ -80,3 +81,70 @@ class FileCell: UICollectionViewCell {
     }
 }
 
+
+
+struct TertiaryFileCell: UIViewRepresentable {
+    @State var file: File
+    @State var imageView = UIImageView()
+    
+    init(file: File) {
+        self._file = .init(initialValue: file)
+        self.update(with: file)
+    }
+    
+    func makeUIView(context: Context) -> some UIView {
+        imageView.tintColor = .label
+        imageView.isOpaque = true
+        
+        imageView.contentMode = .scaleAspectFit
+        imageView.clearsContextBeforeDrawing = true
+        imageView.clipsToBounds = true
+        imageView.autoresizesSubviews = true
+        imageView.insetsLayoutMarginsFromSafeArea = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        return imageView
+    }
+    
+    func updateUIView(_ uiView: UIViewType, context: Context) {
+        
+    }
+    
+    func update(with file: File) {
+        self.file = file
+        
+        let resizeMultiplier = self.getImageResizeMultiplier(imageWidth: self.file.size!.width, imageHeight: self.file.size!.height, multiplier: 1)
+        
+        let finalWidth = self.file.size!.width / resizeMultiplier
+        let finalHeight = self.file.size!.height / resizeMultiplier
+        
+        let finalSize = CGSize(width: finalWidth, height: finalHeight)
+        
+        print("FINAL WIDTH: \(finalWidth)")
+        print("FINAL HEIGHT: \(finalHeight)")
+        
+        file.generateThumbnail(thumbnailSize: finalSize) { image in
+            DispatchQueue.main.async {
+                print("GENERATED IMAGE WIDTH: \(image.size.width)")
+                print("GENERATED IMAGE HEIGHT: \(image.size.height)")
+                
+                self.imageView.image = image
+                self.imageView.frame.size = CGSize(width: finalWidth, height: finalHeight)
+                
+                //self?.thumbnailImageView?.heightAnchor.constraint(equalToConstant: height).isActive = true
+                //self?.thumbnailImageView?.widthAnchor.constraint(equalToConstant: width).isActive = true
+            }
+        }
+        
+        //print(thumbnailImageView!.frame.minX)
+        //print(thumbnailImageView!.frame.minY)
+    }
+    
+    private func getImageResizeMultiplier(imageWidth: CGFloat, imageHeight: CGFloat, multiplier: Int) -> CGFloat {
+        if imageWidth / CGFloat(multiplier) < UIScreen.main.bounds.width && imageHeight / CGFloat(multiplier) < UIScreen.main.bounds.size.height {
+                return CGFloat(multiplier)
+        } else {
+            return getImageResizeMultiplier(imageWidth: imageWidth, imageHeight: imageHeight, multiplier: multiplier + 2)
+        }
+    }
+}

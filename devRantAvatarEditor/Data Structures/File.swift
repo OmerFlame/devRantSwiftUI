@@ -150,6 +150,26 @@ extension File {
         completionSemaphore.wait()
         return finalArray
     }
+    
+    static func loadFile(image: AttachedImage, size: CGSize) -> File {
+        let completionSemaphore = DispatchSemaphore(value: 0)
+        var receivedData: Data? = nil
+        
+        URLSession.shared.dataTask(with: (URL(string: image.url!)!)) { data, _, _ in
+            receivedData = data
+            
+            completionSemaphore.signal()
+        }.resume()
+        
+        completionSemaphore.wait()
+        let filename = UUID().uuidString + ".jpg"
+        
+        let previewURL = FileManager.default.temporaryDirectory.appendingPathComponent(filename)
+        try! receivedData?.write(to: previewURL, options: .atomic)
+        
+        let finalFile = File(url: previewURL, size: size)
+        return finalFile
+    }
 }
 
 extension URL {

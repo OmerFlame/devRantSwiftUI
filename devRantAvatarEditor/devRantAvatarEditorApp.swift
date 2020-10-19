@@ -6,8 +6,38 @@
 //
 
 import SwiftUI
+import BackgroundTasks
+import UserNotifications
 
 class AppDelegate: NSObject, UIApplicationDelegate {
+    /*func applicationDidFinishLaunching(_ application: UIApplication) {
+        let notificationCenter = UNUserNotificationCenter.current()
+        let options: UNAuthorizationOptions = [.alert, .sound, .badge]
+        
+        notificationCenter.requestAuthorization(options: options) { didAllow, error in
+            if !didAllow {
+                print("User has declined notifications")
+            }
+        }
+    }*/
+    
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { didAllow, error in
+            
+            if didAllow == true {
+                print("User allowed notifications!")
+            } else {
+                print("User has denied notifications")
+            }
+            
+            if error != nil {
+                print(error!.localizedDescription)
+            }
+        }
+        
+        return true
+    }
+    
     func applicationWillTerminate(_ application: UIApplication) {
         let tmpDirectory = try! FileManager.default.contentsOfDirectory(atPath: NSTemporaryDirectory())
         tmpDirectory.forEach { file in
@@ -44,10 +74,7 @@ struct TestView: View {
     var body: some View {
         NavigationView {
             NavigationLink(destination: RantView(rantID: 3240155,
-                                                 apiRequest: APIRequest(
-                                                    userIDUserDefaultsIdentifier: "UserID",
-                                                    tokenIDUserDefaultsIdentifier: "TokenID",
-                                                    tokenKeyUserDefaultsIdentifier: "TokenKey"))) {
+                                                 apiRequest: APIRequest())) {
                 RantInFeedView(rantContents: RantInFeed(
                                 id: 3240155,
                                 text: "80% of the letters in \"Intel\" also appear in \"Hitler\" while none of the letters in \"AMD\" do.",

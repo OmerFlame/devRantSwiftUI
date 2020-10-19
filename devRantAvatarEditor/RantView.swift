@@ -58,24 +58,10 @@ struct RantView: View {
                             .frame(alignment: .topLeading)
                             .padding([.trailing])
                     }
-                    
-                    let attachedImage = AttachedImage(
-                        url: "https://img.devrant.com/devrant/rant/r_3240155_Re4L3.jpg",
-                        width: 491,
-                        height: 487
-                    )
-                    let files = File.loadFiles(images: [attachedImage])
-                    let resizeMultiplier: CGFloat = getImageResizeMultiplier(imageWidth: files[0].size!.width, imageHeight: files[0].size!.height, multiplier: 1)
-                    let finalWidth = files[0].size!.width / resizeMultiplier
-                    let finalHeight = files[0].size!.height / resizeMultiplier
-                    
-                    UIPreviewViewRepresentable(images: [attachedImage])
-                        .frame(width: finalWidth, height: finalHeight)
-                        .background(Color(UIColor.systemBackground))
                 }
                 //.padding(.leading)
             }
-            .navigationBarTitle("Rant by \((self.rant?.rant.user_username)!)")
+            .navigationBarTitle("Rant")
             .onAppear {
                 print("View appeared!")
             }
@@ -93,6 +79,6 @@ struct RantView: View {
 
 struct RantView_Previews: PreviewProvider {
     static var previews: some View {
-        RantView(rantID: 3240155, apiRequest: APIRequest(userIDUserDefaultsIdentifier: "UserID", tokenIDUserDefaultsIdentifier: "TokenID", tokenKeyUserDefaultsIdentifier: "TokenKey"))
+        RantView(rantID: 3240155, apiRequest: APIRequest())
     }
 }

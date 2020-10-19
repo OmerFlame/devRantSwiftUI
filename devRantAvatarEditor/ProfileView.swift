@@ -6,108 +6,199 @@
 //
 
 import SwiftUI
-import FancyScrollView
 import BottomBar_SwiftUI
 
+public enum ProfilePages: String, CaseIterable {
+    case rants = "Rants"
+    case upvotes = "++'s"
+    case comments = "Comments"
+    case favorites = "Favorites"
+}
+
 struct ProfileView: View {
-    @State var viewSelection: TestEnum = .test1
+    @State var viewSelection: ProfilePages = .rants
+    @State var isComplete = false
+    @State var shouldShowError = false
     
-    init() {
+    let userID: Int
+    @State var userInfo: Profile? = nil
+    
+    @State var image: UIImage?
+    
+    init(userID: Int) {
         UISegmentedControl.appearance().backgroundColor = .systemBackground
-        UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(hex: "d55161")
         UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
+        
+        self.userID = userID
+        
+        do {
+            //self._userInfo = State(initialValue: nil)
+            self._image = State(initialValue: UIImage())
+            
+        } catch let error {
+            print(error.localizedDescription)
+            self.userInfo = nil
+        }
+    }
+    
+    func getImage() {
+        let completionSemaphore = DispatchSemaphore(value: 0)
+        
+        URLSession.shared.dataTask(with: URL(string: "https://avatars.devrant.com/\(self.userInfo!.avatar.i!)")!) { data, _, _ in
+            self.image = UIImage(data: data!)
+            
+            completionSemaphore.signal()
+        }.resume()
+        
+        completionSemaphore.wait()
+        return
+    }
+    
+    func getUserInfo() {
+        do {
+            self.userInfo = try APIRequest().getProfileFromID(self.userID, userContentType: .rants, skip: 0)!.profile
+            UISegmentedControl.appearance().backgroundColor = .systemBackground
+            UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
+            UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(hex: self.userInfo!.avatar.b)
+        } catch let error {
+            print(error.localizedDescription)
+            self.userInfo = nil
+        }
     }
     
     var body: some View {
-        
-        ZStack(alignment: .bottom) {
-            /*ScrollViewParallaxRepresentable(image: UIImage(named: "background_image")!) {
-                RantView(rant: RantModel(id: 327111,
-                                        text: "My girlfriend got me this mug. She's the one.",
-                                        score: 157,
-                                        created_time: 1481230115,
-                                        attached_image: .attachedImage(AttachedImage(
-                                            url: "https://img.devrant.com/devrant/rant/r_327111_pMWmu.jpg",
-                                            width: 562,
-                                            height: 1000
-                                        )),
-                                        num_comments: 1,
-                                        tags: ["undefined", "linus", "torvalds", "mug"],
-                                        vote_state: 0,
-                                        edited: false,
-                                        link: "rants/327111/my-girlfriend-got-me-this-mug-shes-the-one",
-                                        rt: 1,
-                                        rc: 7,
-                                        links: nil,
-                                        special: nil,
-                                        c_type_long: nil,
-                                        c_description: nil,
-                                        c_tech_stack: nil,
-                                        c_team_size: nil,
-                                        c_url: nil,
-                                        user_id: 118128,
-                                        user_username: "blackmarket",
-                                        user_score: 5885,
-                                        user_avatar: UserAvatar(
-                                            b: "d55161",
-                                            i: "v-37_c-3_b-5_g-m_9-1_1-1_16-2_3-6_8-4_7-4_5-4_12-1_6-3_10-1_2-41_22-1_15-5_18-4_19-3_4-4_20-10.jpg"
-                                        ),
-                                        user_avatar_lg: UserAvatar(
-                                            b: "d55161",
-                                            i: "v-37_c-1_b-5_g-m_9-1_1-1_16-2_3-6_8-4_7-4_5-4_12-1_6-3_10-1_2-41_22-1_15-5_18-4_19-3_4-4_20-10.png"
-                                        ),
-                                        user_dpp: nil,
-                                        comments: [
-                                            CommentModel(id: 327120,
-                                                    rant_id: 327111,
-                                                    body: "Wow its picture where torvalds show fuck off to nvidia coolaskdljfhaklsdjhflaksjhdflkajshdfkljahsdflkjhasdf",
-                                                    score: 8,
-                                                    created_time: 1481230451,
-                                                    vote_state: 0,
-                                                    user_id: 19218,
-                                                    user_username: "Haxk20",
-                                                    user_avatar: UserAvatar(
-                                                        b: "7bc8a4",
-                                                        i: "v-37_c-3_b-1_g-m_9-2_1-2_16-14_3-3_8-3_7-3_5-4_12-2_6-3_10-1_2-109_22-1_18-4_19-5_4-4_20-15_21-4.jpg"
-                                                    )),
-                                            CommentModel(id: 327120,
-                                                    rant_id: 327111,
-                                                    body: "Wow its picture where torvalds show fuck off to nvidia cool",
-                                                    score: 8,
-                                                    created_time: 1481230451,
-                                                    vote_state: 0,
-                                                    user_id: 19218,
-                                                    user_username: "Haxk20",
-                                                    user_avatar: UserAvatar(
-                                                        b: "7bc8a4",
-                                                        i: "v-37_c-3_b-1_g-m_9-2_1-2_16-14_3-3_8-3_7-3_5-4_12-2_6-3_10-1_2-109_22-1_18-4_19-5_4-4_20-15_21-4.jpg"
-                                                    ))
-                                    ]))
-                
-                
-            }*/
-            
-            FancyScrollView(title: "OmerFlame",
-                            headerHeight: 450,
-                            scrollUpHeaderBehavior: .parallax,
-                            scrollDownHeaderBehavior: .offset,
-                            header: { Image("background_image").resizable().aspectRatio(contentMode: .fill) }) {
-                
-                Text("Placeholder")
+        if self.isComplete == false {
+            VStack(alignment: .center) {
+                ProgressView("Loading Profile")
+                    .progressViewStyle(CircularProgressViewStyle())
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            DispatchQueue.global(qos: .userInitiated).sync {
+                                self.getUserInfo()
+                                
+                                if self.userInfo?.avatar.i != nil {
+                                    self.getImage()
+                                }
+                                
+                                DispatchQueue.main.async {
+                                    self.isComplete = true
+                                }
+                            }
+                        }
+                    }
             }
+        } else if self.isComplete && self.userInfo == nil {
+            EmptyView()
+                .onAppear {
+                    self.shouldShowError.toggle()
+                }
+        } else {
+            ZStack(alignment: .bottom) {
+                if self.userInfo?.avatar.i != nil {
+                    FancyScrollView(title: self.userInfo!.username,
+                                    upvotes: self.userInfo!.score,
+                                    choice: $viewSelection,
+                                    headerHeight: 450,
+                                    scrollUpHeaderBehavior: .parallax,
+                                    scrollDownHeaderBehavior: .offset,
+                                    header: {
+                                        ZStack(alignment: .bottomTrailing) {
+                                            Image(uiImage: self.image!).resizable().aspectRatio(contentMode: .fill)
+                                        }
+                                    }) {
+                        self.builder()
+                    }
+                } else {
+                    ScrollView {
+                        VStack {
+                            Text("Placeholder")
+                        }.navigationTitle("Test")
+                    }
+                }
+                    
+                //.navigationBarHidden(true)
+                //.edgesIgnoringSafeArea([.top, .bottom])
                 
-            //.navigationBarHidden(true)
-            //.edgesIgnoringSafeArea([.top, .bottom])
-            
-            Spacer()
-            
-            Picker("Categories", selection: $viewSelection) {
-                ForEach(TestEnum.allCases, id: \.self) { selection in
-                    Text(selection.rawValue).tag(selection)
+                Spacer()
+                
+                /*Picker("Categories", selection: $viewSelection) {
+                    ForEach(ProfilePages.allCases, id: \.self) { selection in
+                        Text(selection.rawValue).tag(selection)
+                    }
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .padding([.leading, .trailing])
+                .edgesIgnoringSafeArea(.bottom)*/
+            }
+        }
+    }
+    
+    func builder() -> AnyView {
+        if self.viewSelection == .rants {
+            return withAnimation { AnyView(RantsList(userID: self.userID)) }
+        } else if self.viewSelection == .upvotes {
+            return withAnimation { AnyView(Text("++'s")) }
+        } else if self.viewSelection == .comments {
+            return withAnimation { AnyView(Text("Comments")) }
+        } else if self.viewSelection == .favorites {
+            return withAnimation { AnyView(Text("Favorites")) }
+        }
+        
+        return AnyView(RantsList(userID: self.userID))
+    }
+}
+
+struct RantsList: View {
+    let userID: Int
+    @State var data: [RantInFeed]?
+    
+    @State var shouldShowError = false
+    @State var shouldShowRing = true
+    
+    init(userID: Int) {
+        self.userID = userID
+        
+        self._data = State(initialValue: [])
+    }
+    
+    func getRants() {
+        do {
+            self.data = try APIRequest().getProfileFromID(self.userID, userContentType: .rants, skip: 0)?.profile.content.content.rants
+        } catch let error {
+            print(error.localizedDescription)
+            self.data = nil
+        }
+    }
+    
+    var body: some View {
+        if self.shouldShowRing {
+            VStack(alignment: .center) {
+                ProgressView("Loading Rants")
+                    .padding(.top)
+                    .progressViewStyle(CircularProgressViewStyle())
+                    .onAppear {
+                        DispatchQueue.global(qos: .userInitiated).async {
+                            self.getRants()
+                            
+                            DispatchQueue.main.async {
+                                self.shouldShowRing = false
+                            }
+                        }
+                    }
+            }
+        } else if !self.shouldShowRing && self.data == nil {
+            EmptyView()
+                .onAppear {
+                    self.shouldShowError.toggle()
+                }
+        } else {
+            VStack {
+                ForEach(data!, id: \.uuid) { rant in
+                    RantInFeedView(rantContents: rant)
                 }
             }
-            .pickerStyle(SegmentedPickerStyle())
-            .padding([.leading, .trailing, .bottom])
+            .padding(.bottom, 25)
+            .padding(.top)
         }
     }
 }
@@ -145,6 +236,6 @@ extension UINavigationController: UIGestureRecognizerDelegate {
 
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileView()
+        ProfileView(userID: 1392945)
     }
 }

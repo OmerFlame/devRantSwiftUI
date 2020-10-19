@@ -254,10 +254,116 @@ struct SecondaryQLView: View {
     }
     
     private func getImageResizeMultiplier(imageWidth: CGFloat, imageHeight: CGFloat, multiplier: Int) -> CGFloat {
-        if imageWidth / CGFloat(multiplier) < UIScreen.main.bounds.width && imageHeight / CGFloat(multiplier) < UIScreen.main.bounds.height {
+        if imageWidth / CGFloat(multiplier) < 315 && imageHeight / CGFloat(multiplier) < 420 {
             return CGFloat(multiplier)
         } else {
             return getImageResizeMultiplier(imageWidth: imageWidth, imageHeight: imageHeight, multiplier: multiplier + 2)
         }
+    }
+}
+
+struct TertiaryQLView: View {
+    let attachedImage: AttachedImage
+    @State var fileCell: TertiaryFileCell?
+    @State var shouldPreview = false
+    
+    init(attachedImage: AttachedImage) {
+        self.attachedImage = attachedImage
+        
+        let resizeMultiplier = self.getImageResizeMultiplier(imageWidth: CGFloat(self.attachedImage.width!), imageHeight: CGFloat(self.attachedImage.height!), multiplier: 1)
+        
+        let finalWidth = CGFloat(self.attachedImage.width!) / resizeMultiplier
+        let finalHeight = CGFloat(self.attachedImage.height!) / resizeMultiplier
+        
+        let file = File.loadFile(image: self.attachedImage, size: CGSize(width: finalWidth, height: finalHeight))
+        
+        self._fileCell = .init(initialValue: TertiaryFileCell(file: file))
+    }
+    
+    var body: some View {
+        ZStack {
+            self.fileCell
+                .frame(width: self.fileCell?.file.size?.width, height: self.fileCell?.file.size?.height)
+                .clipShape(RoundedRectangle(cornerRadius: 15))
+                .onTapGesture {
+                    self.shouldPreview.toggle()
+                }
+            
+            if self.shouldPreview {
+                withAnimation {
+                    PreviewController(fileCell: self.fileCell!)
+                        .onDisappear {
+                            self.shouldPreview.toggle()
+                        }
+                }
+            }
+        }
+    }
+    
+    private func getImageResizeMultiplier(imageWidth: CGFloat, imageHeight: CGFloat, multiplier: Int) -> CGFloat {
+        if imageWidth / CGFloat(multiplier) < UIScreen.main.bounds.width && imageHeight / CGFloat(multiplier) < UIScreen.main.bounds.size.height {
+                return CGFloat(multiplier)
+        } else {
+            return getImageResizeMultiplier(imageWidth: imageWidth, imageHeight: imageHeight, multiplier: multiplier + 2)
+        }
+    }
+}
+
+class PreviewView: UIViewController, QLPreviewControllerDataSource, QLPreviewControllerDelegate {
+    var fileCell: TertiaryFileCell
+    
+    init(fileCell: TertiaryFileCell) {
+        self.fileCell = fileCell
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        let previewController = QLPreviewController()
+        previewController.dataSource = self
+        previewController.delegate = self
+        previewController.currentPreviewItemIndex = 0
+        
+        let topVC = topMostController()
+        
+        topVC.present(previewController, animated: true)
+    }
+    
+    func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
+        1
+    }
+    
+    func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
+        fileCell.file.url as QLPreviewItem
+    }
+    
+    func previewController(_ controller: QLPreviewController, transitionViewFor item: QLPreviewItem) -> UIView? {
+        fileCell.imageView
+    }
+    
+    func topMostController() -> UIViewController {
+        var topController: UIViewController = UIApplication.shared.keyWindow!.rootViewController!
+        while (topController.presentedViewController != nil) {
+            topController = topController.presentedViewController!
+        }
+        return topController
+    }
+}
+
+struct PreviewController: UIViewControllerRepresentable {
+    let fileCell: TertiaryFileCell
+    
+    func makeUIViewController(context: Context) -> some UIViewController {
+        return PreviewView(fileCell: self.fileCell)
+    }
+    
+    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+        
     }
 }

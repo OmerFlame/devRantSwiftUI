@@ -19,7 +19,7 @@ struct ContentView: View {
     
     @State var isSheet = true
     
-    @State var apiRequest = APIRequest(userIDUserDefaultsIdentifier: "UserID", tokenIDUserDefaultsIdentifier: "TokenID", tokenKeyUserDefaultsIdentifier: "TokenKey")
+    @State var apiRequest = APIRequest()
     
     var body: some View {
         VStack {

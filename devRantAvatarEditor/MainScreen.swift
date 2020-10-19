@@ -68,10 +68,17 @@ struct MainScreen: View {
                             }
                             
                             NavigationLink(
-                                destination: ProfileView(),
+                                destination: ProfileView(userID: 1392945),
                                 label: {
                                     Text("Navigate")
                                 })
+                            
+                            NavigationLink(
+                                destination: ProfileView(userID: 3188397),
+                                label: {
+                                    Text("Second Navigate")
+                                }
+                            )
                         }.navigationBarTitle(Text("Home"))
                         //.navigationBarTitleDisplayMode(.inline)
                         .toolbar {
@@ -122,6 +129,6 @@ extension UIScrollView: UIScrollViewDelegate {
 
 struct MainScreen_Previews: PreviewProvider {
     static var previews: some View {
-        MainScreen(apiRequest: APIRequest(userIDUserDefaultsIdentifier: "UserID", tokenIDUserDefaultsIdentifier: "TokenID", tokenKeyUserDefaultsIdentifier: "TokenKey"))
+        MainScreen(apiRequest: APIRequest())
     }
 }

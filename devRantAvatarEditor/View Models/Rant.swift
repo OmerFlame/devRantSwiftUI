@@ -44,7 +44,7 @@ struct Rant: View {
                     //.scaledToFill()
                     
                     VStack {
-                        HStack {
+                        /*HStack {
                             if self.rantContents.user_avatar.i == nil {
                                 let color = UIColor(hex: self.rantContents.user_avatar.b)
                                 
@@ -82,7 +82,52 @@ struct Rant: View {
                                 
                                 Spacer()
                             }
-                        }
+                        }*/
+                        
+                        NavigationLink(
+                            destination: ProfileView(userID: self.rantContents.user_id),
+                            label: {
+                                HStack {
+                                    if self.rantContents.user_avatar.i == nil {
+                                        let color = UIColor(hex: self.rantContents.user_avatar.b)
+                                        
+                                        Circle()
+                                            .size(CGSize(width: 45, height: 45))
+                                            .fill(Color(color!))
+                                            .frame(width: 45, height: 45)
+                                            //.padding(.trailing)
+                                        
+                                        VStack(alignment: .leading, spacing: 1.0) {
+                                            Text(self.rantContents.user_username)
+                                                .fixedSize(horizontal: false, vertical: true)
+                                                .scaledToFill()
+                                            
+                                            ZStack(alignment: .leading) {
+                                                RoundedRectangle(cornerRadius: 5).fill(Color(color!))
+                                                Text("+" + String(self.rantContents.user_score)).padding(.init(top: 2.5, leading: 5, bottom: 2.5, trailing: 5)).font(.caption).foregroundColor(.white)
+                                            }.fixedSize()
+                                        }.scaledToFit()
+                                        
+                                        Spacer()
+                                    } else {
+                                        ImageView(withURL: "https://avatars.devrant.com/" + self.rantContents.user_avatar.i!, width: 45, height: 45)
+                                                .clipShape(Circle())
+                                        
+                                        VStack(alignment: .leading, spacing: 1.0) {
+                                            Text(self.rantContents.user_username).fixedSize(horizontal: false, vertical: true).scaledToFill()
+                                                
+                                            ZStack(alignment: .leading) {
+                                                    RoundedRectangle(cornerRadius: 5).fill(Color(UIColor(hex: self.rantContents.user_avatar.b)!))
+                                                Text("+" + String(self.rantContents.user_score)).padding(.init(top: 2.5, leading: 5, bottom: 2.5, trailing: 5)).font(.caption).foregroundColor(.white)
+                                            }.fixedSize()
+                                        }.scaledToFit()
+                                        
+                                        
+                                        Spacer()
+                                    }
+                                }
+                            }
+                        ).buttonStyle(PlainButtonStyle())
                         
                         HStack {
                             Text(self.rantContents.text)
@@ -103,6 +148,10 @@ struct Rant: View {
                                 HStack {
                                     //QLView(attachedImage: self.rantContents.attached_image!)
                                     SecondaryQLView(attachedImage: self.rantContents.attached_image!, pendingURL: url)
+                                    /*TertiaryQLView(attachedImage: AttachedImage(
+                                                    url: "https://img.devrant.com/devrant/rant/r_3240155_Re4L3.jpg",
+                                                    width: 491,
+                                                    height: 487))*/
                                     
                                     Spacer()
                                 }

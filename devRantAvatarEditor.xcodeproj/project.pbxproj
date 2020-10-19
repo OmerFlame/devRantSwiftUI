@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5903172A2524A06B00CA9E99 /* View+hideNavigationBarWithoutLosingSwipeBack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 590317292524A06B00CA9E99 /* View+hideNavigationBarWithoutLosingSwipeBack.swift */; };
-		5903172D2524A15700CA9E99 /* View+navigationAllowSwipeBackWhenHidden.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5903172C2524A15700CA9E99 /* View+navigationAllowSwipeBackWhenHidden.swift */; };
 		590317302524B9CF00CA9E99 /* ParallaxScrollViewPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5903172F2524B9CF00CA9E99 /* ParallaxScrollViewPort.swift */; };
 		59295A0C25251F8100E98087 /* FloatingTabBar in Frameworks */ = {isa = PBXBuildFile; productRef = 59295A0B25251F8100E98087 /* FloatingTabBar */; };
 		59295A102525204C00E98087 /* BottomBar-SwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 59295A0F2525204C00E98087 /* BottomBar-SwiftUI */; };
@@ -23,6 +21,7 @@
 		59627A4C250F9B3B00233F48 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59627A4B250F9B3B00233F48 /* Comment.swift */; };
 		59627A4E250FA4C100233F48 /* RantView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59627A4D250FA4C100233F48 /* RantView.swift */; };
 		597EC1BA25100BE800EB42C6 /* GeometryContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597EC1B925100BE800EB42C6 /* GeometryContainer.swift */; };
+		5986518025399E83006B631F /* ContentDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5986517F25399E83006B631F /* ContentDataSource.swift */; };
 		598BE6D82535B29B00919439 /* SecondaryFileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598BE6D72535B29B00919439 /* SecondaryFileCell.swift */; };
 		598BE6E32535CCA000919439 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598BE6E22535CCA000919439 /* Utils.swift */; };
 		598FDA4F251092F100ED2C13 /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598FDA4E251092F100ED2C13 /* CollectionView.swift */; };
@@ -34,7 +33,6 @@
 		598FDA5E2510B63200ED2C13 /* RandomAccessCollection+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598FDA5D2510B63200ED2C13 /* RandomAccessCollection+Extension.swift */; };
 		598FDA602510B70C00ED2C13 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598FDA5F2510B70C00ED2C13 /* String+Extension.swift */; };
 		599420DB250F4AC50044565A /* ColorFromHexString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599420DA250F4AC50044565A /* ColorFromHexString.swift */; };
-		5999E0EB251E4F000096470D /* FancyScrollView in Frameworks */ = {isa = PBXBuildFile; productRef = 5999E0EA251E4F000096470D /* FancyScrollView */; };
 		5999E0EE251E4F160096470D /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5999E0ED251E4F160096470D /* Profile.swift */; };
 		5999E0F1251E50180096470D /* RantInFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5999E0F0251E50180096470D /* RantInFeed.swift */; };
 		5999E0F4251E58F70096470D /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5999E0F3251E58F70096470D /* ProfileView.swift */; };
@@ -50,11 +48,19 @@
 		59EA61A125259F0D0084E712 /* RantFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59EA61A025259F0D0084E712 /* RantFeed.swift */; };
 		59EA62172525FA8F0084E712 /* RantInFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59EA62162525FA8F0084E712 /* RantInFeedView.swift */; };
 		59EA621F25265B9D0084E712 /* WrapStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59EA621E25265B9D0084E712 /* WrapStack.swift */; };
+		59F20B43253C6C7C0028A3C6 /* AppleMusicStyleScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F20B42253C6C7C0028A3C6 /* AppleMusicStyleScrollView.swift */; };
+		59F20B46253C6C8A0028A3C6 /* BackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F20B45253C6C8A0028A3C6 /* BackButton.swift */; };
+		59F20B49253C6C9D0028A3C6 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F20B48253C6C9D0028A3C6 /* BlurView.swift */; };
+		59F20B4C253C6CB00028A3C6 /* FancyScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F20B4B253C6CB00028A3C6 /* FancyScrollView.swift */; };
+		59F20B4F253C6CC80028A3C6 /* HeaderScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F20B4E253C6CC80028A3C6 /* HeaderScrollView.swift */; };
+		59F20B52253C6CE50028A3C6 /* HeaderScrollViewTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F20B51253C6CE50028A3C6 /* HeaderScrollViewTitle.swift */; };
+		59F20B55253C6D060028A3C6 /* ScrollDownHeaderBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F20B54253C6D060028A3C6 /* ScrollDownHeaderBehavior.swift */; };
+		59F20B58253C6D270028A3C6 /* ScrollUpHeaderBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F20B57253C6D270028A3C6 /* ScrollUpHeaderBehavior.swift */; };
+		59F20B5B253C6D440028A3C6 /* View+hideNavigationBarWithoutLosingSwipeBack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F20B5A253C6D440028A3C6 /* View+hideNavigationBarWithoutLosingSwipeBack.swift */; };
+		59F20B5E253C6D6B0028A3C6 /* View+navigationAllowSwipeBackWhenHidden.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F20B5D253C6D6B0028A3C6 /* View+navigationAllowSwipeBackWhenHidden.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		590317292524A06B00CA9E99 /* View+hideNavigationBarWithoutLosingSwipeBack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+hideNavigationBarWithoutLosingSwipeBack.swift"; sourceTree = "<group>"; };
-		5903172C2524A15700CA9E99 /* View+navigationAllowSwipeBackWhenHidden.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+navigationAllowSwipeBackWhenHidden.swift"; sourceTree = "<group>"; };
 		5903172F2524B9CF00CA9E99 /* ParallaxScrollViewPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParallaxScrollViewPort.swift; sourceTree = "<group>"; };
 		5948D91A250E6D4200373317 /* devRantAvatarEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = devRantAvatarEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5948D91D250E6D4200373317 /* devRantAvatarEditorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = devRantAvatarEditorApp.swift; sourceTree = "<group>"; };
@@ -69,6 +75,7 @@
 		59627A4B250F9B3B00233F48 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		59627A4D250FA4C100233F48 /* RantView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RantView.swift; sourceTree = "<group>"; };
 		597EC1B925100BE800EB42C6 /* GeometryContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryContainer.swift; sourceTree = "<group>"; };
+		5986517F25399E83006B631F /* ContentDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentDataSource.swift; sourceTree = "<group>"; };
 		598BE6D72535B29B00919439 /* SecondaryFileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondaryFileCell.swift; sourceTree = "<group>"; };
 		598BE6E22535CCA000919439 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		598DB59F2511FD2900E7CF6D /* devRantAvatarEditor.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = devRantAvatarEditor.entitlements; sourceTree = "<group>"; };
@@ -96,6 +103,16 @@
 		59EA61A025259F0D0084E712 /* RantFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RantFeed.swift; sourceTree = "<group>"; };
 		59EA62162525FA8F0084E712 /* RantInFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RantInFeedView.swift; sourceTree = "<group>"; };
 		59EA621E25265B9D0084E712 /* WrapStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrapStack.swift; sourceTree = "<group>"; };
+		59F20B42253C6C7C0028A3C6 /* AppleMusicStyleScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleMusicStyleScrollView.swift; sourceTree = "<group>"; };
+		59F20B45253C6C8A0028A3C6 /* BackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButton.swift; sourceTree = "<group>"; };
+		59F20B48253C6C9D0028A3C6 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
+		59F20B4B253C6CB00028A3C6 /* FancyScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FancyScrollView.swift; sourceTree = "<group>"; };
+		59F20B4E253C6CC80028A3C6 /* HeaderScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderScrollView.swift; sourceTree = "<group>"; };
+		59F20B51253C6CE50028A3C6 /* HeaderScrollViewTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderScrollViewTitle.swift; sourceTree = "<group>"; };
+		59F20B54253C6D060028A3C6 /* ScrollDownHeaderBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollDownHeaderBehavior.swift; sourceTree = "<group>"; };
+		59F20B57253C6D270028A3C6 /* ScrollUpHeaderBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollUpHeaderBehavior.swift; sourceTree = "<group>"; };
+		59F20B5A253C6D440028A3C6 /* View+hideNavigationBarWithoutLosingSwipeBack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+hideNavigationBarWithoutLosingSwipeBack.swift"; sourceTree = "<group>"; };
+		59F20B5D253C6D6B0028A3C6 /* View+navigationAllowSwipeBackWhenHidden.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+navigationAllowSwipeBackWhenHidden.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,7 +122,6 @@
 			files = (
 				59295A102525204C00E98087 /* BottomBar-SwiftUI in Frameworks */,
 				59295A0C25251F8100E98087 /* FloatingTabBar in Frameworks */,
-				5999E0EB251E4F000096470D /* FancyScrollView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,6 +153,7 @@
 				59B5C278250EB6500056F0EC /* Data Structures */,
 				59B5C275250EB1BA0056F0EC /* View Models */,
 				5948D91D250E6D4200373317 /* devRantAvatarEditorApp.swift */,
+				59F20B2D253C6B030028A3C6 /* FancyScrollView */,
 				5948D91F250E6D4200373317 /* ContentView.swift */,
 				59B5C271250E78730056F0EC /* APIRequest.swift */,
 				59B5C273250E78A90056F0EC /* User.swift */,
@@ -149,6 +166,7 @@
 				5903172F2524B9CF00CA9E99 /* ParallaxScrollViewPort.swift */,
 				59EA621E25265B9D0084E712 /* WrapStack.swift */,
 				598BE6E22535CCA000919439 /* Utils.swift */,
+				5986517F25399E83006B631F /* ContentDataSource.swift */,
 				5948D921250E6D4700373317 /* Assets.xcassets */,
 				5948D926250E6D4700373317 /* Info.plist */,
 				5948D923250E6D4700373317 /* Preview Content */,
@@ -170,8 +188,6 @@
 				598FDA512510A9A200ED2C13 /* View+Extension.swift */,
 				598FDA5D2510B63200ED2C13 /* RandomAccessCollection+Extension.swift */,
 				598FDA5F2510B70C00ED2C13 /* String+Extension.swift */,
-				590317292524A06B00CA9E99 /* View+hideNavigationBarWithoutLosingSwipeBack.swift */,
-				5903172C2524A15700CA9E99 /* View+navigationAllowSwipeBackWhenHidden.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -225,6 +241,23 @@
 			path = "Data Structures";
 			sourceTree = "<group>";
 		};
+		59F20B2D253C6B030028A3C6 /* FancyScrollView */ = {
+			isa = PBXGroup;
+			children = (
+				59F20B42253C6C7C0028A3C6 /* AppleMusicStyleScrollView.swift */,
+				59F20B45253C6C8A0028A3C6 /* BackButton.swift */,
+				59F20B48253C6C9D0028A3C6 /* BlurView.swift */,
+				59F20B4B253C6CB00028A3C6 /* FancyScrollView.swift */,
+				59F20B4E253C6CC80028A3C6 /* HeaderScrollView.swift */,
+				59F20B51253C6CE50028A3C6 /* HeaderScrollViewTitle.swift */,
+				59F20B54253C6D060028A3C6 /* ScrollDownHeaderBehavior.swift */,
+				59F20B57253C6D270028A3C6 /* ScrollUpHeaderBehavior.swift */,
+				59F20B5A253C6D440028A3C6 /* View+hideNavigationBarWithoutLosingSwipeBack.swift */,
+				59F20B5D253C6D6B0028A3C6 /* View+navigationAllowSwipeBackWhenHidden.swift */,
+			);
+			path = FancyScrollView;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -242,7 +275,6 @@
 			);
 			name = devRantAvatarEditor;
 			packageProductDependencies = (
-				5999E0EA251E4F000096470D /* FancyScrollView */,
 				59295A0B25251F8100E98087 /* FloatingTabBar */,
 				59295A0F2525204C00E98087 /* BottomBar-SwiftUI */,
 			);
@@ -274,7 +306,6 @@
 			);
 			mainGroup = 5948D911250E6D4200373317;
 			packageReferences = (
-				5999E0E9251E4F000096470D /* XCRemoteSwiftPackageReference "FancyScrollView" */,
 				59295A0A25251F8100E98087 /* XCRemoteSwiftPackageReference "FloatingTabBar" */,
 				59295A0E2525204C00E98087 /* XCRemoteSwiftPackageReference "bottombar-swiftui" */,
 			);
@@ -304,14 +335,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5986518025399E83006B631F /* ContentDataSource.swift in Sources */,
+				59F20B4C253C6CB00028A3C6 /* FancyScrollView.swift in Sources */,
 				5948D920250E6D4200373317 /* ContentView.swift in Sources */,
 				59B85B342534629000B2CAC9 /* FileCell.swift in Sources */,
 				5999E0EE251E4F160096470D /* Profile.swift in Sources */,
 				59EA61A125259F0D0084E712 /* RantFeed.swift in Sources */,
 				5948D91E250E6D4200373317 /* devRantAvatarEditorApp.swift in Sources */,
+				59F20B55253C6D060028A3C6 /* ScrollDownHeaderBehavior.swift in Sources */,
 				59EA621F25265B9D0084E712 /* WrapStack.swift in Sources */,
+				59F20B4F253C6CC80028A3C6 /* HeaderScrollView.swift in Sources */,
 				59EA62172525FA8F0084E712 /* RantInFeedView.swift in Sources */,
-				5903172A2524A06B00CA9E99 /* View+hideNavigationBarWithoutLosingSwipeBack.swift in Sources */,
+				59F20B5B253C6D440028A3C6 /* View+hideNavigationBarWithoutLosingSwipeBack.swift in Sources */,
+				59F20B43253C6C7C0028A3C6 /* AppleMusicStyleScrollView.swift in Sources */,
 				59D822CB2534EBD70015E2D5 /* RantResponse.swift in Sources */,
 				598FDA552510AADC00ED2C13 /* CollectionDetailView.swift in Sources */,
 				598BE6D82535B29B00919439 /* SecondaryFileCell.swift in Sources */,
@@ -326,10 +362,13 @@
 				59B5C270250E73F00056F0EC /* MainScreen.swift in Sources */,
 				5948D92D250E6DE900373317 /* LoginScreen.swift in Sources */,
 				597EC1BA25100BE800EB42C6 /* GeometryContainer.swift in Sources */,
+				59F20B52253C6CE50028A3C6 /* HeaderScrollViewTitle.swift in Sources */,
 				598FDA4F251092F100ED2C13 /* CollectionView.swift in Sources */,
 				5999E0F1251E50180096470D /* RantInFeed.swift in Sources */,
+				59F20B46253C6C8A0028A3C6 /* BackButton.swift in Sources */,
 				59B5C272250E78730056F0EC /* APIRequest.swift in Sources */,
 				598FDA602510B70C00ED2C13 /* String+Extension.swift in Sources */,
+				59F20B49253C6C9D0028A3C6 /* BlurView.swift in Sources */,
 				59B5C27A250EB6600056F0EC /* RantModel.swift in Sources */,
 				598FDA5E2510B63200ED2C13 /* RandomAccessCollection+Extension.swift in Sources */,
 				59627A4C250F9B3B00233F48 /* Comment.swift in Sources */,
@@ -338,10 +377,11 @@
 				59627A4A250F925A00233F48 /* CommentModel.swift in Sources */,
 				59627A4E250FA4C100233F48 /* RantView.swift in Sources */,
 				59B85B2E25345BAB00B2CAC9 /* QuickLook.swift in Sources */,
-				5903172D2524A15700CA9E99 /* View+navigationAllowSwipeBackWhenHidden.swift in Sources */,
+				59F20B58253C6D270028A3C6 /* ScrollUpHeaderBehavior.swift in Sources */,
 				598FDA572510AB5700ED2C13 /* SwiftUICollectionView.swift in Sources */,
 				59B85B3125345BD500B2CAC9 /* File.swift in Sources */,
 				59B5C274250E78A90056F0EC /* User.swift in Sources */,
+				59F20B5E253C6D6B0028A3C6 /* View+navigationAllowSwipeBackWhenHidden.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -475,7 +515,7 @@
 				DEVELOPMENT_TEAM = 666F768P5J;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = devRantAvatarEditor/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -500,7 +540,7 @@
 				DEVELOPMENT_TEAM = 666F768P5J;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = devRantAvatarEditor/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -554,14 +594,6 @@
 				kind = branch;
 			};
 		};
-		5999E0E9251E4F000096470D /* XCRemoteSwiftPackageReference "FancyScrollView" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/nerdsupremacist/FancyScrollView";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.3;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -574,11 +606,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 59295A0E2525204C00E98087 /* XCRemoteSwiftPackageReference "bottombar-swiftui" */;
 			productName = "BottomBar-SwiftUI";
-		};
-		5999E0EA251E4F000096470D /* FancyScrollView */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 5999E0E9251E4F000096470D /* XCRemoteSwiftPackageReference "FancyScrollView" */;
-			productName = FancyScrollView;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
