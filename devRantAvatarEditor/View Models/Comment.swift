@@ -22,9 +22,9 @@ public struct Comment: View {
                             } else if self.commentContents.vote_state == 0 {
                                 Image(systemName: "plus.circle.fill").accentColor(.gray).font(.system(size: 25))
                             } else {
-                                Image(systemName: "plus.circle.fill").disabled(true).font(.system(size: 25))
+                                Image(systemName: "plus.circle.fill").font(.system(size: 25))
                             }
-                        })
+                        }).disabled(self.commentContents.vote_state == -2)
                         Text(String(self.commentContents.score)).font(.subheadline)
                         Button(action: {}, label: {
                             if self.commentContents.vote_state == -1 {
@@ -32,9 +32,9 @@ public struct Comment: View {
                             } else if self.commentContents.vote_state == 0 {
                                 Image(systemName: "minus.circle.fill").accentColor(.gray).font(.system(size: 25))
                             } else {
-                                Image(systemName: "minus.circle.fill").disabled(true).font(.system(size: 25))
+                                Image(systemName: "minus.circle.fill").accentColor(.gray).font(.system(size: 25))
                             }
-                        })
+                        }).disabled(self.commentContents.vote_state == -2)
                     }
                     
                     
@@ -56,8 +56,9 @@ public struct Comment: View {
                                             //.padding(.trailing)
                                         
                                         VStack(alignment: .leading, spacing: 1.0) {
-                                            Text(self.commentContents.user_username).fixedSize(horizontal: false, vertical: true)
-                                                .scaledToFill()
+                                            Text(self.commentContents.user_username)
+                                                .fixedSize(horizontal: true, vertical: false)
+                                                //.scaledToFill()
                                             
                                             ZStack(alignment: .leading) {
                                                 RoundedRectangle(cornerRadius: 5).fill(Color(color!))
@@ -71,10 +72,7 @@ public struct Comment: View {
                                                 .clipShape(Circle())
                                         
                                         VStack(alignment: .leading, spacing: 1.0) {
-                                            Text(self.commentContents.user_username)
-                                                .fixedSize()
-                                                .scaledToFill()
-                                                //.frame(alignment: .leading)
+                                            Text(self.commentContents.user_username).fixedSize(horizontal: false, vertical: true).fixedSize(horizontal: true, vertical: false)
                                                 
                                             ZStack(alignment: .leading) {
                                                     RoundedRectangle(cornerRadius: 5).fill(Color(UIColor(hex: self.commentContents.user_avatar.b)!))
@@ -133,26 +131,26 @@ struct Comment_Previews: PreviewProvider {
     static var previews: some View {
         Comment(highlightColor: Color.red,
                 commentContents: CommentModel(
-                    id: 11111,
-                    rant_id: 99999,
-                    body: "Test Test Test Test",
-                    score: 9000,
-                    created_time: 2350498723,
+                    id: 3290854,
+                    rant_id: 3290301,
+                    body: "Senior dev: It'd better be Liit",
+                    score: 0,
+                    created_time: 1603125848,
                     vote_state: 0,
                     links: nil,
-                    user_id: 34598735,
-                    user_username: "OmerFlame",
-                    user_score: 9000,
+                    user_id: 3290286,
+                    user_username: "ashinsiider",
+                    user_score: 1,
                     user_avatar: UserAvatar(
-                        b: "d55161",
-                        i: "v-37_c-3_b-2_g-m_9-1_1-6_16-4_3-6_8-4_7-4_5-4_12-6_17-2_6-15_2-26_22-7_15-3_11-3_18-4_19-4_4-4_20-1_21-1.jpg"
-                        //i: nil
+                        b: "7bc8a4",
+                        //i: "v-37_c-3_b-2_g-m_9-1_1-6_16-4_3-6_8-4_7-4_5-4_12-6_17-2_6-15_2-26_22-7_15-3_11-3_18-4_19-4_4-4_20-1_21-1.jpg"
+                        i: nil
                     ),
                     user_dpp: nil,
-                    attached_image: AttachedImage(
+                    attached_image: nil /*AttachedImage(
                         url: "https://avatars.devrant.com/v-37_c-1_b-5_g-m_9-1_1-1_16-7_3-2_8-2_7-2_5-1_12-1_6-97_10-9_2-90_22-7_11-8_18-3_19-2_4-1_20-2.png",
                         width: 1400,
-                        height: 1400)
+                        height: 1400)*/
                 ))
     }
 }

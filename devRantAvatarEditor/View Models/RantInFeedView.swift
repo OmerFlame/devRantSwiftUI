@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import FancyScrollView
 
 struct RantInFeedView: View {
     @State private var totalHeight = CGFloat.zero
@@ -86,16 +85,22 @@ struct RantInFeedView: View {
                             } else if self.rantContents.vote_state == 0 {
                                 Image(systemName: "minus.circle.fill").accentColor(.gray).font(.system(size: 25))
                             } else {
-                                Image(systemName: "minus.circle.fill").font(.system(size: 25))
+                                Image(systemName: "minus.circle.fill").accentColor(.gray).font(.system(size: 25))
                             }
                         })
                     }.disabled(self.rantContents.vote_state == -2) // END UPVOTE / DOWNVOTE VSTACK
                     
+                    // MAXIMUM 240 CHARS
                     
                     VStack {
                         HStack {
-                            Text(self.rantContents.text)
-                                .padding(.trailing)
+                            if self.rantContents.text.count >= 240 {
+                                Text(self.rantContents.text.prefix(240) + "... [read more]")
+                                    .padding(.trailing)
+                            } else {
+                                Text(self.rantContents.text)
+                                    .padding(.trailing)
+                            }
                             
                             Spacer()
                         }

@@ -33,4 +33,27 @@ public struct RantInFeed: Codable, Identifiable {
     let user_avatar: UserAvatar
     let user_avatar_lg: UserAvatar
     let user_dpp: Int?
+    
+    enum CodingKeys: String, CodingKey {
+        case id,
+             text,
+             score,
+             created_time,
+             attached_image,
+             num_comments,
+             tags,
+             vote_state,
+             edited,
+             link,
+             rt,
+             rc,
+             c_type,
+             c_type_long,
+             user_id,
+             user_username,
+             user_score,
+             user_avatar,
+             user_avatar_lg,
+             user_dpp
+    }
 }

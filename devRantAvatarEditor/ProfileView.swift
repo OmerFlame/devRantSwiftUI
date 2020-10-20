@@ -24,6 +24,7 @@ struct ProfileView: View {
     @State var userInfo: Profile? = nil
     
     @State var image: UIImage?
+    @State var imageOpacity: Double = 1
     
     init(userID: Int) {
         UISegmentedControl.appearance().backgroundColor = .systemBackground
@@ -95,17 +96,38 @@ struct ProfileView: View {
         } else {
             ZStack(alignment: .bottom) {
                 if self.userInfo?.avatar.i != nil {
+                    let imageHeader = Header(imageOpacity: 1.0, image: self.image!, userAvatar: self.userInfo!.avatar)
                     FancyScrollView(title: self.userInfo!.username,
                                     upvotes: self.userInfo!.score,
                                     choice: $viewSelection,
+                                    opacity: imageHeader.imageOpacity,
                                     headerHeight: 450,
                                     scrollUpHeaderBehavior: .parallax,
                                     scrollDownHeaderBehavior: .offset,
-                                    header: {
-                                        ZStack(alignment: .bottomTrailing) {
+                                    header: imageHeader /*{
+                                        /*ZStack(alignment: .trailing) {
                                             Image(uiImage: self.image!).resizable().aspectRatio(contentMode: .fill)
+                                        }*/
+                                        
+                                        //Image(uiImage: self.image!).resizable().aspectRatio(contentMode: .fill)
+                                        GeometryReader { geometry in
+                                            ZStack {
+                                                Rectangle()
+                                                    .fill(Color(UIColor(hex: self.userInfo!.avatar.b)!))
+                                                    .aspectRatio(contentMode: .fill)
+                                                    .fixedSize(horizontal: false, vertical: false)
+                                                    .opacity(sqrt(self.imageOpacity))
+                                                Image(uiImage: self.image!).resizable().aspectRatio(contentMode: .fill)
+                                                    .frame(width: geometry.size.width - 100, height: geometry.size.height - 100, alignment: .center)
+                                                    .opacity(self.imageOpacity)
+                                            }
+                                            .aspectRatio(contentMode: .fill)
+                                            .position(x: geometry.frame(in: .local).midX, y: geometry.frame(in: .local).midY)
+                                            .opacity(sqrt(self.imageOpacity))
+                                            //.fixedSize(horizontal: false, vertical: false)
                                         }
-                                    }) {
+                                        .opacity(sqrt(self.imageOpacity))
+                                    }*/) {
                         self.builder()
                     }
                 } else {
@@ -145,6 +167,34 @@ struct ProfileView: View {
         }
         
         return AnyView(RantsList(userID: self.userID))
+    }
+}
+
+public struct Header: View {
+    var imageOpacity: Double
+    let image: UIImage
+    let userAvatar: UserAvatar
+    
+    public var body: some View {
+        GeometryReader { geometry in
+            Color(UIColor(hex: self.userAvatar.b)!)
+                //.opacity(0.5)
+                .overlay(
+                    Image(uiImage: self.image).resizable().aspectRatio(contentMode: .fill)
+                        .frame(width: geometry.size.width - 100, height: geometry.size.height - 100, alignment: .center)
+                )
+                //.background(Color(UIColor(hex: self.userAvatar.b)!).opacity(0.5))
+                .aspectRatio(contentMode: .fill)
+                .position(x: geometry.frame(in: .local).midX, y: geometry.frame(in: .local).midY)
+                .overlay(Rectangle().fill(Color.black).frame(width: geometry.size.width, height: geometry.size.height).opacity(sqrt(1 - self.imageOpacity)))
+            //.opacity(sqrt(self.imageOpacity))
+            //.opacity(sqrt(0.5))
+            //.fixedSize(horizontal: false, vertical: false)
+        }
+        //.background(Color(UIColor(hex: self.userAvatar.b)!))
+        //.background(Color(hue: 154, saturation: 25.8, brightness: 51.4))
+        //.opacity(sqrt(self.imageOpacity))
+        //.opacity(0.5)
     }
 }
 

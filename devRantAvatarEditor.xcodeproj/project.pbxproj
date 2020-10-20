@@ -152,8 +152,9 @@
 				598FDA502510A99100ED2C13 /* Extensions */,
 				59B5C278250EB6500056F0EC /* Data Structures */,
 				59B5C275250EB1BA0056F0EC /* View Models */,
-				5948D91D250E6D4200373317 /* devRantAvatarEditorApp.swift */,
+				5992EB40253EC2F1005999C3 /* InfiniteScrollView */,
 				59F20B2D253C6B030028A3C6 /* FancyScrollView */,
+				5948D91D250E6D4200373317 /* devRantAvatarEditorApp.swift */,
 				5948D91F250E6D4200373317 /* ContentView.swift */,
 				59B5C271250E78730056F0EC /* APIRequest.swift */,
 				59B5C273250E78A90056F0EC /* User.swift */,
@@ -208,6 +209,37 @@
 				598FDA5B2510B3DC00ED2C13 /* PagedCollection.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		5992EB40253EC2F1005999C3 /* InfiniteScrollView */ = {
+			isa = PBXGroup;
+			children = (
+				5992EB41253EC31A005999C3 /* Model */,
+				5992EB42253EC325005999C3 /* ViewModel */,
+				5992EB44253EC33F005999C3 /* View */,
+			);
+			path = InfiniteScrollView;
+			sourceTree = "<group>";
+		};
+		5992EB41253EC31A005999C3 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		5992EB42253EC325005999C3 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		5992EB44253EC33F005999C3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		59B5C275250EB1BA0056F0EC /* View Models */ = {

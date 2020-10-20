@@ -16,11 +16,12 @@ struct HeaderScrollView: View {
     let title: String
     let upvotes: Int
     @Binding var pageSelection: ProfilePages
+    var opacity: Double
     @State var selectedPage: ProfilePages = .rants
     let headerHeight: CGFloat
     let scrollUpBehavior: ScrollUpHeaderBehavior
     let scrollDownBehavior: ScrollDownHeaderBehavior
-    let header: AnyView
+    let header: Header
     let content: AnyView
     
     func scrollToTop(_ reader: ScrollViewProxy) {
@@ -38,14 +39,15 @@ struct HeaderScrollView: View {
                     VStack(spacing: 0) {
                         GeometryReader { geometry -> AnyView in
                             let geometry = self.geometry(from: geometry, safeArea: globalGeometry.safeAreaInsets)
-                            return AnyView(
-                                self.header
-                                    .id("Header")
-                                    .frame(width: geometry.width, height: geometry.headerHeight)
-                                    .clipped()
-                                    .opacity(sqrt(geometry.largeTitleWeight))
-                                    .offset(y: geometry.headerOffset)
-                            )
+                            //self.header.imageOpacity = geometry.largeTitleWeight
+                            return AnyView(Header(imageOpacity: geometry.largeTitleWeight, image: self.header.image, userAvatar: self.header.userAvatar)
+                                            
+                                            .id("Header")
+                                            .frame(width: geometry.width, height: geometry.headerHeight)
+                                            .clipped()
+                                            //.opacity(sqrt(geometry.largeTitleWeight))
+                                            //.opacity(0.5)
+                                            .offset(y: geometry.headerOffset))
                         }
                         .frame(width: globalGeometry.size.width, height: self.headerHeight)
 

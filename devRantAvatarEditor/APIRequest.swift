@@ -149,7 +149,8 @@ class APIRequest {
     }
     
     func getRantFromID(id: Int) throws -> RantResponse? {
-        self.resourceURL = URL(string: "https://devrant.com/api/devrant/rants/\(String(id))?app=3")
+        
+        self.resourceURL = URL(string: "https://devrant.com/api/devrant/rants/\(String(id))?app=3&user_id=\(String(UserDefaults.standard.integer(forKey: "UserID")))&token_id=\(String(UserDefaults.standard.integer(forKey: "TokenID")))&token_key=\(String(UserDefaults.standard.string(forKey: "TokenKey")!))")
         self.request = URLRequest(url: self.resourceURL)
         request.httpMethod = "GET"
         request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")

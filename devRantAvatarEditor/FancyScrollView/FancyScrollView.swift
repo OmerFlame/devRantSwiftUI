@@ -11,10 +11,11 @@ public struct FancyScrollView: View {
     let title: String
     let upvotes: Int
     @Binding var pageSelection: ProfilePages
+    var opacity: Double
     let headerHeight: CGFloat
     let scrollUpHeaderBehavior: ScrollUpHeaderBehavior
     let scrollDownHeaderBehavior: ScrollDownHeaderBehavior
-    let header: AnyView?
+    let header: Header?
     let content: AnyView
 
     public var body: some View {
@@ -23,6 +24,7 @@ public struct FancyScrollView: View {
                 HeaderScrollView(title: title,
                                  upvotes: self.upvotes,
                                  pageSelection: self.$pageSelection,
+                                 opacity: opacity,
                                  headerHeight: headerHeight,
                                  scrollUpBehavior: scrollUpHeaderBehavior,
                                  scrollDownBehavior: scrollDownHeaderBehavior,
@@ -55,22 +57,24 @@ public struct FancyScrollView: View {
 
 extension FancyScrollView {
 
-    public init<A: View, B: View>(title: String = "",
+    public init<B: View>(title: String = "",
                                   upvotes: Int,
                                   choice: Binding<ProfilePages>,
+                                  opacity: Double,
                                   headerHeight: CGFloat = 300,
                                   scrollUpHeaderBehavior: ScrollUpHeaderBehavior = .parallax,
                                   scrollDownHeaderBehavior: ScrollDownHeaderBehavior = .offset,
-                                  header: () -> A?,
+                                  header: Header?,
                                   content: () -> B) {
 
         self.init(title: title,
                   upvotes: upvotes,
                   pageSelection: choice,
+                  opacity: opacity,
                   headerHeight: headerHeight,
                   scrollUpHeaderBehavior: scrollUpHeaderBehavior,
                   scrollDownHeaderBehavior: scrollDownHeaderBehavior,
-                  header: AnyView(header()),
+                  header: header,
                   content: AnyView(content()))
     }
 
@@ -78,6 +82,7 @@ extension FancyScrollView {
                          headerHeight: CGFloat = 300,
                          upvotes: Int,
                          choice: Binding<ProfilePages>,
+                         opacity: Double,
                          scrollUpHeaderBehavior: ScrollUpHeaderBehavior = .parallax,
                          scrollDownHeaderBehavior: ScrollDownHeaderBehavior = .offset,
                          content: () -> A) {
@@ -85,6 +90,7 @@ extension FancyScrollView {
            self.init(title: title,
                      upvotes: upvotes,
                      pageSelection: choice,
+                     opacity: opacity,
                      headerHeight: headerHeight,
                      scrollUpHeaderBehavior: scrollUpHeaderBehavior,
                      scrollDownHeaderBehavior: scrollDownHeaderBehavior,

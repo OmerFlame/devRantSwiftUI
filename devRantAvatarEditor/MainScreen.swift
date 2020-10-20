@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct MainScreen: View {
     @State var apiRequest: APIRequest
@@ -15,12 +16,13 @@ struct MainScreen: View {
     @State var shouldShowLoadingRing = true
     
     @State var shouldShowError = false
+    @State var shouldLoadContinuously = false
     
-    @State var rantFeed: RantFeed?
+    @StateObject var rantFeed = RantFeedObservable()
     
     @State var isSheet = true
     
-    private func getFeed() {
+    /*private func getFeed() {
         do {
             self.rantFeed = try self.apiRequest.getRantFeed()
             
@@ -30,16 +32,16 @@ struct MainScreen: View {
                 self.shouldShowError.toggle()
             }
         }
-    }
+    }*/
     
     var body: some View {
         NavigationView {
-            if self.rantFeed == nil || self.shouldShowLoadingRing == true {
+            /*if self.rantFeed.isLoadingPage {
                 VStack(alignment: .center) {
                     ProgressView("Loading Rants")
                         .progressViewStyle(CircularProgressViewStyle())
-                        .onAppear {
-                            if self.rantFeed == nil {
+                        /*.onAppear {
+                            if self.rantFeed.pageStatus == .loading {
                                 self.shouldShowLoadingRing = true
                                 DispatchQueue.global(qos: .userInitiated).async {
                                     self.getFeed()
@@ -50,21 +52,30 @@ struct MainScreen: View {
                                     }
                                 }
                             }
-                    }
-                }
-            } else {
+                    }*/
+                }*/
+            //} else {
                 GeometryReader { geometry in
                     ScrollView(.vertical) {
-                        VStack(alignment: .leading) {
-                            ForEach(self.rantFeed!.rants, id: \.uuid) { rant in
+                        LazyVStack {
+                            ForEach(self.rantFeed.rants, id: \.uuid) { rant in
                                 NavigationLink(
                                     destination: RantView(rantID: rant.id, apiRequest: self.apiRequest)) {
-                                        RantInFeedView(rantContents: rant)
-                                            //.fixedSize(horizontal: false, vertical: true)
-                                            .frame(alignment: .leading)
-                                            
+                                    RantInFeedView(rantContents: rant)
+                                        //.fixedSize(horizontal: false, vertical: true)
+                                        .frame(alignment: .leading)
+                                        .onAppear {
+                                            rantFeed.loadMoreContentIfNeeded(currentItem: rant)
+                                        }
                                 }
                                 .buttonStyle(PlainButtonStyle())
+                            }
+                            
+                            if rantFeed.isLoadingPage {
+                                VStack(alignment: .center) {
+                                    ProgressView()
+                                        .progressViewStyle(CircularProgressViewStyle())
+                                }
                             }
                             
                             NavigationLink(
@@ -111,7 +122,7 @@ struct MainScreen: View {
                         .padding(.top)
                     }
                 }
-            }
+            //}
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }

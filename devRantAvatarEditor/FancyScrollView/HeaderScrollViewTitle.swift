@@ -24,7 +24,10 @@ struct HeaderScrollViewTitle: View {
                     .foregroundColor(.white)
                     .fontWeight(.black)
                     .padding(.leading, 16)
-                    .fixedSize(horizontal: true, vertical: false)
+                    .minimumScaleFactor(0.2)
+                    .allowsTightening(true)
+                    .lineLimit(1)
+                    .fixedSize(horizontal: false, vertical: true)
                 
                 ZStack {
                     RoundedRectangle(cornerRadius: 5).fill(Color.white)
@@ -39,6 +42,7 @@ struct HeaderScrollViewTitle: View {
             ZStack {
                 HStack {
                     BackButton(color: .primary)
+                        .scaledToFit()
                     Spacer()
                 }
                 
@@ -46,13 +50,21 @@ struct HeaderScrollViewTitle: View {
                     Text(title)
                         .font(.system(size: 18))
                         .fontWeight(.bold)
+                        .padding(.leading, 16)
                         .foregroundColor(.primary)
+                        .minimumScaleFactor(0.015)
+                        .allowsTightening(true)
+                        .lineLimit(1)
+                        .fixedSize(horizontal: false, vertical: true)
+                        
                         
                     ZStack {
                         RoundedRectangle(cornerRadius: 5).fill(Color.white)
                         Text("+" + String(self.upvotes)).padding(.init(top: 2.5, leading: 5, bottom: 2.5, trailing: 5)).font(.caption).foregroundColor(.black)
-                    }.fixedSize()
-                }
+                    }.fixedSize().padding(.trailing)
+                    
+                    
+                }.padding(.leading).minimumScaleFactor(0.2).allowsTightening(true).lineLimit(1).fixedSize(horizontal: false, vertical: true).frame(alignment: .center)
             }
             .padding(.bottom, (height - 18) / 2)
             .opacity(sqrt(tinyTitleOpacity))
