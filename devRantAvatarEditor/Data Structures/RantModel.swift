@@ -10,6 +10,7 @@ import Foundation
 public struct RantModel: Codable, Identifiable {
     public let uuid = UUID()
     
+    let weekly: Weekly?
     
     public let id: Int
     let text: String
@@ -23,7 +24,7 @@ public struct RantModel: Codable, Identifiable {
     
     let tags: [String]
     
-    let vote_state: Int
+    var vote_state: Int
     
     let edited: Bool
     
@@ -62,6 +63,7 @@ public struct RantModel: Codable, Identifiable {
              num_comments,
              tags,
              vote_state,
+             weekly,
              edited,
              link,
              rt,
@@ -90,6 +92,7 @@ public struct RantModel: Codable, Identifiable {
          num_comments: Int,
          tags: [String],
          vote_state: Int,
+         weekly: Weekly?,
          edited: Bool,
          link: String?,
          rt: Int,
@@ -117,6 +120,7 @@ public struct RantModel: Codable, Identifiable {
         self.num_comments = num_comments
         self.tags = tags
         self.vote_state = vote_state
+        self.weekly = weekly
         self.edited = edited
         self.link = link
         self.rt = rt
@@ -153,6 +157,7 @@ public struct RantModel: Codable, Identifiable {
         num_comments = try values.decode(Int.self, forKey: .num_comments)
         tags = try values.decode([String].self, forKey: .tags)
         vote_state = try values.decode(Int.self, forKey: .vote_state)
+        weekly = try? values.decode(Weekly.self, forKey: .weekly)
         edited = try values.decode(Bool.self, forKey: .edited)
         link = try? values.decode(String.self, forKey: .link)
         rt = try values.decode(Int.self, forKey: .rt)
@@ -224,4 +229,11 @@ public struct Link: Codable {
     let start: Int
     let end: Int
     let special: Int
+}
+
+public struct Weekly: Codable {
+    let date: String
+    let height: Int
+    let topic: String
+    let week: Int
 }

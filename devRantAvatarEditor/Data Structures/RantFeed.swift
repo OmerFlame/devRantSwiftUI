@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import Combine
+import RxSwift
 
 struct RantFeed: Codable {
     struct RantFeedSettings: Codable {
@@ -66,7 +67,7 @@ struct RantFeed: Codable {
         rants = try values.decode([RantInFeed].self, forKey: .rants)
         settings = try? values.decode(RantFeedSettings.self, forKey: .settings)
         set = try values.decode(String.self, forKey: .set)
-        wrw = try values.decode(Int.self, forKey: .wrw)
+        wrw = try? values.decode(Int.self, forKey: .wrw)
         dpp = try? values.decode(Int.self, forKey: .dpp)
         num_notifs = try? values.decode(Int.self, forKey: .num_notifs)
         unread = try? values.decode(RantFeedUnread.self, forKey: .unread)
@@ -99,12 +100,28 @@ struct RantFeed: Codable {
     }
 }
 
-class RantFeedObservable: ObservableObject {
-    @Published var rants = [RantInFeed]()
-    @Published var isLoadingPage = false
+protocol RantFeedModelDelegate: class {
+    func onFetchCompleted(with newIndexPathsToReload: [IndexPath]?)
+    func onFetchFailed(with reason: String)
+}
+
+class RantFeedModel {
+    private weak var delegate: RantFeedModelDelegate?
     
-    init() {
-        loadMoreContent()
+    var rants = [RantInFeed]()
+    var isLoadingPage = false
+    var currentPage = 0
+    
+    init(delegate: RantFeedModelDelegate) {
+        self.delegate = delegate
+    }
+    
+    var currentCount: Int {
+        return rants.count
+    }
+    
+    func rant(at index: Int) -> RantInFeed {
+        return rants[index]
     }
     
     func loadMoreContentIfNeeded(currentItem item: RantInFeed?) {
@@ -124,28 +141,48 @@ class RantFeedObservable: ObservableObject {
         
     }
     
-    private func loadMoreContent() {
+    func loadMoreContent() {
         guard !isLoadingPage else {
             return
         }
         
-        isLoadingPage = true
+        self.isLoadingPage = true
         
         if Double(UserDefaults.standard.integer(forKey: "TokenExpireTime")) - Date().timeIntervalSince1970 <= 0 {
             APIRequest().logIn(username: UserDefaults.standard.string(forKey: "Username")!, password: UserDefaults.standard.string(forKey: "Password")!)
         }
         
-        URLSession.shared.dataTaskPublisher(for: URL(string: "https://devrant.com/api/devrant/rants?app=3&token_id=\(String(UserDefaults.standard.integer(forKey: "TokenID")))&token_key=\(UserDefaults.standard.string(forKey: "TokenKey")!)&user_id=\(String(UserDefaults.standard.integer(forKey: "UserID")))&range=week&limit=20")!)
-            .map(\.data)
-            .decode(type: RantFeed.self, decoder: JSONDecoder())
-            .receive(on: DispatchQueue.main)
-            .handleEvents(receiveOutput: { response in
+        let newRants = APIRequest().getRantFeed(skip: rants.count)
+        
+        if newRants.rants == nil {
+            DispatchQueue.main.async {
                 self.isLoadingPage = false
-            })
-            .map({ response in
-                return self.rants + response.rants!
-            })
-            .catch({ _ in Just(self.rants) })
-            .assign(to: &$rants)
+                self.delegate?.onFetchFailed(with: "Failed to load rants")
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.isLoadingPage = false
+                self.currentPage += 1
+                self.rants.append(contentsOf: newRants.rants!)
+                
+                if self.currentPage > 1 {
+                    let indexPathsToReload = self.calculateIndexPathsToReload(from: newRants.rants!)
+                    self.delegate?.onFetchCompleted(with: indexPathsToReload)
+                } else {
+                    self.delegate?.onFetchCompleted(with: .none)
+                }
+            }
+        }
     }
+    
+    private func calculateIndexPathsToReload(from newRants: [RantInFeed]) -> [IndexPath] {
+        let startIndex = rants.count - newRants.count
+      let endIndex = startIndex + newRants.count
+      return (startIndex..<endIndex).map { IndexPath(row: $0, section: 0) }
+    }
+}
+
+enum Result<T, U: Error> {
+    case success(T)
+    case failure(U)
 }

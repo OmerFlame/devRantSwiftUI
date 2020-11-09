@@ -10,7 +10,7 @@ import SwiftUI
 struct HeaderScrollViewTitle: View {
     let title: String
     let upvotes: Int
-    @Binding var pageSelection: ProfilePages
+    //@Binding var pageSelection: ProfilePages
     let height: CGFloat
     let largeTitle: Double
 

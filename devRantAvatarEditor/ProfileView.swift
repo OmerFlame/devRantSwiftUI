@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import BottomBar_SwiftUI
 
 public enum ProfilePages: String, CaseIterable {
     case rants = "Rants"
@@ -31,15 +30,16 @@ struct ProfileView: View {
         UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
         
         self.userID = userID
+        self._image = State(initialValue: UIImage())
         
-        do {
+        /*do {
             //self._userInfo = State(initialValue: nil)
             self._image = State(initialValue: UIImage())
             
         } catch let error {
             print(error.localizedDescription)
             self.userInfo = nil
-        }
+        }*/
     }
     
     func getImage() {
@@ -129,7 +129,11 @@ struct ProfileView: View {
                                         .opacity(sqrt(self.imageOpacity))
                                     }*/) {
                         self.builder()
+                            .edgesIgnoringSafeArea(.bottom)
+                            .frame(maxHeight: .infinity)
                     }
+                    .edgesIgnoringSafeArea(.bottom)
+                    .frame(maxHeight: .infinity)
                 } else {
                     ScrollView {
                         VStack {
@@ -170,6 +174,119 @@ struct ProfileView: View {
     }
 }
 
+struct SecondaryProfileView: View {
+    @State var isComplete = false
+    @State var shouldShowError = false
+    
+    let userID: Int
+    @State var userInfo: Profile? = nil
+    
+    @State var image: UIImage?
+    
+    init(userID: Int) {
+        self.userID = userID
+        self._image = State(initialValue: UIImage())
+    }
+    
+    var body: some View {
+        NavigationView {
+            VStack {
+                if self.isComplete == false {
+                    VStack(alignment: .center) {
+                        ProgressView("Loading Profile")
+                            .progressViewStyle(CircularProgressViewStyle())
+                            .onAppear {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                    DispatchQueue.global(qos: .userInitiated).sync {
+                                        self.getUserInfo()
+                                        
+                                        if self.userInfo?.avatar.i != nil {
+                                            self.getImage()
+                                        }
+                                        
+                                        DispatchQueue.main.async {
+                                            self.isComplete = true
+                                        }
+                                    }
+                                }
+                            }//.navigationBarHidden(true)
+                    }
+                } else if self.isComplete && self.userInfo == nil {
+                    EmptyView()
+                        .onAppear {
+                            self.shouldShowError.toggle()
+                        }
+                } else {
+                    VStack {
+                        //TertiaryProfileScrollSwiftUI(userID: self.userID, profileData: userInfo!, image: image)
+                        //Text("Test")
+                        TertiaryProfileScrollSwiftUI(userID: self.userID, profileData: userInfo!, image: image)
+                            .edgesIgnoringSafeArea(.top)
+                            //.navigationBarHidden(true)
+                            //.navigationBarBackButtonHidden(true)
+                            /*.onDisappear {
+                                let navBar = findViewInViewHierarchy(withRootView: UIApplication.shared.windows.first!.rootViewController!.view, destinationType: "UINavigationBar")
+                                
+                                if !navBar.isEmpty {
+                                    navBar[0].isHidden = false
+                                } else {
+                                    print("NAVBAR NOT FOUND")
+                                }
+                            }*/
+                    }.edgesIgnoringSafeArea(.top)
+                    //.navigationBarHidden(true)
+                    //.navigationBarBackButtonHidden(true)
+                }
+            }
+            .edgesIgnoringSafeArea(.top)
+            //.navigationBarHidden(true)
+            //.navigationBarBackButtonHidden(true)
+        }
+        .navigationBarHidden(true)
+        .edgesIgnoringSafeArea(.top)
+    }
+    
+    func findViewInViewHierarchy(withRootView view: UIView, destinationType: String) -> [UIView] {
+        let subviews = view.subviews
+        
+        guard subviews.count != 0 else { return [] }
+        
+        var capturedViews: [UIView] = []
+        
+        capturedViews = subviews.filter { String(describing: type(of: $0)) == destinationType }
+        
+        for subview in subviews {
+            //print(subview.description)
+            
+            capturedViews.append(contentsOf: findViewInViewHierarchy(withRootView: subview, destinationType: destinationType))
+        }
+        
+        return capturedViews
+    }
+    
+    func getImage() {
+        let completionSemaphore = DispatchSemaphore(value: 0)
+        
+        URLSession.shared.dataTask(with: URL(string: "https://avatars.devrant.com/\(self.userInfo!.avatar.i!)")!) { data, _, _ in
+            self.image = UIImage(data: data!)
+            
+            completionSemaphore.signal()
+        }.resume()
+        
+        completionSemaphore.wait()
+        return
+    }
+    
+    func getUserInfo() {
+        do {
+            self.userInfo = try APIRequest().getProfileFromID(self.userID, userContentType: .rants, skip: 0)!.profile
+        } catch let error {
+            print(error.localizedDescription)
+            self.userInfo = nil
+        }
+    }
+}
+
 public struct Header: View {
     var imageOpacity: Double
     let image: UIImage
@@ -186,7 +303,7 @@ public struct Header: View {
                 //.background(Color(UIColor(hex: self.userAvatar.b)!).opacity(0.5))
                 .aspectRatio(contentMode: .fill)
                 .position(x: geometry.frame(in: .local).midX, y: geometry.frame(in: .local).midY)
-                .overlay(Rectangle().fill(Color.black).frame(width: geometry.size.width, height: geometry.size.height).opacity(sqrt(1 - self.imageOpacity)))
+                .overlay(Rectangle().fill(Color(UIColor.systemBackground)).frame(width: geometry.size.width, height: geometry.size.height).opacity(sqrt(1 - self.imageOpacity)))
             //.opacity(sqrt(self.imageOpacity))
             //.opacity(sqrt(0.5))
             //.fixedSize(horizontal: false, vertical: false)
@@ -244,11 +361,17 @@ struct RantsList: View {
         } else {
             VStack {
                 ForEach(data!, id: \.uuid) { rant in
-                    RantInFeedView(rantContents: rant)
+                    // NOTE: THIS IS A TEMPORARY FIX. FIX THIS LATER!
+                    
+                    RantInFeedView(rantContents: State(initialValue: rant).projectedValue, uiImage: nil)
                 }
             }
-            .padding(.bottom, 25)
-            .padding(.top)
+            /*ProfileInfiniteScrollViewRepresentable(userID: self.userID)
+                .padding(.bottom, 25)
+                .padding(.top)
+                .navigationBarHidden(true)
+                .edgesIgnoringSafeArea(.bottom)
+                .frame(maxHeight: .infinity)*/
         }
     }
 }
@@ -261,7 +384,7 @@ struct PreventCollapseView: View {
     }
 }
 
-struct ProfileRantsView: View {
+/*struct ProfileRantsView: View {
     @State var rants: [RantInFeed]
     
     var body: some View {
@@ -271,7 +394,7 @@ struct ProfileRantsView: View {
             }
         }
     }
-}
+}*/
 
 extension UINavigationController: UIGestureRecognizerDelegate {
     override open func viewDidLoad() {

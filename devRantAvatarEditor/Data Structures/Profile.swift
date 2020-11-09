@@ -16,7 +16,7 @@ struct Profile: Codable {
     let skills: String
     let github: String
     let website: String?
-    let content: OuterUserContent
+    var content: OuterUserContent
     let avatar: UserAvatar
     let avatar_sm: UserAvatar
     let dpp: Int?
@@ -28,11 +28,11 @@ struct OuterUserContent: Codable {
 }
 
 struct InnerUserContent: Codable {
-    let rants: [RantInFeed]
-    let upvoted: [RantInFeed]
-    let comments: [CommentModel]
-    let favorites: [RantInFeed]?
-    let viewed: [RantInFeed]?
+    var rants: [RantInFeed]
+    var upvoted: [RantInFeed]
+    var comments: [CommentModel]
+    var favorites: [RantInFeed]?
+    var viewed: [RantInFeed]?
     
     enum CodingKeys: String, CodingKey {
         case rants,
@@ -92,7 +92,7 @@ enum ProfileContentTypes: String {
     case rants = "rants"
     case upvoted = "upvoted"
     case comments = "comments"
-    case favorite = "favorite"
+    case favorite = "favorites"
     case viewed = "viewed"
 }
 

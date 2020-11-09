@@ -9,8 +9,8 @@ import SwiftUI
 
 struct RantInFeedView: View {
     @State private var totalHeight = CGFloat.zero
-    
-    @State var rantContents: RantInFeed
+    @Binding var rantContents: RantInFeed
+    let uiImage: UIImage?
     
     private func viewHeightReader(_ binding: Binding<CGFloat>) -> some View {
         return GeometryReader { geometry -> Color in
@@ -65,89 +65,95 @@ struct RantInFeedView: View {
     }
     
     var body: some View {
-        HStack {
-            VStack {
-                HStack(alignment: .top) { // START MAIN HSTACK
-                    VStack { // UPVOTE / DOWNVOTE VSTACK
-                        Button(action: {}, label: {
-                            if self.rantContents.vote_state == 1 {
-                                Image(systemName: "plus.circle.fill").font(.system(size: 25)).accentColor(Color(UIColor(hex: self.rantContents.user_avatar.b)!))
-                            } else if self.rantContents.vote_state == 0 {
-                                Image(systemName: "plus.circle.fill").accentColor(.gray).font(.system(size: 25))
-                            } else {
-                                Image(systemName: "plus.circle.fill").accentColor(.gray).font(.system(size: 25))
-                            }
-                        })
-                        Text(String(self.rantContents.score)).font(.subheadline)
-                        Button(action: {}, label: {
-                            if self.rantContents.vote_state == -1 {
-                                Image(systemName: "minus.circle.fill").font(.system(size: 25)).accentColor(Color(UIColor(hex: self.rantContents.user_avatar.b)!))
-                            } else if self.rantContents.vote_state == 0 {
-                                Image(systemName: "minus.circle.fill").accentColor(.gray).font(.system(size: 25))
-                            } else {
-                                Image(systemName: "minus.circle.fill").accentColor(.gray).font(.system(size: 25))
-                            }
-                        })
-                    }.disabled(self.rantContents.vote_state == -2) // END UPVOTE / DOWNVOTE VSTACK
-                    
-                    // MAXIMUM 240 CHARS
-                    
-                    VStack {
-                        HStack {
-                            if self.rantContents.text.count >= 240 {
-                                Text(self.rantContents.text.prefix(240) + "... [read more]")
-                                    .padding(.trailing)
-                            } else {
-                                Text(self.rantContents.text)
-                                    .padding(.trailing)
-                            }
-                            
-                            Spacer()
-                        }
+        NavigationLink(destination: RantView(rantID: self.rantContents.id, apiRequest: APIRequest(), rantInFeed: $rantContents)) {
+            HStack {
+                VStack {
+                    HStack(alignment: .top) { // START MAIN HSTACK
+                        VStack { // UPVOTE / DOWNVOTE VSTACK
+                            Button(action: {}, label: {
+                                if self.rantContents.vote_state == 1 {
+                                    //Image(systemName: "plus.circle.fill").font(.system(size: 25)).accentColor(Color(UIColor(hex: self.rantContents.user_avatar.b)!))
+                                    Image("plusplus").font(.system(size: 25)).accentColor(Color(UIColor(hex: self.rantContents.user_avatar.b)!))
+                                    /*Image(uiImage: UIImage(named: "upvote")!)
+                                        .font(.system(size: 25))
+                                        .accentColor(Color(UIColor(hex: rantContents.user_avatar.b)!))*/
+                                        
+                                } else if self.rantContents.vote_state == 0 {
+                                    Image("plusplus").accentColor(.gray).font(.system(size: 25))
+                                } else {
+                                    Image("plusplus").accentColor(.gray).font(.system(size: 25))
+                                }
+                            })
+                            Text(String(self.rantContents.score)).font(.subheadline)
+                            Button(action: {}, label: {
+                                if self.rantContents.vote_state == -1 {
+                                    Image("minusminus").font(.system(size: 25)).accentColor(Color(UIColor(hex: self.rantContents.user_avatar.b)!))
+                                } else if self.rantContents.vote_state == 0 {
+                                    Image("minusminus").accentColor(.gray).font(.system(size: 25))
+                                } else {
+                                    Image("minusminus").accentColor(.gray).font(.system(size: 25))
+                                }
+                            })
+                        }.disabled(self.rantContents.vote_state == -2) // END UPVOTE / DOWNVOTE VSTACK
+                        
+                        // MAXIMUM 240 CHARS
                         
                         VStack {
-                            TagCloudView(tags: self.rantContents.tags, color: Color(UIColor(hex: self.rantContents.user_avatar.b)!))
+                            HStack {
+                                if self.rantContents.text.count >= 240 {
+                                    Text(self.rantContents.text.prefix(240) + "... [read more]")
+                                        .padding(.trailing)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                } else {
+                                    Text(self.rantContents.text)
+                                        .padding(.trailing)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                }
+                                
+                                Spacer()
+                            }
+                            
+                            VStack {
+                                if self.uiImage != nil && self.rantContents.attached_image != nil {
+                                    //let url = File.loadFiles(images: [self.rantContents.attached_image!])[0].url
+                                    let resizeMultiplier = self.getImageResizeMultiplier(
+                                        imageWidth: CGFloat(self.rantContents.attached_image!.width!),
+                                        imageHeight: CGFloat(self.rantContents.attached_image!.height!), multiplier: 1)
+                                    
+                                    let finalWidth = CGFloat(self.rantContents.attached_image!.width!) / resizeMultiplier
+                                    let finalHeight = CGFloat(self.rantContents.attached_image!.height!) / resizeMultiplier
+                                    
+                                    HStack {
+                                        //ImageView(withURL: "https://img.devrant.com/\(self.rantContents.attached_image!.url)", width: finalWidth, height: finalHeight)
+                                        Image(uiImage: self.uiImage!)
+                                            .resizable()
+                                            .foregroundColor(Color(UIColor.systemBackground))
+                                            //.fixedSize(horizontal: false, vertical: true)
+                                            .scaledToFit()
+                                            .frame(width: finalWidth,
+                                                   height: finalHeight)
+                                            .clipShape(RoundedRectangle(cornerRadius: 15))
+                                        
+                                        Spacer()
+                                    }
+                                }
+                                
+                                TagCloudView(tags: self.rantContents.tags, color: Color(UIColor(hex: self.rantContents.user_avatar.b)!))
+                            }
                         }
-                    }
-                }.padding([.top, .leading])
-                
-                Divider()
-            }
-        } // END MAIN HSTACK
+                    }.padding([.top, .leading, .bottom])
+                    
+                    //Divider()
+                }
+            } // END MAIN HSTACK
+        }.buttonStyle(PlainButtonStyle())
     }
-}
-
-struct RantInFeedView_Previews: PreviewProvider {
-    static var previews: some View {
-        RantInFeedView(rantContents: RantInFeed(id: 327111,
-                                                text: "My girlfriend got me this mug. She is the one.",
-                                                score: 157,
-                                                created_time: 1481230115,
-                                                attached_image: .attachedImage(AttachedImage(
-                                                    url: "https://img.devrant.com/devrant/rant/r_327111_pMWmu.jpg",
-                                                    width: 562,
-                                                    height: 1000
-                                                 )),
-                                                num_comments: 1,
-                                                tags: ["undefined", "linusgh", "torvalds", "mug"],
-                                                vote_state: 0,
-                                                edited: false,
-                                                link: "rants/327111/my-girlfriend-got-me-this-mug-shes-the-one",
-                                                rt: 1,
-                                                rc: 7,
-                                                c_type: nil,
-                                                c_type_long: nil,
-                                                user_id: 118128,
-                                                user_username: "blackmarket",
-                                                user_score: 5885,
-                                                user_avatar: UserAvatar(
-                                                    b: "d55161",
-                                                    i: "v-37_c-3_b-5_g-m_9-1_1-1_16-2_3-6_8-4_7-4_5-4_12-1_6-3_10-1_2-41_22-1_15-5_18-4_19-3_4-4_20-10.jpg"
-                                                 ),
-                                                user_avatar_lg: UserAvatar(
-                                                    b: "d55161",
-                                                    i: "v-37_c-1_b-5_g-m_9-1_1-1_16-2_3-6_8-4_7-4_5-4_12-1_6-3_10-1_2-41_22-1_15-5_18-4_19-3_4-4_20-10.png"
-                                                 ),
-                                                user_dpp: 0))
+    
+    private func getImageResizeMultiplier(imageWidth: CGFloat, imageHeight: CGFloat, multiplier: Int) -> CGFloat {
+        if imageWidth / CGFloat(multiplier) < 315 && imageHeight / CGFloat(multiplier) < 420 {
+            return CGFloat(multiplier)
+        } else {
+            return getImageResizeMultiplier(imageWidth: imageWidth, imageHeight: imageHeight, multiplier: multiplier + 2)
+        }
     }
 }

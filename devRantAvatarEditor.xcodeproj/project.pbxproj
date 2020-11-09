@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		590317302524B9CF00CA9E99 /* ParallaxScrollViewPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5903172F2524B9CF00CA9E99 /* ParallaxScrollViewPort.swift */; };
-		59295A0C25251F8100E98087 /* FloatingTabBar in Frameworks */ = {isa = PBXBuildFile; productRef = 59295A0B25251F8100E98087 /* FloatingTabBar */; };
-		59295A102525204C00E98087 /* BottomBar-SwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 59295A0F2525204C00E98087 /* BottomBar-SwiftUI */; };
+		590CB1852549622C00972528 /* SecondaryInfiniteScroll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 590CB1842549622C00972528 /* SecondaryInfiniteScroll.swift */; };
+		590CB1892549649800972528 /* TinyConstraints in Frameworks */ = {isa = PBXBuildFile; productRef = 590CB1882549649800972528 /* TinyConstraints */; };
 		5948D91E250E6D4200373317 /* devRantAvatarEditorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5948D91D250E6D4200373317 /* devRantAvatarEditorApp.swift */; };
 		5948D920250E6D4200373317 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5948D91F250E6D4200373317 /* ContentView.swift */; };
 		5948D922250E6D4700373317 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5948D921250E6D4700373317 /* Assets.xcassets */; };
@@ -21,6 +21,7 @@
 		59627A4C250F9B3B00233F48 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59627A4B250F9B3B00233F48 /* Comment.swift */; };
 		59627A4E250FA4C100233F48 /* RantView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59627A4D250FA4C100233F48 /* RantView.swift */; };
 		597EC1BA25100BE800EB42C6 /* GeometryContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597EC1B925100BE800EB42C6 /* GeometryContainer.swift */; };
+		5983DC17254572D70026B61B /* InfiniteScroll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5983DC16254572D70026B61B /* InfiniteScroll.swift */; };
 		5986518025399E83006B631F /* ContentDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5986517F25399E83006B631F /* ContentDataSource.swift */; };
 		598BE6D82535B29B00919439 /* SecondaryFileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598BE6D72535B29B00919439 /* SecondaryFileCell.swift */; };
 		598BE6E32535CCA000919439 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598BE6E22535CCA000919439 /* Utils.swift */; };
@@ -33,9 +34,12 @@
 		598FDA5E2510B63200ED2C13 /* RandomAccessCollection+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598FDA5D2510B63200ED2C13 /* RandomAccessCollection+Extension.swift */; };
 		598FDA602510B70C00ED2C13 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598FDA5F2510B70C00ED2C13 /* String+Extension.swift */; };
 		599420DB250F4AC50044565A /* ColorFromHexString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599420DA250F4AC50044565A /* ColorFromHexString.swift */; };
+		599871E2254C0F9200571DC4 /* UIFont+bestFittingFontSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599871E1254C0F9200571DC4 /* UIFont+bestFittingFontSize.swift */; };
+		599871E6254C174E00571DC4 /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599871E5254C174E00571DC4 /* PaddingLabel.swift */; };
 		5999E0EE251E4F160096470D /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5999E0ED251E4F160096470D /* Profile.swift */; };
 		5999E0F1251E50180096470D /* RantInFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5999E0F0251E50180096470D /* RantInFeed.swift */; };
 		5999E0F4251E58F70096470D /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5999E0F3251E58F70096470D /* ProfileView.swift */; };
+		599EC27225496F6000332AF5 /* UIHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599EC27125496F6000332AF5 /* UIHeaderView.swift */; };
 		59B5C270250E73F00056F0EC /* MainScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B5C26F250E73F00056F0EC /* MainScreen.swift */; };
 		59B5C272250E78730056F0EC /* APIRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B5C271250E78730056F0EC /* APIRequest.swift */; };
 		59B5C274250E78A90056F0EC /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B5C273250E78A90056F0EC /* User.swift */; };
@@ -44,10 +48,18 @@
 		59B85B2E25345BAB00B2CAC9 /* QuickLook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B85B2D25345BAB00B2CAC9 /* QuickLook.swift */; };
 		59B85B3125345BD500B2CAC9 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B85B3025345BD500B2CAC9 /* File.swift */; };
 		59B85B342534629000B2CAC9 /* FileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B85B332534629000B2CAC9 /* FileCell.swift */; };
+		59BC7B2125595D0600A3E549 /* Carbon in Frameworks */ = {isa = PBXBuildFile; productRef = 59BC7B2025595D0600A3E549 /* Carbon */; };
+		59BF852025402F5A005962B9 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 59BF851F25402F5A005962B9 /* RxSwift */; };
 		59D822CB2534EBD70015E2D5 /* RantResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D822CA2534EBD70015E2D5 /* RantResponse.swift */; };
 		59EA61A125259F0D0084E712 /* RantFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59EA61A025259F0D0084E712 /* RantFeed.swift */; };
 		59EA62172525FA8F0084E712 /* RantInFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59EA62162525FA8F0084E712 /* RantInFeedView.swift */; };
 		59EA621F25265B9D0084E712 /* WrapStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59EA621E25265B9D0084E712 /* WrapStack.swift */; };
+		59F1F62725528EC10007FF49 /* CalculationsUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 59F1F61B25528EC10007FF49 /* CalculationsUtils.m */; };
+		59F1F62825528EC10007FF49 /* UIView+Subviews.m in Sources */ = {isa = PBXBuildFile; fileRef = 59F1F61D25528EC10007FF49 /* UIView+Subviews.m */; };
+		59F1F62925528EC10007FF49 /* UIView+Shadow.m in Sources */ = {isa = PBXBuildFile; fileRef = 59F1F61F25528EC10007FF49 /* UIView+Shadow.m */; };
+		59F1F62A25528EC10007FF49 /* UIView+HorizontalView.m in Sources */ = {isa = PBXBuildFile; fileRef = 59F1F62125528EC10007FF49 /* UIView+HorizontalView.m */; };
+		59F1F62B25528EC10007FF49 /* UIView+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 59F1F62325528EC10007FF49 /* UIView+Helper.m */; };
+		59F1F62C25528EC10007FF49 /* UILabel+Subview.m in Sources */ = {isa = PBXBuildFile; fileRef = 59F1F62525528EC10007FF49 /* UILabel+Subview.m */; };
 		59F20B43253C6C7C0028A3C6 /* AppleMusicStyleScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F20B42253C6C7C0028A3C6 /* AppleMusicStyleScrollView.swift */; };
 		59F20B46253C6C8A0028A3C6 /* BackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F20B45253C6C8A0028A3C6 /* BackButton.swift */; };
 		59F20B49253C6C9D0028A3C6 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F20B48253C6C9D0028A3C6 /* BlurView.swift */; };
@@ -58,10 +70,12 @@
 		59F20B58253C6D270028A3C6 /* ScrollUpHeaderBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F20B57253C6D270028A3C6 /* ScrollUpHeaderBehavior.swift */; };
 		59F20B5B253C6D440028A3C6 /* View+hideNavigationBarWithoutLosingSwipeBack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F20B5A253C6D440028A3C6 /* View+hideNavigationBarWithoutLosingSwipeBack.swift */; };
 		59F20B5E253C6D6B0028A3C6 /* View+navigationAllowSwipeBackWhenHidden.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F20B5D253C6D6B0028A3C6 /* View+navigationAllowSwipeBackWhenHidden.swift */; };
+		64D70BF8D6AD90E4A76ACEE2 /* Pods_devRantAvatarEditor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9329BA3DCF47D1B1F7BA8F79 /* Pods_devRantAvatarEditor.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		5903172F2524B9CF00CA9E99 /* ParallaxScrollViewPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParallaxScrollViewPort.swift; sourceTree = "<group>"; };
+		590CB1842549622C00972528 /* SecondaryInfiniteScroll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondaryInfiniteScroll.swift; sourceTree = "<group>"; };
 		5948D91A250E6D4200373317 /* devRantAvatarEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = devRantAvatarEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5948D91D250E6D4200373317 /* devRantAvatarEditorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = devRantAvatarEditorApp.swift; sourceTree = "<group>"; };
 		5948D91F250E6D4200373317 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -75,6 +89,8 @@
 		59627A4B250F9B3B00233F48 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		59627A4D250FA4C100233F48 /* RantView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RantView.swift; sourceTree = "<group>"; };
 		597EC1B925100BE800EB42C6 /* GeometryContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometryContainer.swift; sourceTree = "<group>"; };
+		5983DC13254572570026B61B /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
+		5983DC16254572D70026B61B /* InfiniteScroll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniteScroll.swift; sourceTree = "<group>"; };
 		5986517F25399E83006B631F /* ContentDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentDataSource.swift; sourceTree = "<group>"; };
 		598BE6D72535B29B00919439 /* SecondaryFileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondaryFileCell.swift; sourceTree = "<group>"; };
 		598BE6E22535CCA000919439 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
@@ -88,9 +104,14 @@
 		598FDA5D2510B63200ED2C13 /* RandomAccessCollection+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RandomAccessCollection+Extension.swift"; sourceTree = "<group>"; };
 		598FDA5F2510B70C00ED2C13 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		599420DA250F4AC50044565A /* ColorFromHexString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorFromHexString.swift; sourceTree = "<group>"; };
+		599871E1254C0F9200571DC4 /* UIFont+bestFittingFontSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+bestFittingFontSize.swift"; sourceTree = "<group>"; };
+		599871E5254C174E00571DC4 /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
 		5999E0ED251E4F160096470D /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		5999E0F0251E50180096470D /* RantInFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RantInFeed.swift; sourceTree = "<group>"; };
 		5999E0F3251E58F70096470D /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		599A958A2553FEF5006D044C /* LookinServer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LookinServer.framework; path = ../../Downloads/LookinServer.framework; sourceTree = "<group>"; };
+		599A958F2553FF24006D044C /* LookinServer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LookinServer.framework; path = ../../../../Applications/Lookin.app/Contents/Resources/LookinServerFramework/LookinServer.framework; sourceTree = "<group>"; };
+		599EC27125496F6000332AF5 /* UIHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHeaderView.swift; sourceTree = "<group>"; };
 		59B5C26F250E73F00056F0EC /* MainScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreen.swift; sourceTree = "<group>"; };
 		59B5C271250E78730056F0EC /* APIRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRequest.swift; sourceTree = "<group>"; };
 		59B5C273250E78A90056F0EC /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -103,6 +124,18 @@
 		59EA61A025259F0D0084E712 /* RantFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RantFeed.swift; sourceTree = "<group>"; };
 		59EA62162525FA8F0084E712 /* RantInFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RantInFeedView.swift; sourceTree = "<group>"; };
 		59EA621E25265B9D0084E712 /* WrapStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrapStack.swift; sourceTree = "<group>"; };
+		59F1F61B25528EC10007FF49 /* CalculationsUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalculationsUtils.m; sourceTree = "<group>"; };
+		59F1F61C25528EC10007FF49 /* UIView+HorizontalView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+HorizontalView.h"; sourceTree = "<group>"; };
+		59F1F61D25528EC10007FF49 /* UIView+Subviews.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Subviews.m"; sourceTree = "<group>"; };
+		59F1F61E25528EC10007FF49 /* UIView+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Helper.h"; sourceTree = "<group>"; };
+		59F1F61F25528EC10007FF49 /* UIView+Shadow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Shadow.m"; sourceTree = "<group>"; };
+		59F1F62025528EC10007FF49 /* UILabel+Subview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+Subview.h"; sourceTree = "<group>"; };
+		59F1F62125528EC10007FF49 /* UIView+HorizontalView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+HorizontalView.m"; sourceTree = "<group>"; };
+		59F1F62225528EC10007FF49 /* CalculationsUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalculationsUtils.h; sourceTree = "<group>"; };
+		59F1F62325528EC10007FF49 /* UIView+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Helper.m"; sourceTree = "<group>"; };
+		59F1F62425528EC10007FF49 /* UIView+Subviews.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Subviews.h"; sourceTree = "<group>"; };
+		59F1F62525528EC10007FF49 /* UILabel+Subview.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+Subview.m"; sourceTree = "<group>"; };
+		59F1F62625528EC10007FF49 /* UIView+Shadow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Shadow.h"; sourceTree = "<group>"; };
 		59F20B42253C6C7C0028A3C6 /* AppleMusicStyleScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleMusicStyleScrollView.swift; sourceTree = "<group>"; };
 		59F20B45253C6C8A0028A3C6 /* BackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButton.swift; sourceTree = "<group>"; };
 		59F20B48253C6C9D0028A3C6 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
@@ -113,6 +146,9 @@
 		59F20B57253C6D270028A3C6 /* ScrollUpHeaderBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollUpHeaderBehavior.swift; sourceTree = "<group>"; };
 		59F20B5A253C6D440028A3C6 /* View+hideNavigationBarWithoutLosingSwipeBack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+hideNavigationBarWithoutLosingSwipeBack.swift"; sourceTree = "<group>"; };
 		59F20B5D253C6D6B0028A3C6 /* View+navigationAllowSwipeBackWhenHidden.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+navigationAllowSwipeBackWhenHidden.swift"; sourceTree = "<group>"; };
+		9329BA3DCF47D1B1F7BA8F79 /* Pods_devRantAvatarEditor.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_devRantAvatarEditor.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B252914F5DFF09BAB871A017 /* Pods-devRantAvatarEditor.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-devRantAvatarEditor.release.xcconfig"; path = "Target Support Files/Pods-devRantAvatarEditor/Pods-devRantAvatarEditor.release.xcconfig"; sourceTree = "<group>"; };
+		C8E522D3F238A9306FD60E6C /* Pods-devRantAvatarEditor.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-devRantAvatarEditor.debug.xcconfig"; path = "Target Support Files/Pods-devRantAvatarEditor/Pods-devRantAvatarEditor.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,19 +156,42 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				59295A102525204C00E98087 /* BottomBar-SwiftUI in Frameworks */,
-				59295A0C25251F8100E98087 /* FloatingTabBar in Frameworks */,
+				59BF852025402F5A005962B9 /* RxSwift in Frameworks */,
+				64D70BF8D6AD90E4A76ACEE2 /* Pods_devRantAvatarEditor.framework in Frameworks */,
+				590CB1892549649800972528 /* TinyConstraints in Frameworks */,
+				59BC7B2125595D0600A3E549 /* Carbon in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3DB1456BDFADE13B676E2778 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				599A958A2553FEF5006D044C /* LookinServer.framework */,
+				599A958F2553FF24006D044C /* LookinServer.framework */,
+				9329BA3DCF47D1B1F7BA8F79 /* Pods_devRantAvatarEditor.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		56E0465C995D164769F1B1A7 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				C8E522D3F238A9306FD60E6C /* Pods-devRantAvatarEditor.debug.xcconfig */,
+				B252914F5DFF09BAB871A017 /* Pods-devRantAvatarEditor.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		5948D911250E6D4200373317 = {
 			isa = PBXGroup;
 			children = (
 				5948D91C250E6D4200373317 /* devRantAvatarEditor */,
 				5948D91B250E6D4200373317 /* Products */,
+				56E0465C995D164769F1B1A7 /* Pods */,
+				3DB1456BDFADE13B676E2778 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -147,6 +206,7 @@
 		5948D91C250E6D4200373317 /* devRantAvatarEditor */ = {
 			isa = PBXGroup;
 			children = (
+				59F1F61A25528EC10007FF49 /* DMHorizontalView */,
 				598DB59F2511FD2900E7CF6D /* devRantAvatarEditor.entitlements */,
 				598FDA582510AF1300ED2C13 /* Helpers */,
 				598FDA502510A99100ED2C13 /* Extensions */,
@@ -168,6 +228,7 @@
 				59EA621E25265B9D0084E712 /* WrapStack.swift */,
 				598BE6E22535CCA000919439 /* Utils.swift */,
 				5986517F25399E83006B631F /* ContentDataSource.swift */,
+				5983DC13254572570026B61B /* BridgingHeader.h */,
 				5948D921250E6D4700373317 /* Assets.xcassets */,
 				5948D926250E6D4700373317 /* Info.plist */,
 				5948D923250E6D4700373317 /* Preview Content */,
@@ -189,6 +250,7 @@
 				598FDA512510A9A200ED2C13 /* View+Extension.swift */,
 				598FDA5D2510B63200ED2C13 /* RandomAccessCollection+Extension.swift */,
 				598FDA5F2510B70C00ED2C13 /* String+Extension.swift */,
+				599871E1254C0F9200571DC4 /* UIFont+bestFittingFontSize.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -214,32 +276,12 @@
 		5992EB40253EC2F1005999C3 /* InfiniteScrollView */ = {
 			isa = PBXGroup;
 			children = (
-				5992EB41253EC31A005999C3 /* Model */,
-				5992EB42253EC325005999C3 /* ViewModel */,
-				5992EB44253EC33F005999C3 /* View */,
+				5983DC16254572D70026B61B /* InfiniteScroll.swift */,
+				590CB1842549622C00972528 /* SecondaryInfiniteScroll.swift */,
+				599EC27125496F6000332AF5 /* UIHeaderView.swift */,
+				599871E5254C174E00571DC4 /* PaddingLabel.swift */,
 			);
 			path = InfiniteScrollView;
-			sourceTree = "<group>";
-		};
-		5992EB41253EC31A005999C3 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		5992EB42253EC325005999C3 /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ViewModel;
-			sourceTree = "<group>";
-		};
-		5992EB44253EC33F005999C3 /* View */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = View;
 			sourceTree = "<group>";
 		};
 		59B5C275250EB1BA0056F0EC /* View Models */ = {
@@ -273,6 +315,25 @@
 			path = "Data Structures";
 			sourceTree = "<group>";
 		};
+		59F1F61A25528EC10007FF49 /* DMHorizontalView */ = {
+			isa = PBXGroup;
+			children = (
+				59F1F61B25528EC10007FF49 /* CalculationsUtils.m */,
+				59F1F61C25528EC10007FF49 /* UIView+HorizontalView.h */,
+				59F1F61D25528EC10007FF49 /* UIView+Subviews.m */,
+				59F1F61E25528EC10007FF49 /* UIView+Helper.h */,
+				59F1F61F25528EC10007FF49 /* UIView+Shadow.m */,
+				59F1F62025528EC10007FF49 /* UILabel+Subview.h */,
+				59F1F62125528EC10007FF49 /* UIView+HorizontalView.m */,
+				59F1F62225528EC10007FF49 /* CalculationsUtils.h */,
+				59F1F62325528EC10007FF49 /* UIView+Helper.m */,
+				59F1F62425528EC10007FF49 /* UIView+Subviews.h */,
+				59F1F62525528EC10007FF49 /* UILabel+Subview.m */,
+				59F1F62625528EC10007FF49 /* UIView+Shadow.h */,
+			);
+			path = DMHorizontalView;
+			sourceTree = "<group>";
+		};
 		59F20B2D253C6B030028A3C6 /* FancyScrollView */ = {
 			isa = PBXGroup;
 			children = (
@@ -297,9 +358,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5948D929250E6D4700373317 /* Build configuration list for PBXNativeTarget "devRantAvatarEditor" */;
 			buildPhases = (
+				EECC78F698C3FFE7D81D9198 /* [CP] Check Pods Manifest.lock */,
 				5948D916250E6D4200373317 /* Sources */,
 				5948D917250E6D4200373317 /* Frameworks */,
 				5948D918250E6D4200373317 /* Resources */,
+				99D714C4F7ACD6008FAEA0E6 /* [CP] Embed Pods Frameworks */,
+				599A95982554003B006D044C /* Integrate Lookin */,
 			);
 			buildRules = (
 			);
@@ -307,8 +371,9 @@
 			);
 			name = devRantAvatarEditor;
 			packageProductDependencies = (
-				59295A0B25251F8100E98087 /* FloatingTabBar */,
-				59295A0F2525204C00E98087 /* BottomBar-SwiftUI */,
+				59BF851F25402F5A005962B9 /* RxSwift */,
+				590CB1882549649800972528 /* TinyConstraints */,
+				59BC7B2025595D0600A3E549 /* Carbon */,
 			);
 			productName = devRantAvatarEditor;
 			productReference = 5948D91A250E6D4200373317 /* devRantAvatarEditor.app */;
@@ -338,8 +403,9 @@
 			);
 			mainGroup = 5948D911250E6D4200373317;
 			packageReferences = (
-				59295A0A25251F8100E98087 /* XCRemoteSwiftPackageReference "FloatingTabBar" */,
-				59295A0E2525204C00E98087 /* XCRemoteSwiftPackageReference "bottombar-swiftui" */,
+				59BF851E25402F5A005962B9 /* XCRemoteSwiftPackageReference "RxSwift" */,
+				590CB1872549649800972528 /* XCRemoteSwiftPackageReference "TinyConstraints" */,
+				59BC7B1F25595D0600A3E549 /* XCRemoteSwiftPackageReference "Carbon" */,
 			);
 			productRefGroup = 5948D91B250E6D4200373317 /* Products */;
 			projectDirPath = "";
@@ -362,6 +428,66 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		599A95982554003B006D044C /* Integrate Lookin */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Integrate Lookin";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/zsh;
+			shellScript = "FRAMEWORK_FILENAME=\"LookinServer.framework\"\nFRAMEWORK_WORKPATH=\"${CODESIGNING_FOLDER_PATH}/Frameworks\"\n\nFRAMEWORK_PATH=\"${SRCROOT}/${FRAMEWORK_FILENAME}\"\n\n[ \"${CONFIGURATION}\" != \"Debug\" ] && exit 0\n\nmkdir -p \"${FRAMEWORK_WORKPATH}\"\n\nif [ -e \"${FRAMEWORK_PATH}\" ]; then\n    cp -Rf \"$FRAMEWORK_PATH\" \"${FRAMEWORK_WORKPATH}\"\n    if [ -n \"${EXPANDED_CODE_SIGN_IDENTITY}\" ]; then\n        codesign -fs \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"${FRAMEWORK_WORKPATH}/${FRAMEWORK_FILENAME}\"\n    fi\n    echo \"LookinServer was integrated successfully.\"\nelse\n    echo \"Failed to integrate LookingServer, Because the framework could not be found at ${FRAMEWORK_PATH}.\"\nfi\n";
+		};
+		99D714C4F7ACD6008FAEA0E6 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-devRantAvatarEditor/Pods-devRantAvatarEditor-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-devRantAvatarEditor/Pods-devRantAvatarEditor-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-devRantAvatarEditor/Pods-devRantAvatarEditor-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EECC78F698C3FFE7D81D9198 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-devRantAvatarEditor-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		5948D916250E6D4200373317 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -371,6 +497,7 @@
 				59F20B4C253C6CB00028A3C6 /* FancyScrollView.swift in Sources */,
 				5948D920250E6D4200373317 /* ContentView.swift in Sources */,
 				59B85B342534629000B2CAC9 /* FileCell.swift in Sources */,
+				5983DC17254572D70026B61B /* InfiniteScroll.swift in Sources */,
 				5999E0EE251E4F160096470D /* Profile.swift in Sources */,
 				59EA61A125259F0D0084E712 /* RantFeed.swift in Sources */,
 				5948D91E250E6D4200373317 /* devRantAvatarEditorApp.swift in Sources */,
@@ -383,6 +510,7 @@
 				59D822CB2534EBD70015E2D5 /* RantResponse.swift in Sources */,
 				598FDA552510AADC00ED2C13 /* CollectionDetailView.swift in Sources */,
 				598BE6D82535B29B00919439 /* SecondaryFileCell.swift in Sources */,
+				59F1F62925528EC10007FF49 /* UIView+Shadow.m in Sources */,
 				598FDA522510A9A200ED2C13 /* View+Extension.swift in Sources */,
 				598FDA5A2510AF3500ED2C13 /* CollectionViewLayout.swift in Sources */,
 				598BE6E32535CCA000919439 /* Utils.swift in Sources */,
@@ -395,21 +523,30 @@
 				5948D92D250E6DE900373317 /* LoginScreen.swift in Sources */,
 				597EC1BA25100BE800EB42C6 /* GeometryContainer.swift in Sources */,
 				59F20B52253C6CE50028A3C6 /* HeaderScrollViewTitle.swift in Sources */,
+				59F1F62C25528EC10007FF49 /* UILabel+Subview.m in Sources */,
 				598FDA4F251092F100ED2C13 /* CollectionView.swift in Sources */,
 				5999E0F1251E50180096470D /* RantInFeed.swift in Sources */,
 				59F20B46253C6C8A0028A3C6 /* BackButton.swift in Sources */,
 				59B5C272250E78730056F0EC /* APIRequest.swift in Sources */,
 				598FDA602510B70C00ED2C13 /* String+Extension.swift in Sources */,
 				59F20B49253C6C9D0028A3C6 /* BlurView.swift in Sources */,
+				599EC27225496F6000332AF5 /* UIHeaderView.swift in Sources */,
+				59F1F62825528EC10007FF49 /* UIView+Subviews.m in Sources */,
+				59F1F62B25528EC10007FF49 /* UIView+Helper.m in Sources */,
+				599871E6254C174E00571DC4 /* PaddingLabel.swift in Sources */,
+				599871E2254C0F9200571DC4 /* UIFont+bestFittingFontSize.swift in Sources */,
 				59B5C27A250EB6600056F0EC /* RantModel.swift in Sources */,
 				598FDA5E2510B63200ED2C13 /* RandomAccessCollection+Extension.swift in Sources */,
 				59627A4C250F9B3B00233F48 /* Comment.swift in Sources */,
 				5948D92F250E6EA000373317 /* UndismissableSheet.swift in Sources */,
 				599420DB250F4AC50044565A /* ColorFromHexString.swift in Sources */,
 				59627A4A250F925A00233F48 /* CommentModel.swift in Sources */,
+				590CB1852549622C00972528 /* SecondaryInfiniteScroll.swift in Sources */,
 				59627A4E250FA4C100233F48 /* RantView.swift in Sources */,
+				59F1F62725528EC10007FF49 /* CalculationsUtils.m in Sources */,
 				59B85B2E25345BAB00B2CAC9 /* QuickLook.swift in Sources */,
 				59F20B58253C6D270028A3C6 /* ScrollUpHeaderBehavior.swift in Sources */,
+				59F1F62A25528EC10007FF49 /* UIView+HorizontalView.m in Sources */,
 				598FDA572510AB5700ED2C13 /* SwiftUICollectionView.swift in Sources */,
 				59B85B3125345BD500B2CAC9 /* File.swift in Sources */,
 				59B5C274250E78A90056F0EC /* User.swift in Sources */,
@@ -475,6 +612,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_MODULE_NAME = devRantAvatarEditor;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -529,6 +667,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				PRODUCT_MODULE_NAME = devRantAvatarEditor;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -538,6 +677,7 @@
 		};
 		5948D92A250E6D4700373317 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C8E522D3F238A9306FD60E6C /* Pods-devRantAvatarEditor.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -546,6 +686,11 @@
 				DEVELOPMENT_ASSET_PATHS = "\"devRantAvatarEditor/Preview Content\"";
 				DEVELOPMENT_TEAM = 666F768P5J;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/UIScrollView-InfiniteScroll\"",
+					"$(SRCROOT)",
+				);
 				INFOPLIST_FILE = devRantAvatarEditor/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.0;
@@ -553,9 +698,19 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.cracksoftware.devRantAvatarEditor;
+				MARKETING_VERSION = 0.1;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					"\"UIScrollView_InfiniteScroll\"",
+					"-ObjC",
+					"-weak_framework",
+					LookinServer,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = omershamai.devRant;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = ./devRantAvatarEditor/BridgingHeader.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -563,6 +718,7 @@
 		};
 		5948D92B250E6D4700373317 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B252914F5DFF09BAB871A017 /* Pods-devRantAvatarEditor.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -578,9 +734,16 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.cracksoftware.devRantAvatarEditor;
+				MARKETING_VERSION = 0.1;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					"\"UIScrollView_InfiniteScroll\"",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = omershamai.devRant;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = ./devRantAvatarEditor/BridgingHeader.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -610,34 +773,47 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		59295A0A25251F8100E98087 /* XCRemoteSwiftPackageReference "FloatingTabBar" */ = {
+		590CB1872549649800972528 /* XCRemoteSwiftPackageReference "TinyConstraints" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/10011WORK/FloatingTabBar";
+			repositoryURL = "https://github.com/roberthein/TinyConstraints";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.1;
+			};
+		};
+		59BC7B1F25595D0600A3E549 /* XCRemoteSwiftPackageReference "Carbon" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ra1028/Carbon";
 			requirement = {
 				branch = master;
 				kind = branch;
 			};
 		};
-		59295A0E2525204C00E98087 /* XCRemoteSwiftPackageReference "bottombar-swiftui" */ = {
+		59BF851E25402F5A005962B9 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/smartvipere75/bottombar-swiftui";
+			repositoryURL = "https://github.com/ReactiveX/RxSwift";
 			requirement = {
-				branch = master;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		59295A0B25251F8100E98087 /* FloatingTabBar */ = {
+		590CB1882549649800972528 /* TinyConstraints */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 59295A0A25251F8100E98087 /* XCRemoteSwiftPackageReference "FloatingTabBar" */;
-			productName = FloatingTabBar;
+			package = 590CB1872549649800972528 /* XCRemoteSwiftPackageReference "TinyConstraints" */;
+			productName = TinyConstraints;
 		};
-		59295A0F2525204C00E98087 /* BottomBar-SwiftUI */ = {
+		59BC7B2025595D0600A3E549 /* Carbon */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 59295A0E2525204C00E98087 /* XCRemoteSwiftPackageReference "bottombar-swiftui" */;
-			productName = "BottomBar-SwiftUI";
+			package = 59BC7B1F25595D0600A3E549 /* XCRemoteSwiftPackageReference "Carbon" */;
+			productName = Carbon;
+		};
+		59BF851F25402F5A005962B9 /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 59BF851E25402F5A005962B9 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

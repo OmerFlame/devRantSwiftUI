@@ -12,14 +12,41 @@ struct RantView: View {
     @State var apiRequest: APIRequest
     
     @State var rant: RantResponse? = nil
+    @Binding var rantInFeed: RantInFeed
     @State var shouldShowRing = true
     @State var shouldShowError = false
+    
+    @State var ranterImage: UIImage? = nil
+    @State var profile: Profile? = nil
     
     private func getRant() {
         do {
             self.rant = try self.apiRequest.getRantFromID(id: self.rantID)
             
             print("IS RANT EMPTY: \(self.rant == nil)")
+        } catch {
+            DispatchQueue.main.async {
+                self.shouldShowError.toggle()
+            }
+        }
+    }
+    
+    private func getRanterImage() {
+        let completionSemaphore = DispatchSemaphore(value: 0)
+        
+        URLSession.shared.dataTask(with: URL(string: "https://avatars.devrant.com/\(self.rant!.rant.user_avatar_lg.i!)")!) { data, _, _ in
+            self.ranterImage = UIImage(data: data!)
+            
+            completionSemaphore.signal()
+        }.resume()
+        
+        completionSemaphore.wait()
+        return
+    }
+    
+    private func getProfile() {
+        do {
+            self.profile = try self.apiRequest.getProfileFromID(rant!.rant.user_id, userContentType: .rants, skip: 0)?.profile
         } catch {
             DispatchQueue.main.async {
                 self.shouldShowError.toggle()
@@ -35,12 +62,26 @@ struct RantView: View {
                     .onAppear {
                         if self.rant == nil {
                             self.shouldShowRing = true
-                            DispatchQueue.global(qos: .userInitiated).async {
+                            /*DispatchQueue.global(qos: .userInitiated).async {
                                 self.getRant()
                                 
                                 DispatchQueue.main.async {
                                     print("IS RANT FEED EMPTY: \(self.rant == nil)")
                                     self.shouldShowRing.toggle()
+                                }
+                            }*/
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                DispatchQueue.global(qos: .userInitiated).sync {
+                                    self.getRant()
+                                    self.getProfile()
+                                    
+                                    if self.rant?.rant.user_avatar_lg.i != nil {
+                                        self.getRanterImage()
+                                    }
+                                    
+                                    DispatchQueue.main.async {
+                                        self.shouldShowRing = false
+                                    }
                                 }
                             }
                         }
@@ -49,7 +90,7 @@ struct RantView: View {
         } else {
             ScrollView {
                 VStack(alignment: .leading) {
-                    Rant(rantContents: (self.rant?.rant)!)
+                    Rant(rantContents: (self.rant?.rant)!, rantInFeed: $rantInFeed, userImage: self.ranterImage, profile: self.profile!)
                         .padding([.trailing])
                         //.fixedSize(horizontal: false, vertical: true)
                 
@@ -62,6 +103,7 @@ struct RantView: View {
                 //.padding(.leading)
             }
             .navigationBarTitle("Rant")
+            .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 print("View appeared!")
             }
@@ -74,11 +116,5 @@ struct RantView: View {
         } else {
             return getImageResizeMultiplier(imageWidth: imageWidth, imageHeight: imageHeight, multiplier: multiplier + 2)
         }
-    }
-}
-
-struct RantView_Previews: PreviewProvider {
-    static var previews: some View {
-        RantView(rantID: 3240155, apiRequest: APIRequest())
     }
 }

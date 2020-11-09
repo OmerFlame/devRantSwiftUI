@@ -35,17 +35,18 @@ class APIRequest {
         //self._authTokenExpireTime = authTokenExpireTime
         //self._authTokenUserID = authTokenUserID
         
-        self.userIDUserDefaultsIdentifier = "UserID"
-        self.tokenIDUserDefaultsIdentifier = "TokenID"
-        self.tokenKeyUserDefaultsIdentifier = "TokenKey"
+        self.userIDUserDefaultsIdentifier = "DRUserID"
+        self.tokenIDUserDefaultsIdentifier = "DRTokenID"
+        self.tokenKeyUserDefaultsIdentifier = "DRTokenKey"
     }
     
     func logIn(username: String, password: String) {
         self.resourceURL = URL(string: "https://devrant.com/api/users/auth-token?app=3")!
+        //self.resourceURL = URL(string: "https://proxy.devrant.app/api/users/auth-token?app=3")!
         self.request = URLRequest(url: self.resourceURL)
         request.httpMethod = "POST"
         request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        request.httpBody = "app=3&username=\(username)&password=\(password)".data(using: .utf8)
+        request.httpBody = "app=3&username=\(username.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)&password=\(password.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)".data(using: .utf8)
         
         let completionSemaphore = DispatchSemaphore(value: 0)
         var receivedRawJSON = String()
@@ -96,10 +97,10 @@ class APIRequest {
                     UserDefaults.standard.set(extractedCredentials.auth_token!.id, forKey: self.tokenIDUserDefaultsIdentifier)
                     UserDefaults.standard.set(extractedCredentials.auth_token!.key, forKey: self.tokenKeyUserDefaultsIdentifier)
                     UserDefaults.standard.set(extractedCredentials.auth_token!.user_id, forKey: self.userIDUserDefaultsIdentifier)
-                    UserDefaults.standard.set(extractedCredentials.auth_token!.expire_time, forKey: "TokenExpireTime")
+                    UserDefaults.standard.set(extractedCredentials.auth_token!.expire_time, forKey: "DRTokenExpireTime")
                     
-                    UserDefaults.standard.set(username, forKey: "Username")
-                    UserDefaults.standard.set(password, forKey: "Password")
+                    UserDefaults.standard.set(username, forKey: "DRUsername")
+                    UserDefaults.standard.set(password, forKey: "DRPassword")
                 }
             }
         }
@@ -107,15 +108,30 @@ class APIRequest {
         task.resume()
     }
     
-    func getRantFeed() -> RantFeed {
-        if Double(UserDefaults.standard.integer(forKey: "TokenExpireTime")) - Date().timeIntervalSince1970 <= 0 {
-            logIn(username: UserDefaults.standard.string(forKey: "Username")!, password: UserDefaults.standard.string(forKey: "Password")!)
+    func getRantFeed(skip: Int) -> RantFeed {
+        if Double(UserDefaults.standard.integer(forKey: "DRTokenExpireTime")) - Double(Date().timeIntervalSince1970) <= 0 {
+            logIn(username: UserDefaults.standard.string(forKey: "DRUsername")!, password: UserDefaults.standard.string(forKey: "DRPassword")!)
         }
         
         var extractedData: RantFeed?
         
-        self.resourceURL = URL(string: "https://devrant.com/api/devrant/rants?app=3&token_id=\(String(UserDefaults.standard.integer(forKey: "TokenID")))&token_key=\(UserDefaults.standard.string(forKey: "TokenKey")!)&user_id=\(String(UserDefaults.standard.integer(forKey: "UserID")))&range=week&limit=20")
-        self.request = URLRequest(url: self.resourceURL)
+        //self.resourceURL = URL(string: "https://devrant.com/api/devrant/rants?app=3&token_id=\(String(UserDefaults.standard.integer(forKey: "TokenID")))&token_key=\(UserDefaults.standard.string(forKey: "TokenKey")!)&user_id=\(String(UserDefaults.standard.integer(forKey: "UserID")))&range=week&limit=20")
+        //self.resourceURL = URL(string: "https://proxy.devrant.app/api/devrant/rants?app=3&sort=recent&token_id=\(String(UserDefaults.standard.integer(forKey: "TokenID")))&token_key=\(UserDefaults.standard.string(forKey: "TokenKey")!)&user_id=\(String(UserDefaults.standard.integer(forKey: "UserID")))&range=null&limit=20&skip=\(String(skip))")
+        
+        print("LAST SET:  \(String(UserDefaults.standard.string(forKey: "DRLastSet")!))")
+        print("USER ID:   \(String(UserDefaults.standard.integer(forKey: "DRUserID")))")
+        print("TOKEN ID:  \(String(UserDefaults.standard.integer(forKey: "DRTokenID")))")
+        print("TOKEN KEY: \(String(UserDefaults.standard.string(forKey: "DRTokenKey")!))")
+        
+        var resourceURL: URL {
+            if UserDefaults.standard.string(forKey: "DRLastSet") != nil {
+                return URL(string: "https://devrant.com/api/devrant/rants?limit=20&skip=\(String(skip).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)&sort=algo&prev_set=\(String(UserDefaults.standard.string(forKey: "DRLastSet")!).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)&app=3&plat=1&nari=1&user_id=\(String(UserDefaults.standard.integer(forKey: "DRUserID")).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)&token_id=\(String(UserDefaults.standard.integer(forKey: "DRTokenID")).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)&token_key=\(String(UserDefaults.standard.string(forKey: "DRTokenKey")!).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)")!
+            } else {
+                return URL(string: "https://devrant.com/api/devrant/rants?limit=20&skip=\(String(skip).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)&sort=algo&app=3&plat=1&nari=1&user_id=\(String(UserDefaults.standard.integer(forKey: "DRUserID")).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)&token_id=\(String(UserDefaults.standard.integer(forKey: "DRTokenID")).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)&token_key=\(String(UserDefaults.standard.string(forKey: "DRTokenKey")!).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)")!
+            }
+        }
+        
+        var request = URLRequest(url: resourceURL)
         request.httpMethod = "GET"
         request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         
@@ -124,20 +140,22 @@ class APIRequest {
         let completionSemaphore = DispatchSemaphore(value: 0)
         var receivedRawJSON = String()
         
-        let task = URLSession.shared.dataTask(with: self.request) { data, response, error in
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let response = response {
-                print(response)
-                
-                if let data = data, let body = String(data: data, encoding: .utf8) {
-                    receivedRawJSON = body
-                    print(body)
+                DispatchQueue.global(qos: .background).async {
+                    print(response)
                     
-                    let dataFromString = receivedRawJSON.data(using: .utf8)
-                    
-                    let decoder = JSONDecoder()
-                    
-                    extractedData = try! decoder.decode(RantFeed.self, from: dataFromString!)
-                    completionSemaphore.signal()
+                    if let data = data, let body = String(data: data, encoding: .utf8) {
+                        receivedRawJSON = body
+                        print(body)
+                        
+                        let dataFromString = receivedRawJSON.data(using: .utf8)
+                        
+                        let decoder = JSONDecoder()
+                        
+                        extractedData = try! decoder.decode(RantFeed.self, from: dataFromString!)
+                        completionSemaphore.signal()
+                    }
                 }
             }
         }
@@ -145,13 +163,16 @@ class APIRequest {
         task.resume()
         
         completionSemaphore.wait()
+        UserDefaults.standard.setValue(extractedData!.set, forKey: "DRLastSet")
         return extractedData!
     }
     
     func getRantFromID(id: Int) throws -> RantResponse? {
         
-        self.resourceURL = URL(string: "https://devrant.com/api/devrant/rants/\(String(id))?app=3&user_id=\(String(UserDefaults.standard.integer(forKey: "UserID")))&token_id=\(String(UserDefaults.standard.integer(forKey: "TokenID")))&token_key=\(String(UserDefaults.standard.string(forKey: "TokenKey")!))")
-        self.request = URLRequest(url: self.resourceURL)
+        let resourceURL = URL(string: "https://devrant.com/api/devrant/rants/\(String(id))?app=3&user_id=\(String(UserDefaults.standard.integer(forKey: "DRUserID")).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)&token_id=\(String(UserDefaults.standard.integer(forKey: "DRTokenID")).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)&token_key=\(String(UserDefaults.standard.string(forKey: "DRTokenKey")!).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)")!
+        
+        //self.resourceURL = URL(string: "https://proxy.devrant.app/api/devrant/rants/\(String(id))?app=3&user_id=\(String(UserDefaults.standard.integer(forKey: "UserID")))&token_id=\(String(UserDefaults.standard.integer(forKey: "TokenID")))&token_key=\(String(UserDefaults.standard.string(forKey: "TokenKey")!))")
+        var request = URLRequest(url: resourceURL)
         request.httpMethod = "GET"
         request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         
@@ -160,9 +181,11 @@ class APIRequest {
         
         var extractedData: RantResponse?
         
-        let task = URLSession.shared.dataTask(with: self.request) { data, response, error in
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if response != nil {
                 if let data = data, let body = String(data: data, encoding: .utf8) {
+                    print(response!)
+                    
                     receivedRawJSON = body
                     
                     print(body)
@@ -190,12 +213,51 @@ class APIRequest {
         }
     }
     
-    func getProfileFromID(_ profileID: Int, userContentType: ProfileContentTypes, skip: Int) throws -> ProfileResponse? {
-        let userID = UserDefaults.standard.integer(forKey: "UserID")
-        let tokenID = UserDefaults.standard.integer(forKey: "TokenID")
-        let tokenKey = UserDefaults.standard.string(forKey: "TokenKey")
+    func voteOnRant(rantID: Int, vote: Int) -> Bool {
+        if Double(UserDefaults.standard.integer(forKey: "DRTokenExpireTime")) - Double(Date().timeIntervalSince1970) <= 0 {
+            logIn(username: UserDefaults.standard.string(forKey: "DRUsername")!, password: UserDefaults.standard.string(forKey: "DRPassword")!)
+        }
         
-        let resourceURL = URL(string: "https://devrant.com/api/users/\(String(profileID))?app=3&skip=\(String(skip))&content=\(String(userContentType.rawValue))&user_id=\(String(userID))&token_id=\(String(tokenID))&token_key=\(String(tokenKey!))")
+        let resourceURL = URL(string: "https://devrant.com/api/devrant/rants/\(String(rantID).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)/vote?cb=\(String(Int(Date().timeIntervalSince1970)).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)")!
+        
+        //self.resourceURL = URL(string: "https://proxy.devrant.app/api/devrant/rants/\(String(rantID))/vote")!
+        var request = URLRequest(url: resourceURL)
+        
+        request.httpMethod = "POST"
+        request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.httpBody = "app=3&user_id=\(String(UserDefaults.standard.integer(forKey: "DRUserID")))&token_id=\(String(UserDefaults.standard.integer(forKey: "DRTokenID")))&token_key=\(String(UserDefaults.standard.string(forKey: "DRTokenKey")!))&vote=\(String(vote))".data(using: .utf8)
+        
+        let completionSemaphore = DispatchSemaphore(value: 0)
+        var success = false
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            let body = String(data: data!, encoding: .utf8)!
+            
+            print(body)
+            
+            if (200..<300).contains((response as? HTTPURLResponse)!.statusCode) {
+                success = true
+            } else {
+                success = false
+            }
+            
+            completionSemaphore.signal()
+        }
+        
+        task.resume()
+        
+        completionSemaphore.wait()
+        return success
+    }
+    
+    func getProfileFromID(_ profileID: Int, userContentType: ProfileContentTypes, skip: Int) throws -> ProfileResponse? {
+        let userID = UserDefaults.standard.integer(forKey: "DRUserID")
+        let tokenID = UserDefaults.standard.integer(forKey: "DRTokenID")
+        let tokenKey = UserDefaults.standard.string(forKey: "DRTokenKey")
+        
+        let resourceURL = URL(string: "https://devrant.com/api/users/\(String(profileID).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)?app=3&skip=\(String(skip).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)&content=\(String(userContentType.rawValue).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)&user_id=\(String(userID).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)&token_id=\(String(tokenID).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)&token_key=\(String(tokenKey!).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)")
+        
+        //let resourceURL = URL(string: "https://proxy.devrant.app/api/users/\(String(profileID))?app=3&skip=\(String(skip))&content=\(String(userContentType.rawValue))&user_id=\(String(userID))&token_id=\(String(tokenID))&token_key=\(String(tokenKey!))")
         self.request = URLRequest(url: resourceURL!)
         self.request.httpMethod = "GET"
         self.request.addValue("application/x-www-form/urlencoded", forHTTPHeaderField: "Content-Type")
@@ -251,6 +313,6 @@ class APIRequest {
             throw APIError.decodingError
         }
         
-        return nil
+        //return nil
     }
 }

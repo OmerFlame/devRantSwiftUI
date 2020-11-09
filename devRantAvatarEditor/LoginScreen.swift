@@ -11,9 +11,9 @@ import Combine
 struct LoginScreen: View {
     @Binding var showVar: Bool
     
-    @State var userID = UserDefaults.standard.integer(forKey: "UserID")
-    @State var tokenID = UserDefaults.standard.integer(forKey: "TokenID")
-    @State var tokenKey = UserDefaults.standard.string(forKey: "TokenKey")
+    @State var userID = UserDefaults.standard.integer(forKey: "DRUserID")
+    @State var tokenID = UserDefaults.standard.integer(forKey: "DRTokenID")
+    @State var tokenKey = UserDefaults.standard.string(forKey: "DRTokenKey")
     
     //@ObservedObject var userCredentials = credentials()
     
@@ -40,7 +40,7 @@ struct LoginScreen: View {
                         DispatchQueue.main.async {
                             self.shouldShowLoadingRing.toggle()
                             
-                            if UserDefaults.standard.integer(forKey: "UserID") == 0 && UserDefaults.standard.integer(forKey: "TokenID") == 0 && UserDefaults.standard.string(forKey: "TokenKey") == nil {
+                            if UserDefaults.standard.integer(forKey: "DRUserID") == 0 && UserDefaults.standard.integer(forKey: "DRTokenID") == 0 && UserDefaults.standard.string(forKey: "DRTokenKey") == nil {
                                 
                                 self.shouldShowIncorrectPassword.toggle()
                             } else {

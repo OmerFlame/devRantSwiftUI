@@ -10,12 +10,12 @@ import SwiftUI
 struct ContentView: View {
     @State var shouldShowLogin = false
     @State var shouldShowEditor = false
-    @State var userID = UserDefaults.standard.integer(forKey: "UserID")
-    @State var tokenID = UserDefaults.standard.integer(forKey: "TokenID")
-    @State var tokenKey = UserDefaults.standard.string(forKey: "TokenKey")
+    @State var userID = UserDefaults.standard.integer(forKey: "DRUserID")
+    @State var tokenID = UserDefaults.standard.integer(forKey: "DRTokenID")
+    @State var tokenKey = UserDefaults.standard.string(forKey: "DRTokenKey")
     
-    @State var username = UserDefaults.standard.string(forKey: "Username")
-    @State var password = UserDefaults.standard.string(forKey: "Password")
+    @State var username = UserDefaults.standard.string(forKey: "DRUsername")
+    @State var password = UserDefaults.standard.string(forKey: "DRPassword")
     
     @State var isSheet = true
     

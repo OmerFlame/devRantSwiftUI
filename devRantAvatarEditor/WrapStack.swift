@@ -60,11 +60,13 @@ struct TagCloudView: View {
 
     private func item(for text: String, color: Color) -> some View {
         Text(text)
+            .underline()
             .padding(.all, 5)
             .font(.footnote)
-            .background(color)
-            .foregroundColor(Color.white)
+            .background(Color.clear)
+            //.foregroundColor(Color.black)
             .cornerRadius(5)
+            //.colorInvert()
     }
 
     private func viewHeightReader(_ binding: Binding<CGFloat>) -> some View {

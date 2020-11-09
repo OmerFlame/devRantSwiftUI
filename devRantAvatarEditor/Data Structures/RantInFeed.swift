@@ -14,10 +14,10 @@ public struct RantInFeed: Codable, Identifiable {
     let text: String
     let score: Int
     let created_time: Int
-    let attached_image: Polytype
+    let attached_image: AttachedImage?
     let num_comments: Int
     let tags: [String]
-    let vote_state: Int
+    var vote_state: Int
     let edited: Bool
     let link: String?
     
@@ -55,5 +55,35 @@ public struct RantInFeed: Codable, Identifiable {
              user_avatar,
              user_avatar_lg,
              user_dpp
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        id = try values.decode(Int.self, forKey: .id)
+        text = try values.decode(String.self, forKey: .text)
+        score = try values.decode(Int.self, forKey: .score)
+        created_time = try values.decode(Int.self, forKey: .created_time)
+        
+        do {
+            attached_image = try values.decode(AttachedImage.self, forKey: .attached_image)
+        } catch {
+            attached_image = nil
+        }
+        
+        num_comments = try values.decode(Int.self, forKey: .num_comments)
+        tags = try values.decode([String].self, forKey: .tags)
+        vote_state = try values.decode(Int.self, forKey: .vote_state)
+        edited = try values.decode(Bool.self, forKey: .edited)
+        link = try? values.decode(String.self, forKey: .link)
+        rt = try? values.decode(Int.self, forKey: .rt)
+        rc = try? values.decode(Int.self, forKey: .rc)
+        c_type = try? values.decode(Int.self, forKey: .c_type)
+        c_type_long = try? values.decode(String.self, forKey: .c_type_long)
+        user_id = try values.decode(Int.self, forKey: .user_id)
+        user_username = try values.decode(String.self, forKey: .user_username)
+        user_score = try values.decode(Int.self, forKey: .user_score)
+        user_avatar = try values.decode(UserAvatar.self, forKey: .user_avatar)
+        user_avatar_lg = try values.decode(UserAvatar.self, forKey: .user_avatar_lg)
+        user_dpp = try? values.decode(Int.self, forKey: .user_dpp)
     }
 }
