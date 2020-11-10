@@ -7,9 +7,9 @@
 
 import SwiftUI
 import Combine
-import RxSwift
 
 struct MainScreen: View {
+    @State var isBottomSheetShown = false
     @State var apiRequest: APIRequest
     
     @State var shouldShowSettings = false
@@ -39,210 +39,46 @@ struct MainScreen: View {
     }*/
     
     var body: some View {
-        NavigationView {
-            
-            /*if self.rantFeed.isLoadingPage {
-                VStack(alignment: .center) {
-                    ProgressView("Loading Rants")
-                        .progressViewStyle(CircularProgressViewStyle())
-                        /*.onAppear {
-                            if self.rantFeed.pageStatus == .loading {
-                                self.shouldShowLoadingRing = true
-                                DispatchQueue.global(qos: .userInitiated).async {
-                                    self.getFeed()
-                                    
-                                    DispatchQueue.main.async {
-                                        print("IS RANT FEED EMPTY: \(self.rantFeed == nil)")
-                                        self.shouldShowLoadingRing.toggle()
+        GeometryReader { geometry in
+            ZStack {
+                NavigationView {
+                    InfiniteScrollRepresentable()
+                    .id(UUID())
+                    //.listStyle(GroupedListStyle())
+                    .navigationBarTitle(Text("Home"))
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Menu(content: {
+                                Button(action: {
+                                    self.shouldShowSettings.toggle()
+                                }, label: {
+                                    HStack {
+                                        Text("Settings")
+                                        Image(systemName: "gearshape.fill")
                                     }
-                                }
-                            }
-                    }*/
-                }*/
-            //} else {
-            /*ScrollView(.vertical) {
-                LazyVStack {
-                    ForEach(self.rantFeed.rants.indices, id: \.self) { idx in
-                            
-                        NavigationLink(
-                            destination: RantView(rantID: self.rantFeed.rants[idx].id, apiRequest: self.apiRequest, rantInFeed: self.$rantFeed.rants[idx])) {
+                                })
                                 
-                            ZStack {
-                                RantInFeedView(rantContents: self.$rantFeed.rants[idx])
-                                    //.fixedSize(horizontal: false, vertical: true)
-                                    .frame(alignment: .leading)
-                                        
-                                        
-                                if idx == self.rantFeed.rants.endIndex - 1 {
-                                    GeometryReader { proxy -> AnyView in
-                                        self.shouldFetchMore = proxy.frame(in: .global).minY <= UIScreen.main.bounds.size.height
-                                        return AnyView(Color.clear
-                                                        .frame(width: .zero, height: .zero))
-                                    }.fixedSize(horizontal: true, vertical: true)
-                                }
-                            }.onAppear {
-                                print("loaded rant \(idx)!")
-                            }
-                                /*if idx == self.rantFeed.rants.endIndex - 1 {
-                                    GeometryReader { proxy -> AnyView in
-                                        self.shouldFetchMore = proxy.frame(in: .global).minY <= UIScreen.main.bounds.size.height
-                                        return AnyView(Color.clear
-                                            //.preference(key: ScrollViewOffsetPreferenceKey.self, value: shouldRefresh)
-                                                        .anchorPreference(key: OffsetKey.self, value: .bottom) {
-                                                            proxy[$0].y
-                                                        }
-                                                        .frame(width: .zero, height: .zero))
-                                    }.fixedSize(horizontal: true, vertical: true)
-                                }*/
-                                /*.onAppear {
-                                    if idx == self.rantFeed.rants.endIndex - 1 {
-                                        rantFeed.loadMoreContentIfNeeded(currentItem: self.rantFeed.rants[idx])
+                                Button(action: {
+                                    self.shouldShowLogin.toggle()
+                                }, label: {
+                                    HStack {
+                                        Text("Log Out")
+                                        Image(systemName: "lock.fill")
                                     }
-                                }*/
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                    }
-                        
-                    if rantFeed.isLoadingPage {
-                            
-                        VStack(alignment: .center) {
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle())
+                                })
+                            }, label: { Image(systemName: "ellipsis.circle.fill").font(.system(size: 25)) }
+                            )
                         }
                     }
-                        
-                    NavigationLink(
-                        destination: ProfileView(userID: 1392945),
-                        label: {
-                            Text("Navigate")
-                        })
-                        
-                    NavigationLink(
-                        destination: ProfileView(userID: 3188397),
-                        label: {
-                            Text("Second Navigate")
-                        }
-                    )
-                }.navigationBarTitle(Text("Home"))
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Menu(content: {
-                            Button(action: {
-                                self.shouldShowSettings.toggle()
-                            }, label: {
-                                HStack {
-                                    Text("Settings")
-                                    Image(systemName: "gearshape.fill")
-                                }
-                            })
-                                   
-                            Button(action: {
-                                self.shouldShowLogin.toggle()
-                            }, label: {
-                                HStack {
-                                    Text("Log Out")
-                                    Image(systemName: "lock.fill")
-                                }
-                            })
-                        }, label: { Image(systemName: "ellipsis.circle.fill").font(.system(size: 25)) }
-                        )
-                    }
+                    .sheet(isPresented: $shouldShowLogin, content: {
+                        LoginScreen(showVar: $shouldShowLogin, apiRequest: self.apiRequest).presentation(isSheet: $isSheet)
+                    })
+                    //.padding(.top)
                 }
-                .sheet(isPresented: $shouldShowLogin, content: {
-                    LoginScreen(showVar: $shouldShowLogin, apiRequest: self.apiRequest).presentation(isSheet: $isSheet)
-                })
-                .padding(.top)
-                /*.backgroundPreferenceValue(ScrollViewOffsetPreferenceKey.self) { value -> Color in
-                    //print("Y COORDINATE: \(value)")
-                    //print(value)
-                    if value == true {
-                        self.rantFeed.loadMoreContent()
-                    }
-                        
-                    return Color.clear
-                }*/
-            }.onChange(of: self.shouldFetchMore, perform: { value in
-                    if value == true {
-                        print("FETCH NOW!")
-                        DispatchQueue.global(qos: .userInteractive).async {
-                            self.rantFeed.loadMoreContent()
-                        }
-                    }
-                })
-                    
-                /*.onPreferenceChange(OffsetKey.self) { value in
-                        print(value)
-                }*/
-                //.gesture(DragGesture().on)
-                //.id(UUID())
-            //}
-            */
-            
-            /*List {
-                ForEach(self.rantFeed.rants.indices) { idx in
-                    GeometryReader { geometry in
-                        LazyVStack {
-                            ZStack {
-                                RantInFeedView(rantContents: self.$rantFeed.rants[idx])
-                                    //.fixedSize(horizontal: false, vertical: true)
-                                    .frame(alignment: .leading)
-                                    //.fixedSize()
-                                
-                                NavigationLink(destination: RantView(rantID: self.rantFeed.rants[idx].id, apiRequest: self.apiRequest, rantInFeed: self.$rantFeed.rants[idx])) {
-                                    EmptyView()
-                                }
-                                
-                                if idx == self.rantFeed.rants.endIndex - 1 {
-                                    GeometryReader { proxy -> AnyView in
-                                        self.shouldFetchMore = proxy.frame(in: .global).minY <= UIScreen.main.bounds.size.height
-                                        return AnyView(Color.clear
-                                                        .frame(width: .zero, height: .zero))
-                                    }.fixedSize(horizontal: true, vertical: true)
-                                }
-                            }.onAppear {
-                                print("rant \(idx) appeared!")
-                            }
-                            //.fixedSize()
-                        }.frame(maxWidth: geometry.size.width, maxHeight: .infinity)
-                    }
-                }
-            }*/
-            InfiniteScrollRepresentable()
-            .id(UUID())
-            //.listStyle(GroupedListStyle())
-            .navigationBarTitle(Text("Home"))
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Menu(content: {
-                        Button(action: {
-                            self.shouldShowSettings.toggle()
-                        }, label: {
-                            HStack {
-                                Text("Settings")
-                                Image(systemName: "gearshape.fill")
-                            }
-                        })
-                               
-                        Button(action: {
-                            self.shouldShowLogin.toggle()
-                        }, label: {
-                            HStack {
-                                Text("Log Out")
-                                Image(systemName: "lock.fill")
-                            }
-                        })
-                    }, label: { Image(systemName: "ellipsis.circle.fill").font(.system(size: 25)) }
-                    )
-                }
+                .navigationViewStyle(StackNavigationViewStyle())
             }
-            .sheet(isPresented: $shouldShowLogin, content: {
-                LoginScreen(showVar: $shouldShowLogin, apiRequest: self.apiRequest).presentation(isSheet: $isSheet)
-            })
-            //.padding(.top)
         }
-        .navigationViewStyle(StackNavigationViewStyle())
     }
     
     private struct OffsetKey: PreferenceKey {
@@ -426,6 +262,7 @@ struct TableRepresentable: UIViewControllerRepresentable {
 
 final class HostingCell<Content: View>: UITableViewCell {
     private let hostingController = UIHostingController<Content?>(rootView: nil)
+    public var height = CGFloat()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -438,7 +275,16 @@ final class HostingCell<Content: View>: UITableViewCell {
     
     func set(rootView: Content, parentController: UIViewController) {
         self.hostingController.rootView = rootView
+        
+        print("INTRINSIC CONTENT SIZE WIDTH BEFORE INVALIDATING:  \(self.hostingController.view.intrinsicContentSize.width)")
+        print("INTRINSIC CONTENT SIZE HEIGHT BEFORE INVALIDATING: \(self.hostingController.view.intrinsicContentSize.height)")
+        
         self.hostingController.view.invalidateIntrinsicContentSize()
+        
+        print("INTRINSIC CONTENT SIZE WIDTH AFTER INVALIDATING:  \(self.hostingController.view.intrinsicContentSize.width)")
+        print("INTRINSIC CONTENT SIZE HEIGHT AFTER INVALIDATING: \(self.hostingController.view.intrinsicContentSize.height)")
+        
+        self.hostingController.view.sizeToFit()
         
         let requiresControllerMove = hostingController.parent != parentController
         if requiresControllerMove {
@@ -450,13 +296,33 @@ final class HostingCell<Content: View>: UITableViewCell {
             hostingController.view.translatesAutoresizingMaskIntoConstraints = false
             hostingController.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor).isActive = true
             hostingController.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor).isActive = true
-            hostingController.view.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10).isActive = true
-            hostingController.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: 10).isActive = true
+            //hostingController.view.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10).isActive = true
+            hostingController.view.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive = true
+            hostingController.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
         }
+        
+        /*if !self.contentView.subviews.contains(hostingController.view) {
+            self.contentView.addSubview(hostingController.view)
+            hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+            self.contentView.translatesAutoresizingMaskIntoConstraints = false
+            
+            //hostingController.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor).isActive = true
+            //hostingController.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor).isActive = true
+            //hostingController.view.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive = true
+            //hostingController.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
+            
+            self.contentView.leadingAnchor.constraint(equalTo: hostingController.view.leadingAnchor).isActive = true
+            self.contentView.trailingAnchor.constraint(equalTo: hostingController.view.trailingAnchor).isActive = true
+        }*/
         
         if requiresControllerMove {
             hostingController.didMove(toParent: parentController)
         }
+        
+        print("CONTENT VIEW WIDTH:  \(self.contentView.frame.size.width)")
+        print("CONTENT VIEW HEIGHT: \(self.contentView.frame.size.height)")
+        
+        height = self.contentView.frame.size.height
     }
 }
 

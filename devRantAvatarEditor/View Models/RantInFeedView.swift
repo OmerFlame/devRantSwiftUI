@@ -9,7 +9,9 @@ import SwiftUI
 
 struct RantInFeedView: View {
     @State private var totalHeight = CGFloat.zero
+    @State var shouldShowError = false
     @Binding var rantContents: RantInFeed
+    var parentTableView: UITableView
     let uiImage: UIImage?
     
     private func viewHeightReader(_ binding: Binding<CGFloat>) -> some View {
@@ -69,8 +71,31 @@ struct RantInFeedView: View {
             HStack {
                 VStack {
                     HStack(alignment: .top) { // START MAIN HSTACK
-                        VStack { // UPVOTE / DOWNVOTE VSTACK
-                            Button(action: {}, label: {
+                        VStack(spacing: 1) { // UPVOTE / DOWNVOTE VSTACK
+                            Button(action: {
+                                var vote: Int {
+                                    switch self.rantContents.vote_state {
+                                    case 0:
+                                        return 1
+                                        
+                                    case 1:
+                                        return 0
+                                        
+                                    default:
+                                        return 1
+                                    }
+                                }
+                                
+                                let success = APIRequest().voteOnRant(rantID: self.rantContents.id, vote: vote)
+                                
+                                if !success {
+                                    self.shouldShowError.toggle()
+                                } else {
+                                    self.rantContents.vote_state = vote
+                                    
+                                    parentTableView.reloadData()
+                                }
+                            }, label: {
                                 if self.rantContents.vote_state == 1 {
                                     //Image(systemName: "plus.circle.fill").font(.system(size: 25)).accentColor(Color(UIColor(hex: self.rantContents.user_avatar.b)!))
                                     Image("plusplus").font(.system(size: 25)).accentColor(Color(UIColor(hex: self.rantContents.user_avatar.b)!))
@@ -85,7 +110,29 @@ struct RantInFeedView: View {
                                 }
                             })
                             Text(String(self.rantContents.score)).font(.subheadline)
-                            Button(action: {}, label: {
+                            Button(action: {
+                                var vote: Int {
+                                    switch self.rantContents.vote_state {
+                                    case 0:
+                                        return -1
+                                        
+                                    case -1:
+                                        return 0
+                                        
+                                    default:
+                                        return -1
+                                    }
+                                }
+                                
+                                let success = APIRequest().voteOnRant(rantID: self.rantContents.id, vote: vote)
+                                
+                                if !success {
+                                    self.shouldShowError.toggle()
+                                } else {
+                                    self.rantContents.vote_state = vote
+                                    parentTableView.reloadData()
+                                }
+                            }, label: {
                                 if self.rantContents.vote_state == -1 {
                                     Image("minusminus").font(.system(size: 25)).accentColor(Color(UIColor(hex: self.rantContents.user_avatar.b)!))
                                 } else if self.rantContents.vote_state == 0 {
@@ -147,6 +194,7 @@ struct RantInFeedView: View {
                 }
             } // END MAIN HSTACK
         }.buttonStyle(PlainButtonStyle())
+        .frame(minHeight: 0, maxHeight: .infinity)
     }
     
     private func getImageResizeMultiplier(imageWidth: CGFloat, imageHeight: CGFloat, multiplier: Int) -> CGFloat {

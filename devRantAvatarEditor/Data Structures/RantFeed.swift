@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 import Combine
-import RxSwift
 
 struct RantFeed: Codable {
     struct RantFeedSettings: Codable {

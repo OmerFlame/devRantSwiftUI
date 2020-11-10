@@ -16,6 +16,8 @@
 		5948D925250E6D4700373317 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5948D924250E6D4700373317 /* Preview Assets.xcassets */; };
 		5948D92D250E6DE900373317 /* LoginScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5948D92C250E6DE900373317 /* LoginScreen.swift */; };
 		5948D92F250E6EA000373317 /* UndismissableSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5948D92E250E6EA000373317 /* UndismissableSheet.swift */; };
+		594CA450255A8F7D00E7D009 /* TagListView in Frameworks */ = {isa = PBXBuildFile; productRef = 594CA44F255A8F7D00E7D009 /* TagListView */; };
+		594CA45A255AB88800E7D009 /* SlideOverCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594CA459255AB88800E7D009 /* SlideOverCard.swift */; };
 		595604F62536FB4E00928C01 /* ThumbnailImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595604F52536FB4E00928C01 /* ThumbnailImageView.swift */; };
 		59627A4A250F925A00233F48 /* CommentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59627A49250F925A00233F48 /* CommentModel.swift */; };
 		59627A4C250F9B3B00233F48 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59627A4B250F9B3B00233F48 /* Comment.swift */; };
@@ -49,7 +51,6 @@
 		59B85B3125345BD500B2CAC9 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B85B3025345BD500B2CAC9 /* File.swift */; };
 		59B85B342534629000B2CAC9 /* FileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B85B332534629000B2CAC9 /* FileCell.swift */; };
 		59BC7B2125595D0600A3E549 /* Carbon in Frameworks */ = {isa = PBXBuildFile; productRef = 59BC7B2025595D0600A3E549 /* Carbon */; };
-		59BF852025402F5A005962B9 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 59BF851F25402F5A005962B9 /* RxSwift */; };
 		59D822CB2534EBD70015E2D5 /* RantResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D822CA2534EBD70015E2D5 /* RantResponse.swift */; };
 		59EA61A125259F0D0084E712 /* RantFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59EA61A025259F0D0084E712 /* RantFeed.swift */; };
 		59EA62172525FA8F0084E712 /* RantInFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59EA62162525FA8F0084E712 /* RantInFeedView.swift */; };
@@ -84,6 +85,7 @@
 		5948D926250E6D4700373317 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5948D92C250E6DE900373317 /* LoginScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreen.swift; sourceTree = "<group>"; };
 		5948D92E250E6EA000373317 /* UndismissableSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndismissableSheet.swift; sourceTree = "<group>"; };
+		594CA459255AB88800E7D009 /* SlideOverCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideOverCard.swift; sourceTree = "<group>"; };
 		595604F52536FB4E00928C01 /* ThumbnailImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailImageView.swift; sourceTree = "<group>"; };
 		59627A49250F925A00233F48 /* CommentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentModel.swift; sourceTree = "<group>"; };
 		59627A4B250F9B3B00233F48 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
@@ -156,10 +158,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				59BF852025402F5A005962B9 /* RxSwift in Frameworks */,
 				64D70BF8D6AD90E4A76ACEE2 /* Pods_devRantAvatarEditor.framework in Frameworks */,
 				590CB1892549649800972528 /* TinyConstraints in Frameworks */,
 				59BC7B2125595D0600A3E549 /* Carbon in Frameworks */,
+				594CA450255A8F7D00E7D009 /* TagListView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,6 +299,7 @@
 				595604F52536FB4E00928C01 /* ThumbnailImageView.swift */,
 				59B85B332534629000B2CAC9 /* FileCell.swift */,
 				598BE6D72535B29B00919439 /* SecondaryFileCell.swift */,
+				594CA459255AB88800E7D009 /* SlideOverCard.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -371,9 +374,9 @@
 			);
 			name = devRantAvatarEditor;
 			packageProductDependencies = (
-				59BF851F25402F5A005962B9 /* RxSwift */,
 				590CB1882549649800972528 /* TinyConstraints */,
 				59BC7B2025595D0600A3E549 /* Carbon */,
+				594CA44F255A8F7D00E7D009 /* TagListView */,
 			);
 			productName = devRantAvatarEditor;
 			productReference = 5948D91A250E6D4200373317 /* devRantAvatarEditor.app */;
@@ -403,9 +406,9 @@
 			);
 			mainGroup = 5948D911250E6D4200373317;
 			packageReferences = (
-				59BF851E25402F5A005962B9 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				590CB1872549649800972528 /* XCRemoteSwiftPackageReference "TinyConstraints" */,
 				59BC7B1F25595D0600A3E549 /* XCRemoteSwiftPackageReference "Carbon" */,
+				594CA44E255A8F7D00E7D009 /* XCRemoteSwiftPackageReference "TagListView" */,
 			);
 			productRefGroup = 5948D91B250E6D4200373317 /* Products */;
 			projectDirPath = "";
@@ -502,6 +505,7 @@
 				59EA61A125259F0D0084E712 /* RantFeed.swift in Sources */,
 				5948D91E250E6D4200373317 /* devRantAvatarEditorApp.swift in Sources */,
 				59F20B55253C6D060028A3C6 /* ScrollDownHeaderBehavior.swift in Sources */,
+				594CA45A255AB88800E7D009 /* SlideOverCard.swift in Sources */,
 				59EA621F25265B9D0084E712 /* WrapStack.swift in Sources */,
 				59F20B4F253C6CC80028A3C6 /* HeaderScrollView.swift in Sources */,
 				59EA62172525FA8F0084E712 /* RantInFeedView.swift in Sources */,
@@ -781,20 +785,20 @@
 				minimumVersion = 4.0.1;
 			};
 		};
+		594CA44E255A8F7D00E7D009 /* XCRemoteSwiftPackageReference "TagListView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ElaWorkshop/TagListView";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.1;
+			};
+		};
 		59BC7B1F25595D0600A3E549 /* XCRemoteSwiftPackageReference "Carbon" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ra1028/Carbon";
 			requirement = {
 				branch = master;
 				kind = branch;
-			};
-		};
-		59BF851E25402F5A005962B9 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ReactiveX/RxSwift";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.1.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -805,15 +809,15 @@
 			package = 590CB1872549649800972528 /* XCRemoteSwiftPackageReference "TinyConstraints" */;
 			productName = TinyConstraints;
 		};
+		594CA44F255A8F7D00E7D009 /* TagListView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 594CA44E255A8F7D00E7D009 /* XCRemoteSwiftPackageReference "TagListView" */;
+			productName = TagListView;
+		};
 		59BC7B2025595D0600A3E549 /* Carbon */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 59BC7B1F25595D0600A3E549 /* XCRemoteSwiftPackageReference "Carbon" */;
 			productName = Carbon;
-		};
-		59BF851F25402F5A005962B9 /* RxSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 59BF851E25402F5A005962B9 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = RxSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

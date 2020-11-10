@@ -166,7 +166,7 @@ extension InfiniteScroll {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "HostingCell", for: indexPath) as! HostingCell<RantInFeedView>
         
-        cell.set(rootView: RantInFeedView(rantContents: rant, uiImage: supplementalImages[indexPath.row]), parentController: self)
+        cell.set(rootView: RantInFeedView(rantContents: rant, parentTableView: tableView, uiImage: supplementalImages[indexPath.row]), parentController: self)
         
         return cell
     }
@@ -196,7 +196,7 @@ struct InfiniteScrollRepresentable: UIViewControllerRepresentable {
 
 // MARK: - Profile Scroll View
 
-class ProfileInfiniteScrollView: UITableViewController {
+/*class ProfileInfiniteScrollView: UITableViewController {
     @State var viewSelection: ProfilePages = .rants
     @State var isComplete = false
     @State var shouldShowError = false
@@ -533,3 +533,4 @@ struct ProfileInfiniteScrollViewRepresentable: UIViewControllerRepresentable {
         
     }
 }
+*/

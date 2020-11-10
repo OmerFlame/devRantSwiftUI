@@ -24,40 +24,69 @@ struct Rant: View {
                 HStack(alignment: .top) {
                     VStack {
                         Button(action: {
-                            let success = APIRequest().voteOnRant(rantID: self.rantContents.id, vote: 1)
+                            var vote: Int {
+                                switch self.rantContents.vote_state {
+                                case 0:
+                                    return 1
+                                    
+                                case 1:
+                                    return 0
+                                    
+                                default:
+                                    return 1
+                                }
+                            }
+                            
+                            let success = APIRequest().voteOnRant(rantID: self.rantContents.id, vote: vote)
                             
                             if !success {
                                 self.shouldShowError.toggle()
                             } else {
-                                self.rantContents.vote_state = 1
+                                self.rantContents.vote_state = vote
                             }
                             
-                            self.rantInFeed.vote_state = 1
+                            self.rantInFeed.vote_state = self.rantContents.vote_state
                         }, label: {
-                                if self.rantContents.vote_state == 1 {
-                                Image(systemName: "plus.circle.fill").font(.system(size: 25)).accentColor(Color(UIColor(hex: self.rantContents.user_avatar.b)!))
+                            if self.rantContents.vote_state == 1 {
+                                //Image(systemName: "plus.circle.fill").font(.system(size: 25)).accentColor(Color(UIColor(hex: self.rantContents.user_avatar.b)!))
+                                Image("plusplus").font(.system(size: 25)).accentColor(Color(UIColor(hex: self.rantContents.user_avatar.b)!))
                             } else if self.rantContents.vote_state == 0 {
-                                Image(systemName: "plus.circle.fill").accentColor(.gray).font(.system(size: 25))
+                                Image("plusplus").font(.system(size: 25)).accentColor(.gray)
                             } else {
-                                Image(systemName: "plus.circle.fill").disabled(true).font(.system(size: 25))
+                                Image("plusplus").font(.system(size: 25)).disabled(true).font(.system(size: 25))
                             }
                         })
                         Text(String(self.rantContents.score)).font(.subheadline)
                         Button(action: {
-                            let success = APIRequest().voteOnRant(rantID: self.rantContents.id, vote: -1)
+                            var vote: Int {
+                                switch self.rantContents.vote_state {
+                                case 0:
+                                    return -1
+                                    
+                                case -1:
+                                    return 0
+                                    
+                                default:
+                                    return -1
+                                }
+                            }
+                            
+                            let success = APIRequest().voteOnRant(rantID: self.rantContents.id, vote: vote)
                             
                             if !success {
                                 self.shouldShowError.toggle()
                             } else {
-                                self.rantContents.vote_state = -1
+                                self.rantContents.vote_state = vote
                             }
+                            
+                            self.rantInFeed.vote_state = self.rantContents.vote_state
                         }, label: {
                             if self.rantContents.vote_state == -1 {
-                                Image(systemName: "minus.circle.fill").font(.system(size: 25)).accentColor(Color(UIColor(hex: self.rantContents.user_avatar.b)!))
+                                Image("minusminus").font(.system(size: 25)).accentColor(Color(UIColor(hex: self.rantContents.user_avatar.b)!))
                             } else if self.rantContents.vote_state == 0 {
-                                Image(systemName: "minus.circle.fill").accentColor(.gray).font(.system(size: 25))
+                                Image("minusminus").accentColor(.gray).font(.system(size: 25))
                             } else {
-                                Image(systemName: "minus.circle.fill").disabled(true).font(.system(size: 25))
+                                Image("minusminus").disabled(true).font(.system(size: 25))
                             }
                         })
                     }
@@ -109,7 +138,8 @@ struct Rant: View {
                         NavigationLink(
                             destination: /*ProfileInfiniteScrollViewRepresentable(userID: self.rantContents.user_id).edgesIgnoringSafeArea(.top)*/ //SecondaryProfileRepresentable(userID: self.rantContents.user_id)
                                 TertiaryProfileScrollSwiftUI(userID: self.rantContents.user_id, profileData: self.profile, image: self.userImage)
-                                .edgesIgnoringSafeArea(.top),
+                                .edgesIgnoringSafeArea(.top)
+                                .navigationBarHidden(true),
                             label: {
                                 HStack {
                                     if self.rantContents.user_avatar.i == nil {

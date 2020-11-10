@@ -363,7 +363,7 @@ struct RantsList: View {
                 ForEach(data!, id: \.uuid) { rant in
                     // NOTE: THIS IS A TEMPORARY FIX. FIX THIS LATER!
                     
-                    RantInFeedView(rantContents: State(initialValue: rant).projectedValue, uiImage: nil)
+                    RantInFeedView(rantContents: State(initialValue: rant).projectedValue, parentTableView: UITableView(), uiImage: nil)
                 }
             }
             /*ProfileInfiniteScrollViewRepresentable(userID: self.userID)

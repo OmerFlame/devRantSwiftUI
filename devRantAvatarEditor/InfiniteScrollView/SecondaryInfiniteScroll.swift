@@ -12,7 +12,7 @@ import TinyConstraints
 
 public let secondaryProfilePages: [String] = ["Rants", "++'s", "Comments", "Favorites"]
 
-class SecondaryProfileInfiniteScroll: UITableViewController {
+/*class SecondaryProfileInfiniteScroll: UITableViewController {
     @ObservedObject var content = rantFeedData()
     var supplementalImages = [UIImage?]()
     var isComplete = false
@@ -323,7 +323,7 @@ class SecondaryProfileInfiniteScroll: UITableViewController {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "HostingCell", for: indexPath) as! HostingCell<RantInFeedView>
         
-        cell.set(rootView: RantInFeedView(rantContents: rant, uiImage: supplementalImages[indexPath.row]), parentController: self)
+        cell.set(rootView: RantInFeedView(rantContents: rant, uiImage: supplementalImages[indexPath.row], parentTableView: <#UITableView#>), parentController: self)
         
         return cell
     }
@@ -339,7 +339,7 @@ struct SecondaryProfileRepresentable: UIViewControllerRepresentable {
     func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
         
     }
-}
+}*/
 
 class profileViewData: ObservableObject {
     //@Published var data: Profile? = nil
@@ -354,6 +354,7 @@ class TertiaryProfileScroll: UITableViewController {
     var userID: Int
     @ObservedObject var profile = profileViewData()
     var supplementalImages = [UIImage?]()
+    var rowHeights = [CGFloat]()
     var image: UIImage?
     
     var segmentedControl: UISegmentedControl!
@@ -405,8 +406,8 @@ class TertiaryProfileScroll: UITableViewController {
         
         
         if useAutosizingCells && tableView.responds(to: #selector(getter: UIView.layoutMargins)) {
-            tableView.estimatedRowHeight = 150
             tableView.rowHeight = UITableView.automaticDimension
+            tableView.estimatedRowHeight = 150
         }
         
         let headerView = SecondaryStretchyTableHeaderView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 482))
@@ -572,22 +573,31 @@ class TertiaryProfileScroll: UITableViewController {
         switch temporaryIndex {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "RantInFeedCell", for: indexPath) as! HostingCell<RantInFeedView>
-            cell.set(rootView: RantInFeedView(rantContents: $profile.rants[indexPath.row], uiImage: supplementalImages[indexPath.row]), parentController: self)
+            cell.set(rootView: RantInFeedView(rantContents: $profile.rants[indexPath.row], parentTableView: tableView, uiImage: supplementalImages[indexPath.row]), parentController: self)
+            
+            /*if rowHeights.count - 1 >= indexPath.row {
+                rowHeights[indexPath.row] = cell.height
+            } else {
+                rowHeights.append(cell.height)
+            }*/
+            
             return cell
             
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "RantInFeedCell", for: indexPath) as! HostingCell<RantInFeedView>
-            cell.set(rootView: RantInFeedView(rantContents: $profile.upvoted[indexPath.row], uiImage: supplementalImages[indexPath.row]), parentController: self)
+            cell.set(rootView: RantInFeedView(rantContents: $profile.upvoted[indexPath.row], parentTableView: tableView, uiImage: supplementalImages[indexPath.row]), parentController: self)
+            
             return cell
             
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "CommentCell", for: indexPath) as! HostingCell<Comment>
             cell.set(rootView: Comment(highlightColor: Color(UIColor(hex: profile.comments[indexPath.row].user_avatar.b)!), commentContents: profile.comments[indexPath.row]), parentController: self)
+            
             return cell
             
         case 3:
             let cell = tableView.dequeueReusableCell(withIdentifier: "RantInFeedCell", for: indexPath) as! HostingCell<RantInFeedView>
-            cell.set(rootView: RantInFeedView(rantContents: $profile.favorites[indexPath.row], uiImage: supplementalImages[indexPath.row]), parentController: self)
+            cell.set(rootView: RantInFeedView(rantContents: $profile.favorites[indexPath.row], parentTableView: tableView, uiImage: supplementalImages[indexPath.row]), parentController: self)
             return cell
             
         default:
@@ -852,20 +862,21 @@ class TertiaryProfileScroll: UITableViewController {
     @objc func selectionChanged(_ sender: UISegmentedControl) {
         print("Selection changed to \(secondaryProfilePages[sender.selectedSegmentIndex])")
         //tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
-        tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+        //tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
         
-        //self.profile.rants = []
-        //self.profile.upvoted = []
-        //self.profile.comments = []
-        //self.profile.favorites = []
-        //self.supplementalImages = []
+        self.profile.rants = []
+        self.profile.upvoted = []
+        self.profile.comments = []
+        self.profile.favorites = []
+        self.supplementalImages = []
         
-        //self.tableView.reloadData()
+        self.tableView.reloadData()
+        temporaryIndex = segmentedControl.selectedSegmentIndex
         //self.tableView.beginInfiniteScroll(true)
-        //performFetch(nil)
+        performFetch(nil)
     }
     
-    override func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+    /*override func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         temporaryIndex = segmentedControl.selectedSegmentIndex
         
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
@@ -879,7 +890,7 @@ class TertiaryProfileScroll: UITableViewController {
             //self.tableView.beginInfiniteScroll(true)
             self.performFetch(nil)
         }
-    }
+    }*/
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)

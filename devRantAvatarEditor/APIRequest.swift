@@ -118,10 +118,10 @@ class APIRequest {
         //self.resourceURL = URL(string: "https://devrant.com/api/devrant/rants?app=3&token_id=\(String(UserDefaults.standard.integer(forKey: "TokenID")))&token_key=\(UserDefaults.standard.string(forKey: "TokenKey")!)&user_id=\(String(UserDefaults.standard.integer(forKey: "UserID")))&range=week&limit=20")
         //self.resourceURL = URL(string: "https://proxy.devrant.app/api/devrant/rants?app=3&sort=recent&token_id=\(String(UserDefaults.standard.integer(forKey: "TokenID")))&token_key=\(UserDefaults.standard.string(forKey: "TokenKey")!)&user_id=\(String(UserDefaults.standard.integer(forKey: "UserID")))&range=null&limit=20&skip=\(String(skip))")
         
-        print("LAST SET:  \(String(UserDefaults.standard.string(forKey: "DRLastSet")!))")
-        print("USER ID:   \(String(UserDefaults.standard.integer(forKey: "DRUserID")))")
-        print("TOKEN ID:  \(String(UserDefaults.standard.integer(forKey: "DRTokenID")))")
-        print("TOKEN KEY: \(String(UserDefaults.standard.string(forKey: "DRTokenKey")!))")
+        //print("LAST SET:  \(String(UserDefaults.standard.string(forKey: "DRLastSet")!).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)")
+        //print("USER ID:   \(String(UserDefaults.standard.integer(forKey: "DRUserID")).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)")
+        //print("TOKEN ID:  \(String(UserDefaults.standard.integer(forKey: "DRTokenID")).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)")
+        //print("TOKEN KEY: \(String(UserDefaults.standard.string(forKey: "DRTokenKey")!).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)")
         
         var resourceURL: URL {
             if UserDefaults.standard.string(forKey: "DRLastSet") != nil {
