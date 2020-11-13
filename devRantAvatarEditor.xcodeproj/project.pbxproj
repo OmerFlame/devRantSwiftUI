@@ -10,6 +10,10 @@
 		590317302524B9CF00CA9E99 /* ParallaxScrollViewPort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5903172F2524B9CF00CA9E99 /* ParallaxScrollViewPort.swift */; };
 		590CB1852549622C00972528 /* SecondaryInfiniteScroll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 590CB1842549622C00972528 /* SecondaryInfiniteScroll.swift */; };
 		590CB1892549649800972528 /* TinyConstraints in Frameworks */ = {isa = PBXBuildFile; productRef = 590CB1882549649800972528 /* TinyConstraints */; };
+		591F5A34255BDC86005D3F20 /* RectGetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591F5A33255BDC86005D3F20 /* RectGetter.swift */; };
+		591F5A40255C073B005D3F20 /* tektronixTest.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 591F5A3F255C073B005D3F20 /* tektronixTest.mp4 */; };
+		591F5A44255C0A3E005D3F20 /* imageTest.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 591F5A43255C0A3E005D3F20 /* imageTest.jpg */; };
+		591F5A52255C0C3A005D3F20 /* pngTest.png in Resources */ = {isa = PBXBuildFile; fileRef = 591F5A51255C0C3A005D3F20 /* pngTest.png */; };
 		5948D91E250E6D4200373317 /* devRantAvatarEditorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5948D91D250E6D4200373317 /* devRantAvatarEditorApp.swift */; };
 		5948D920250E6D4200373317 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5948D91F250E6D4200373317 /* ContentView.swift */; };
 		5948D922250E6D4700373317 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5948D921250E6D4700373317 /* Assets.xcassets */; };
@@ -77,6 +81,10 @@
 /* Begin PBXFileReference section */
 		5903172F2524B9CF00CA9E99 /* ParallaxScrollViewPort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParallaxScrollViewPort.swift; sourceTree = "<group>"; };
 		590CB1842549622C00972528 /* SecondaryInfiniteScroll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondaryInfiniteScroll.swift; sourceTree = "<group>"; };
+		591F5A33255BDC86005D3F20 /* RectGetter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectGetter.swift; sourceTree = "<group>"; };
+		591F5A3F255C073B005D3F20 /* tektronixTest.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = tektronixTest.mp4; sourceTree = "<group>"; };
+		591F5A43255C0A3E005D3F20 /* imageTest.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = imageTest.jpg; sourceTree = "<group>"; };
+		591F5A51255C0C3A005D3F20 /* pngTest.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pngTest.png; sourceTree = "<group>"; };
 		5948D91A250E6D4200373317 /* devRantAvatarEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = devRantAvatarEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5948D91D250E6D4200373317 /* devRantAvatarEditorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = devRantAvatarEditorApp.swift; sourceTree = "<group>"; };
 		5948D91F250E6D4200373317 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -230,8 +238,12 @@
 				59EA621E25265B9D0084E712 /* WrapStack.swift */,
 				598BE6E22535CCA000919439 /* Utils.swift */,
 				5986517F25399E83006B631F /* ContentDataSource.swift */,
+				591F5A33255BDC86005D3F20 /* RectGetter.swift */,
 				5983DC13254572570026B61B /* BridgingHeader.h */,
 				5948D921250E6D4700373317 /* Assets.xcassets */,
+				591F5A51255C0C3A005D3F20 /* pngTest.png */,
+				591F5A3F255C073B005D3F20 /* tektronixTest.mp4 */,
+				591F5A43255C0A3E005D3F20 /* imageTest.jpg */,
 				5948D926250E6D4700373317 /* Info.plist */,
 				5948D923250E6D4700373317 /* Preview Content */,
 			);
@@ -425,7 +437,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				5948D925250E6D4700373317 /* Preview Assets.xcassets in Resources */,
+				591F5A40255C073B005D3F20 /* tektronixTest.mp4 in Resources */,
+				591F5A52255C0C3A005D3F20 /* pngTest.png in Resources */,
 				5948D922250E6D4700373317 /* Assets.xcassets in Resources */,
+				591F5A44255C0A3E005D3F20 /* imageTest.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -516,6 +531,7 @@
 				598BE6D82535B29B00919439 /* SecondaryFileCell.swift in Sources */,
 				59F1F62925528EC10007FF49 /* UIView+Shadow.m in Sources */,
 				598FDA522510A9A200ED2C13 /* View+Extension.swift in Sources */,
+				591F5A34255BDC86005D3F20 /* RectGetter.swift in Sources */,
 				598FDA5A2510AF3500ED2C13 /* CollectionViewLayout.swift in Sources */,
 				598BE6E32535CCA000919439 /* Utils.swift in Sources */,
 				590317302524B9CF00CA9E99 /* ParallaxScrollViewPort.swift in Sources */,
@@ -612,7 +628,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -668,7 +684,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_MODULE_NAME = devRantAvatarEditor;
@@ -696,8 +712,7 @@
 					"$(SRCROOT)",
 				);
 				INFOPLIST_FILE = devRantAvatarEditor/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -732,8 +747,7 @@
 				DEVELOPMENT_TEAM = 666F768P5J;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = devRantAvatarEditor/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

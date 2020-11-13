@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import QuickLook
 import Combine
 
 struct Rant: View {
@@ -16,7 +17,26 @@ struct Rant: View {
     let profile: Profile
     @State var shouldShowError = false
     
-    @State var url = URL(string: "")
+    @State var shouldPreview = false
+    
+    @State var url: URL?
+    
+    init(rantContents: RantModel, rantInFeed: Binding<RantInFeed>, userImage: UIImage?, profile: Profile) {
+        self._rantContents = State(initialValue: rantContents)
+        self._rantInFeed = rantInFeed
+        self.userImage = userImage
+        self.profile = profile
+        
+        if rantContents.attached_image != nil {
+            let url = File.loadFiles(images: [rantContents.attached_image!])[0].url
+            
+            print("THE FINAL URL: \(url)")
+            
+            self._url = State(initialValue: Optional(File.loadFiles(images: [rantContents.attached_image!])[0].url))
+        } else {
+            self._url = State(initialValue: URL(string: ""))
+        }
+    }
     
     var body: some View {
         HStack {
@@ -199,15 +219,31 @@ struct Rant: View {
                                     imageWidth: CGFloat(self.rantContents.attached_image!.width!),
                                     imageHeight: CGFloat(self.rantContents.attached_image!.height!), multiplier: 1)
                                 
-                                let url = File.loadFiles(images: [self.rantContents.attached_image!])[0].url
+                                //let url = File.loadFiles(images: [self.rantContents.attached_image!])[0].url
                                 
                                 HStack {
                                     //QLView(attachedImage: self.rantContents.attached_image!)
-                                    SecondaryQLView(attachedImage: self.rantContents.attached_image!, pendingURL: url)
                                     /*TertiaryQLView(attachedImage: AttachedImage(
                                                     url: "https://img.devrant.com/devrant/rant/r_3240155_Re4L3.jpg",
                                                     width: 491,
                                                     height: 487))*/
+                                    
+                                    //SecondaryQLView(attachedImage: self.rantContents.attached_image!, pendingURL: url)
+                                    
+                                    ThumbnailImageView(url: self.url!, size: CGSize(width: CGFloat(self.rantContents.attached_image!.width!) / resizeMultiplier, height: CGFloat(self.rantContents.attached_image!.height!) / resizeMultiplier))
+                                        .foregroundColor(Color(UIColor.systemBackground))
+                                        .fixedSize(horizontal: false, vertical: true)
+                                        .scaledToFit()
+                                        .frame(width: CGFloat(self.rantContents.attached_image!.width!) / resizeMultiplier,
+                                               height: CGFloat(self.rantContents.attached_image!.height!) / resizeMultiplier)
+                                        .clipShape(RoundedRectangle(cornerRadius: 15))
+                                        .onTapGesture {
+                                            /*if let controller = topMostViewController() {
+                                                controller.present(QLPreviewController(), animated: true, completion: nil)
+                                            }*/
+                                            
+                                            self.shouldPreview.toggle()
+                                        }
                                     
                                     Spacer()
                                 }
@@ -224,6 +260,9 @@ struct Rant: View {
                         //Spacer()
                 }.padding([.leading, .top]).fixedSize(horizontal: false, vertical: true)
             }
+            /*.fullScreenCover(isPresented: $shouldPreview) {
+                PreviewControllerTest(url: self.url, isPresented: $shouldPreview).edgesIgnoringSafeArea(.all)
+            }*/
             
             Spacer()
         }

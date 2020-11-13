@@ -367,3 +367,230 @@ struct PreviewController: UIViewControllerRepresentable {
         
     }
 }
+
+protocol EmbeddedQLPreviewControllerDelegate: class {
+    func embeddedQLPreviewControllerDidDismiss(_ viewController: EmbeddedQLPreviewController)
+}
+
+class EmbeddedQLPreviewController: UIViewController, QLPreviewControllerDelegate {
+    weak var delegate: EmbeddedQLPreviewControllerDelegate?
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.open(animated: animated)
+    }
+    
+    private func open(animated: Bool) {
+        let viewController = QLPreviewController()
+        viewController.delegate = self
+        self.present(viewController, animated: false)
+    }
+    
+    func previewControllerDidDismiss(_ controller: QLPreviewController) {
+        self.dismiss(animated: false) {
+            self.delegate?.embeddedQLPreviewControllerDidDismiss(self)
+        }
+    }
+}
+
+/*class QuickLookViewModel {
+    var dummy: _DummyViewController!
+    var vc: QLPreviewController?
+}
+
+public class _DummyViewController: UIViewController {}
+
+struct EmbeddedQuickLook: UIViewControllerRepresentable {
+    @Binding var showPreview: Bool
+    @State private var viewModel = QuickLookViewModel()
+    public var onDismiss: (() -> Void)?
+    
+    public init(showPreview: Binding<Bool>, onDismiss: (() -> Void)? = nil) {
+        self._showPreview = showPreview
+        self.onDismiss = onDismiss
+    }
+    
+    func makeUIViewController(context: Context) -> some UIViewController {
+        let dummy = _DummyViewController()
+        viewModel.dummy = dummy
+        return dummy
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        return Coordinator(self)
+    }
+    
+    final class Coordinator: NSObject, QLPreviewControllerDelegate {
+        var parent: EmbeddedQuickLook
+        
+        init(_ parent: EmbeddedQuickLook) {
+            self.parent = parent
+        }
+        
+        func previewControllerDidDismiss(_ controller: QLPreviewController) {
+            parent.showPreview = false
+            parent.onDismiss?()
+        }
+    }
+    
+    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+        guard viewModel.dummy != nil else {
+            return
+        }
+        
+        let ableToPresent = viewModel.dummy.presentedViewController == nil || viewModel.dummy.presentedViewController?.isBeingDismissed == true
+        
+        let ableToDismiss = viewModel.vc != nil
+        
+        if showPreview && viewModel.vc == nil && ableToPresent {
+            let previewVC = QLPreviewController()
+            previewVC.delegate = context.coordinator
+            viewModel.vc = previewVC
+            viewModel.dummy.present(previewVC, animated: true)
+        } else if !showPreview && ableToDismiss {
+            viewModel.dummy.dismiss(animated: true)
+            self.viewModel.vc = nil
+        }
+    }
+}
+*/
+
+class FullScreenQuickLook: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        let previewController = QLPreviewController()
+        
+        addChild(previewController)
+        view.addSubview(previewController.view)
+        
+        previewController.view.translatesAutoresizingMaskIntoConstraints = false
+        
+        previewController.view.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        previewController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        previewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        previewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+    }
+}
+
+/*struct PreviewControllerTest: UIViewControllerRepresentable {
+    let url: URL
+    @Binding var isPresented: Bool
+    
+    @State var controller: UIDocumentInteractionController? = nil
+    
+    func makeUIViewController(context: Context) -> UINavigationController {
+        self.controller = UIDocumentInteractionController(url: self.url)
+        /*controller.navigationItem.leftBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .done, target: context.coordinator, action: #selector(context.coordinator.dismiss)
+        )*/
+        
+        let navigationController = UINavigationController(rootViewController: controller!)
+        return navigationController
+    }
+    
+    func updateUIViewController(_ uiViewController: UINavigationController, context: Context) {}
+}*/
+
+struct PreviewTest: UIViewControllerRepresentable {
+    let url: URL
+    @Binding var isPresented: Bool
+    
+    func makeUIViewController(context: Context) -> UINavigationController {
+        let controller = QLPreviewController()
+        controller.dataSource = context.coordinator
+        controller.navigationItem.leftBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .done, target: context.coordinator, action: #selector(context.coordinator.dismiss)
+        )
+        
+        let navigationController = UINavigationController(rootViewController: controller)
+        return navigationController
+    }
+    
+    func updateUIViewController(_ uiViewController: UINavigationController, context: Context) {}
+    
+    func makeCoordinator() -> Coordinator {
+        return Coordinator(parent: self)
+    }
+    
+    class Coordinator: QLPreviewControllerDataSource {
+        let parent: PreviewTest
+        
+        init(parent: PreviewTest) {
+            self.parent = parent
+        }
+        
+        func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
+            return 1
+        }
+        
+        func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
+            return parent.url as NSURL
+        }
+        
+        @objc func dismiss() {
+            parent.isPresented = false
+        }
+        
+    }
+}
+
+struct DocumentPreview: UIViewControllerRepresentable {
+    private var isActive: Binding<Bool>
+    private let viewController = UIViewController()
+    private let docController: UIDocumentInteractionController
+
+    init(_ isActive: Binding<Bool>, url: URL) {
+        self.isActive = isActive
+        self.docController = UIDocumentInteractionController(url: url)
+    }
+
+    func makeUIViewController(context: UIViewControllerRepresentableContext<DocumentPreview>) -> UIViewController {
+        return viewController
+    }
+
+    func updateUIViewController(_ uiViewController: UIViewController, context: UIViewControllerRepresentableContext<DocumentPreview>) {
+        if self.isActive.wrappedValue && docController.delegate == nil { // to not show twice
+            docController.delegate = context.coordinator
+            self.docController.presentPreview(animated: true)
+        }
+    }
+
+    func makeCoordinator() -> Coordintor {
+        return Coordintor(owner: self)
+    }
+
+    final class Coordintor: NSObject, UIDocumentInteractionControllerDelegate { // works as delegate
+        let owner: DocumentPreview
+        init(owner: DocumentPreview) {
+            self.owner = owner
+        }
+        func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+            return owner.viewController
+        }
+
+        func documentInteractionControllerDidEndPreview(_ controller: UIDocumentInteractionController) {
+            controller.delegate = nil // done, so unlink self
+            owner.isActive.wrappedValue = false // notify external about done
+        }
+    }
+}
+
+// Demo of possible usage
+struct DemoPDFPreview: View {
+    @State private var showPreview = false // state activating preview
+
+    var body: some View {
+        VStack {
+            Button("Show Preview") { self.showPreview = true }
+                .background(DocumentPreview($showPreview, // no matter where it is, because no content
+                            url: Bundle.main.url(forResource: "example", withExtension: "pdf")!))
+        }
+    }
+}
+
+struct DemoPDFPreview_Previews: PreviewProvider {
+    static var previews: some View {
+        DemoPDFPreview()
+    }
+}

@@ -26,6 +26,8 @@ struct MainScreen: View {
     
     @State var isSheet = true
     
+    @State var test = false
+    
     /*private func getFeed() {
         do {
             self.rantFeed = try self.apiRequest.getRantFeed()
@@ -43,38 +45,49 @@ struct MainScreen: View {
             ZStack {
                 NavigationView {
                     InfiniteScrollRepresentable()
-                    .id(UUID())
-                    //.listStyle(GroupedListStyle())
-                    .navigationBarTitle(Text("Home"))
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Menu(content: {
-                                Button(action: {
-                                    self.shouldShowSettings.toggle()
-                                }, label: {
-                                    HStack {
-                                        Text("Settings")
-                                        Image(systemName: "gearshape.fill")
-                                    }
-                                })
+                        //.listStyle(GroupedListStyle())
+                        .navigationBarTitle(Text("Home"))
+                        .navigationBarTitleDisplayMode(.inline)
+                        .toolbar {
+                            ToolbarItem(placement: .navigationBarLeading) {
+                                Menu(content: {
+                                    Button(action: {
+                                        self.shouldShowSettings.toggle()
+                                    }, label: {
+                                        HStack {
+                                            Text("Settings")
+                                            Image(systemName: "gearshape.fill")
+                                        }
+                                    })
                                 
-                                Button(action: {
-                                    self.shouldShowLogin.toggle()
-                                }, label: {
-                                    HStack {
-                                        Text("Log Out")
-                                        Image(systemName: "lock.fill")
-                                    }
-                                })
-                            }, label: { Image(systemName: "ellipsis.circle.fill").font(.system(size: 25)) }
-                            )
+                                    Button(action: {
+                                        self.shouldShowLogin.toggle()
+                                    }, label: {
+                                        HStack {
+                                            Text("Log Out")
+                                            Image(systemName: "lock.fill")
+                                        }
+                                    })
+                                }, label: { Image(systemName: "ellipsis.circle.fill").font(.system(size: 25)) }
+                                )
+                            }
+                            
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                Button("Test") {
+                                    self.test = true
+                                }
+                            }
                         }
-                    }
-                    .sheet(isPresented: $shouldShowLogin, content: {
-                        LoginScreen(showVar: $shouldShowLogin, apiRequest: self.apiRequest).presentation(isSheet: $isSheet)
-                    })
-                    //.padding(.top)
+                        /*.background(DocumentPreview($test, // no matter where it is, because no content
+                                                     url: Bundle.main.url(forResource: "pngTest", withExtension: "png")!))*/
+                        .sheet(isPresented: $shouldShowLogin, content: {
+                            LoginScreen(showVar: $shouldShowLogin, apiRequest: self.apiRequest).presentation(isSheet: $isSheet)
+                        })
+                        
+                        .sheet(isPresented: $test) {
+                            PreviewTest(url: Bundle.main.url(forResource: "pngTest", withExtension: "png")!, isPresented: $test)
+                        }
+                        //.padding(.top)
                 }
                 .navigationViewStyle(StackNavigationViewStyle())
             }
