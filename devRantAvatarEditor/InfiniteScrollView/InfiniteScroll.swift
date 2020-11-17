@@ -168,8 +168,18 @@ extension InfiniteScroll {
         
         cell.set(rootView: RantInFeedView(rantContents: rant, parentTableView: tableView, uiImage: supplementalImages[indexPath.row]), parentController: self)
         
+        print("FRAME HEIGHT BEFORE SET: \(cell.frame.size.height)")
+        
+        cell.frame.size.height = cell.hostingController.view.intrinsicContentSize.height
+        
+        print("FRAME HEIGHT AFTER SET: \(cell.frame.size.height)")
+        
         return cell
     }
+    
+    /*override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        
+    }*/
 }
 
 extension InfiniteScroll {

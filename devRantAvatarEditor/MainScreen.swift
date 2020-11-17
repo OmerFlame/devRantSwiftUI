@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import QuickLook
 import Combine
 
 struct MainScreen: View {
@@ -26,7 +27,12 @@ struct MainScreen: View {
     
     @State var isSheet = true
     
-    @State var test = false
+    @State var test = URL(string: "")
+    
+    @Environment(\.viewController) private var viewControllerHolder: ViewControllerHolder
+    private var viewController: UIViewController? {
+        self.viewControllerHolder.value
+    }
     
     /*private func getFeed() {
         do {
@@ -74,7 +80,25 @@ struct MainScreen: View {
                             
                             ToolbarItem(placement: .navigationBarTrailing) {
                                 Button("Test") {
-                                    self.test = true
+                                    //self.test = Bundle.main.url(forResource: "pngTest", withExtension: "png")
+                                    
+                                    //let containerController = UINavigationController(rootViewController: UIViewController())
+                                    //containerController.modalPresentationStyle = .overFullScreen
+                                    
+                                    //containerController.didMove(toParent: self.viewController)
+                                    //self.viewController?.addChild(containerController)
+                                    //containerController.view.frame = (self.viewController?.view.frame)!
+                                    //self.viewController?.view.addSubview(containerController.view)
+                                    //containerController.didMove(toParent: self.viewController)
+                                    
+                                    //self.viewController?.present(containerController, animated: true)
+                                    
+                                    let previewController = previewTestController()
+                                    previewController.modalPresentationStyle = .overCurrentContext
+                                    previewController.didMove(toParent: self.viewController)
+                                    //previewController.dataSource = previewControllerDataSource()
+                                    self.viewController?.present(previewController, animated: true)
+                                    //containerController.present(previewController, animated: true)
                                 }
                             }
                         }
@@ -84,9 +108,7 @@ struct MainScreen: View {
                             LoginScreen(showVar: $shouldShowLogin, apiRequest: self.apiRequest).presentation(isSheet: $isSheet)
                         })
                         
-                        .sheet(isPresented: $test) {
-                            PreviewTest(url: Bundle.main.url(forResource: "pngTest", withExtension: "png")!, isPresented: $test)
-                        }
+                        .quickLookPreview($test)
                         //.padding(.top)
                 }
                 .navigationViewStyle(StackNavigationViewStyle())
@@ -97,13 +119,9 @@ struct MainScreen: View {
     private struct OffsetKey: PreferenceKey {
         static var defaultValue: CGFloat = 0
         static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
-          value = nextValue()
+            value = nextValue()
         }
-      }
-}
-
-class rantFeedData: ObservableObject {
-    @Published var rantFeed = [RantInFeed]()
+    }
 }
 
 /*final class TableViewController: UITableViewController {
@@ -273,72 +291,6 @@ struct TableRepresentable: UIViewControllerRepresentable {
     }
 }*/
 
-final class HostingCell<Content: View>: UITableViewCell {
-    private let hostingController = UIHostingController<Content?>(rootView: nil)
-    public var height = CGFloat()
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        hostingController.view.backgroundColor = .clear
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func set(rootView: Content, parentController: UIViewController) {
-        self.hostingController.rootView = rootView
-        
-        print("INTRINSIC CONTENT SIZE WIDTH BEFORE INVALIDATING:  \(self.hostingController.view.intrinsicContentSize.width)")
-        print("INTRINSIC CONTENT SIZE HEIGHT BEFORE INVALIDATING: \(self.hostingController.view.intrinsicContentSize.height)")
-        
-        self.hostingController.view.invalidateIntrinsicContentSize()
-        
-        print("INTRINSIC CONTENT SIZE WIDTH AFTER INVALIDATING:  \(self.hostingController.view.intrinsicContentSize.width)")
-        print("INTRINSIC CONTENT SIZE HEIGHT AFTER INVALIDATING: \(self.hostingController.view.intrinsicContentSize.height)")
-        
-        self.hostingController.view.sizeToFit()
-        
-        let requiresControllerMove = hostingController.parent != parentController
-        if requiresControllerMove {
-            parentController.addChild(hostingController)
-        }
-        
-        if !self.contentView.subviews.contains(hostingController.view) {
-            self.contentView.addSubview(hostingController.view)
-            hostingController.view.translatesAutoresizingMaskIntoConstraints = false
-            hostingController.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor).isActive = true
-            hostingController.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor).isActive = true
-            //hostingController.view.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10).isActive = true
-            hostingController.view.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive = true
-            hostingController.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
-        }
-        
-        /*if !self.contentView.subviews.contains(hostingController.view) {
-            self.contentView.addSubview(hostingController.view)
-            hostingController.view.translatesAutoresizingMaskIntoConstraints = false
-            self.contentView.translatesAutoresizingMaskIntoConstraints = false
-            
-            //hostingController.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor).isActive = true
-            //hostingController.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor).isActive = true
-            //hostingController.view.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive = true
-            //hostingController.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
-            
-            self.contentView.leadingAnchor.constraint(equalTo: hostingController.view.leadingAnchor).isActive = true
-            self.contentView.trailingAnchor.constraint(equalTo: hostingController.view.trailingAnchor).isActive = true
-        }*/
-        
-        if requiresControllerMove {
-            hostingController.didMove(toParent: parentController)
-        }
-        
-        print("CONTENT VIEW WIDTH:  \(self.contentView.frame.size.width)")
-        print("CONTENT VIEW HEIGHT: \(self.contentView.frame.size.height)")
-        
-        height = self.contentView.frame.size.height
-    }
-}
-
 struct ScrollViewOffsetPreferenceKey: PreferenceKey {
     static var defaultValue: Bool = false
     typealias Value = Bool
@@ -355,26 +307,6 @@ extension UIScrollView: UIScrollViewDelegate {
         if scrollView.contentOffset.x > 0 {
             scrollView.contentOffset.x = 0
         }
-    }
-}
-
-class ObservableArray<T>: ObservableObject {
-    var cancellables = [AnyCancellable]()
-    
-    @Published var array: [T] = []
-    
-    init(array: [T]) {
-        self.array = array
-    }
-    
-    func observeChildrenChange<T: ObservableObject>() -> ObservableArray<T> {
-        let array2 = array as! [T]
-        array2.forEach({
-            let c = $0.objectWillChange.sink(receiveValue: { _ in self.objectWillChange.send() })
-            
-            self.cancellables.append(c)
-        })
-        return self as! ObservableArray<T>
     }
 }
 

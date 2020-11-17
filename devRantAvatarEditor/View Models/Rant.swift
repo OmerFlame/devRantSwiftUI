@@ -10,31 +10,46 @@ import QuickLook
 import Combine
 
 struct Rant: View {
+    @Environment(\.viewController) private var viewControllerHolder: ViewControllerHolder
+    private var viewController: UIViewController? {
+        self.viewControllerHolder.value
+    }
     @State var shouldShowLoadingRing = true
     @State var rantContents: RantModel
     @Binding var rantInFeed: RantInFeed
     let userImage: UIImage?
     let profile: Profile
+    
+    var file: File?
     @State var shouldShowError = false
     
     @State var shouldPreview = false
     
     @State var url: URL?
     
+    @State private var thumbnailRect: CGRect = .zero
+    
     init(rantContents: RantModel, rantInFeed: Binding<RantInFeed>, userImage: UIImage?, profile: Profile) {
         self._rantContents = State(initialValue: rantContents)
         self._rantInFeed = rantInFeed
         self.userImage = userImage
         self.profile = profile
+        self.file = nil
         
         if rantContents.attached_image != nil {
-            let url = File.loadFiles(images: [rantContents.attached_image!])[0].url
+            let resizeMultiplier = self.getImageResizeMultiplier(imageWidth: CGFloat(rantContents.attached_image!.width!), imageHeight: CGFloat(rantContents.attached_image!.height!), multiplier: 1)
             
-            print("THE FINAL URL: \(url)")
+            let finalWidth = CGFloat(rantContents.attached_image!.width!) / resizeMultiplier
+            let finalHeight = CGFloat(rantContents.attached_image!.height!) / resizeMultiplier
             
-            self._url = State(initialValue: Optional(File.loadFiles(images: [rantContents.attached_image!])[0].url))
+            self.file = Optional(File.loadFile(image: rantContents.attached_image!, size: CGSize(width: finalWidth, height: finalHeight)))
+            
+            //print("THE FINAL URL: \(url)")
+            
+            //self._url = State(initialValue: Optional(File.loadFiles(images: [rantContents.attached_image!])[0].url))
         } else {
             self._url = State(initialValue: URL(string: ""))
+            self.file = nil
         }
     }
     
@@ -230,20 +245,28 @@ struct Rant: View {
                                     
                                     //SecondaryQLView(attachedImage: self.rantContents.attached_image!, pendingURL: url)
                                     
-                                    ThumbnailImageView(url: self.url!, size: CGSize(width: CGFloat(self.rantContents.attached_image!.width!) / resizeMultiplier, height: CGFloat(self.rantContents.attached_image!.height!) / resizeMultiplier))
+                                    /*ThumbnailImageView(url: self.file!.url, size: CGSize(width: CGFloat(self.rantContents.attached_image!.width!) / resizeMultiplier, height: CGFloat(self.rantContents.attached_image!.height!) / resizeMultiplier))
                                         .foregroundColor(Color(UIColor.systemBackground))
                                         .fixedSize(horizontal: false, vertical: true)
                                         .scaledToFit()
                                         .frame(width: CGFloat(self.rantContents.attached_image!.width!) / resizeMultiplier,
                                                height: CGFloat(self.rantContents.attached_image!.height!) / resizeMultiplier)
                                         .clipShape(RoundedRectangle(cornerRadius: 15))
+                                        .background(RectGetter(rect: $thumbnailRect))
                                         .onTapGesture {
                                             /*if let controller = topMostViewController() {
                                                 controller.present(QLPreviewController(), animated: true, completion: nil)
                                             }*/
                                             
-                                            self.shouldPreview.toggle()
-                                        }
+                                            //self.shouldPreview.toggle()
+                                            let previewController = previewTestController(rect: self.thumbnailRect, url: self.file?.url)
+                                            previewController.modalPresentationStyle = .overFullScreen
+                                            previewController.didMove(toParent: self.viewController)
+                                            //previewController.dataSource = previewControllerDataSource()
+                                            self.viewController?.present(previewController, animated: true)
+                                        }*/
+                                    
+                                    QLView(file: self.file!, parentViewController: self.viewController!)
                                     
                                     Spacer()
                                 }

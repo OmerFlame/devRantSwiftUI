@@ -407,7 +407,7 @@ class TertiaryProfileScroll: UITableViewController {
         
         if useAutosizingCells && tableView.responds(to: #selector(getter: UIView.layoutMargins)) {
             tableView.rowHeight = UITableView.automaticDimension
-            tableView.estimatedRowHeight = 150
+            tableView.estimatedRowHeight = 570
         }
         
         let headerView = SecondaryStretchyTableHeaderView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 482))
@@ -805,6 +805,8 @@ class TertiaryProfileScroll: UITableViewController {
         
         scoreLabel.translatesAutoresizingMaskIntoConstraints = false
         scoreLabel.leadingAnchor.constraint(equalTo: largeLabel.trailingAnchor, constant: 5).isActive = true
+        
+        largeLabel.centerYAnchor.constraint(equalTo: largeLabel.superview!.centerYAnchor).isActive = true
         
         smallHeaderTitle.translatesAutoresizingMaskIntoConstraints = false
         smallHeaderTitle.insetsLayoutMarginsFromSafeArea = false

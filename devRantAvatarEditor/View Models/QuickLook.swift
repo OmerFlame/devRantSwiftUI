@@ -12,8 +12,9 @@ import QuickLook
 class UIPreviewView: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     //var remoteURLs: [URL]
     var collectionView: UICollectionView?
+    var vc: UIViewController
     
-    init(files: [File]) {
+    init(files: [File], parentViewController: UIViewController) {
         //let completionSemaphore = DispatchSemaphore(value: 0)
         /*let tmpDirectory = try! FileManager.default.contentsOfDirectory(atPath: NSTemporaryDirectory())
         tmpDirectory.forEach { file in
@@ -23,6 +24,7 @@ class UIPreviewView: UIViewController, UICollectionViewDelegate, UICollectionVie
         
         //remoteURLs = urls
         self.files = files
+        self.vc = parentViewController
         
         print(files)
         
@@ -118,7 +120,7 @@ class UIPreviewView: UIViewController, UICollectionViewDelegate, UICollectionVie
     }
     
     private func getImageResizeMultiplier(imageWidth: CGFloat, imageHeight: CGFloat, multiplier: Int) -> CGFloat {
-        if imageWidth / CGFloat(multiplier) < UIScreen.main.bounds.width && imageHeight / CGFloat(multiplier) < UIScreen.main.bounds.size.height {
+        if imageWidth / CGFloat(multiplier) < 315 && imageHeight / CGFloat(multiplier) < 420 {
             return CGFloat(multiplier)
         } else {
             return getImageResizeMultiplier(imageWidth: imageWidth, imageHeight: imageHeight, multiplier: multiplier + 2)
@@ -128,12 +130,13 @@ class UIPreviewView: UIViewController, UICollectionViewDelegate, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         let quickLookViewController = QLPreviewController()
+        quickLookViewController.modalPresentationStyle = .overFullScreen
         quickLookViewController.dataSource = self
         quickLookViewController.delegate = self
         tappedCell = collectionView.cellForItem(at: indexPath) as? FileCell
         
         quickLookViewController.currentPreviewItemIndex = indexPath.row
-        present(quickLookViewController, animated: false)
+        vc.present(quickLookViewController, animated: true)
     }
 }
 
@@ -144,7 +147,7 @@ extension UIPreviewView: QLPreviewControllerDataSource {
     }
     
     func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
-        files[index].previewItemURL as QLPreviewItem
+        return files[index].previewItemURL as QLPreviewItem
     }
 }
 
@@ -182,12 +185,13 @@ extension UIView {
 }
 
 struct UIPreviewViewRepresentable: UIViewControllerRepresentable {
-    var images: [AttachedImage]
+    var files: [File]
+    var parentViewController: UIViewController
     
     func makeUIViewController(context: Context) -> some UIViewController {
-        let files = File.loadFiles(images: self.images)
         
-        let previewView = UIPreviewView(files: files)
+        
+        let previewView = UIPreviewView(files: files, parentViewController: self.parentViewController)
         
         return previewView
     }
@@ -198,21 +202,22 @@ struct UIPreviewViewRepresentable: UIViewControllerRepresentable {
 }
 
 struct QLView: View {
-    let attachedImage: AttachedImage
+    let file: File
+    let parentViewController: UIViewController
     
     var body: some View {
-        let files = File.loadFiles(images: [self.attachedImage])
-        let resizeMultiplier: CGFloat = getImageResizeMultiplier(imageWidth: files[0].size!.width, imageHeight: files[0].size!.height, multiplier: 1)
-        let finalWidth = files[0].size!.width / resizeMultiplier
-        let finalHeight = files[0].size!.height / resizeMultiplier
+        //let files = File.loadFiles(images: [self.attachedImage])
+        let resizeMultiplier: CGFloat = getImageResizeMultiplier(imageWidth: self.file.size!.width, imageHeight: self.file.size!.height, multiplier: 1)
+        let finalWidth = self.file.size!.width / resizeMultiplier
+        let finalHeight = self.file.size!.height / resizeMultiplier
         
-        UIPreviewViewRepresentable(images: [self.attachedImage])
+        UIPreviewViewRepresentable(files: [self.file], parentViewController: self.parentViewController)
             .frame(width: finalWidth, height: finalHeight)
             .background(Color(UIColor.systemBackground))
     }
     
     private func getImageResizeMultiplier(imageWidth: CGFloat, imageHeight: CGFloat, multiplier: Int) -> CGFloat {
-        if imageWidth / CGFloat(multiplier) < UIScreen.main.bounds.width && imageHeight / CGFloat(multiplier) < UIScreen.main.bounds.height {
+        if imageWidth / CGFloat(multiplier) < 315 && imageHeight / CGFloat(multiplier) < 420 {
             return CGFloat(multiplier)
         } else {
             return getImageResizeMultiplier(imageWidth: imageWidth, imageHeight: imageHeight, multiplier: multiplier + 2)
@@ -263,19 +268,21 @@ struct SecondaryQLView: View {
 }
 
 struct TertiaryQLView: View {
-    let attachedImage: AttachedImage
+    //let attachedImage: AttachedImage
+    var parentViewController: UIViewController
     @State var fileCell: TertiaryFileCell?
     @State var shouldPreview = false
     
-    init(attachedImage: AttachedImage) {
-        self.attachedImage = attachedImage
+    init(file: File, parentViewController: UIViewController) {
+        self.parentViewController = parentViewController
+        /*self.attachedImage = attachedImage
         
         let resizeMultiplier = self.getImageResizeMultiplier(imageWidth: CGFloat(self.attachedImage.width!), imageHeight: CGFloat(self.attachedImage.height!), multiplier: 1)
         
         let finalWidth = CGFloat(self.attachedImage.width!) / resizeMultiplier
         let finalHeight = CGFloat(self.attachedImage.height!) / resizeMultiplier
         
-        let file = File.loadFile(image: self.attachedImage, size: CGSize(width: finalWidth, height: finalHeight))
+        let file = File.loadFile(image: self.attachedImage, size: CGSize(width: finalWidth, height: finalHeight))*/
         
         self._fileCell = .init(initialValue: TertiaryFileCell(file: file))
     }
@@ -291,7 +298,7 @@ struct TertiaryQLView: View {
             
             if self.shouldPreview {
                 withAnimation {
-                    PreviewController(fileCell: self.fileCell!)
+                    PreviewController(fileCell: self.fileCell!, parentViewController: self.parentViewController)
                         .onDisappear {
                             self.shouldPreview.toggle()
                         }
@@ -311,9 +318,11 @@ struct TertiaryQLView: View {
 
 class PreviewView: UIViewController, QLPreviewControllerDataSource, QLPreviewControllerDelegate {
     var fileCell: TertiaryFileCell
+    var vc: UIViewController
     
-    init(fileCell: TertiaryFileCell) {
+    init(fileCell: TertiaryFileCell, parentViewController: UIViewController) {
         self.fileCell = fileCell
+        self.vc = parentViewController
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -326,13 +335,12 @@ class PreviewView: UIViewController, QLPreviewControllerDataSource, QLPreviewCon
         super.viewDidLoad()
         
         let previewController = QLPreviewController()
+        previewController.modalPresentationStyle = .overFullScreen
         previewController.dataSource = self
         previewController.delegate = self
         previewController.currentPreviewItemIndex = 0
         
-        let topVC = topMostController()
-        
-        topVC.present(previewController, animated: true)
+        vc.present(previewController, animated: true)
     }
     
     func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
@@ -358,9 +366,10 @@ class PreviewView: UIViewController, QLPreviewControllerDataSource, QLPreviewCon
 
 struct PreviewController: UIViewControllerRepresentable {
     let fileCell: TertiaryFileCell
+    let parentViewController: UIViewController
     
     func makeUIViewController(context: Context) -> some UIViewController {
-        return PreviewView(fileCell: self.fileCell)
+        return PreviewView(fileCell: self.fileCell, parentViewController: self.parentViewController)
     }
     
     func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
