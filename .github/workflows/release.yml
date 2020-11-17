@@ -28,6 +28,9 @@ jobs:
           pod repo update
           pod install
         shell: bash
+        
+      - name: List Schemes
+        run: xcodebuild -list -workspace devRantAvatarEditor.xcworkspace
       
       - name: Build devRantSwiftUI project - ${{ matrix.destination }}
         run: xcodebuild -scheme "devRantAvatarEditor - Release" -workspace devRantAvatarEditor.xcworkspace -destination "${{ matrix.destination }}" IPHONEOS_DEPLOYMENT_TARGET=14.2
