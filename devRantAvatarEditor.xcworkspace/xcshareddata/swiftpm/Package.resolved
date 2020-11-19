@@ -20,6 +20,15 @@
         }
       },
       {
+        "package": "MultiplexerController",
+        "repositoryURL": "https://github.com/OmerFlame/MultiplexerController",
+        "state": {
+          "branch": "master",
+          "revision": "76dfb50e6a66f92f7cb873d8500a1fccf92fe0d9",
+          "version": null
+        }
+      },
+      {
         "package": "TagListView",
         "repositoryURL": "https://github.com/ElaWorkshop/TagListView",
         "state": {

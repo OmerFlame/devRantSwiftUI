@@ -250,6 +250,42 @@ class APIRequest {
         return success
     }
     
+    func voteOnComment(commentID: Int, vote: Int) -> Bool {
+        if Double(UserDefaults.standard.integer(forKey: "DRTokenExpireTime")) - Double(Date().timeIntervalSince1970) <= 0 {
+            logIn(username: UserDefaults.standard.string(forKey: "DRUsername")!, password: UserDefaults.standard.string(forKey: "DRPassword")!)
+        }
+        
+        let resourceURL = URL(string: "https://devrant.com/api/comments/\(String(commentID).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)/vote?cb=\(String(Int(Date().timeIntervalSince1970)).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)")!
+        
+        var request = URLRequest(url: resourceURL)
+        
+        request.httpMethod = "POST"
+        request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.httpBody = "app=3&user_id=\(String(UserDefaults.standard.integer(forKey: "DRUserID")).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)&token_id=\(String(UserDefaults.standard.integer(forKey: "DRTokenID")).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)&token_key=\(String(UserDefaults.standard.string(forKey: "DRTokenKey")!).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)&vote=\(String(vote).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)".data(using: .utf8)
+        
+        let completionSemaphore = DispatchSemaphore(value: 0)
+        var success = false
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            let body = String(data: data!, encoding: .utf8)!
+            
+            print(body)
+            
+            if (200..<300).contains((response as? HTTPURLResponse)!.statusCode) {
+                success = true
+            } else {
+                success = false
+            }
+            
+            completionSemaphore.signal()
+        }
+        
+        task.resume()
+        
+        completionSemaphore.wait()
+        return success
+    }
+    
     func getProfileFromID(_ profileID: Int, userContentType: ProfileContentTypes, skip: Int) throws -> ProfileResponse? {
         let userID = UserDefaults.standard.integer(forKey: "DRUserID")
         let tokenID = UserDefaults.standard.integer(forKey: "DRTokenID")

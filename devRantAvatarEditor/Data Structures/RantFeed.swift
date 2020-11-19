@@ -129,10 +129,7 @@ class RantFeedModel {
             return
         }
         
-        print("ARRAY LENGTH: \(rants.count)")
-        
         let thresholdIndex = rants.index(rants.endIndex, offsetBy: -1)
-        print("THRESHOLD INDEX: \(thresholdIndex)")
         
         if rants.firstIndex(where: { $0.uuid == item.uuid }) == thresholdIndex {
             loadMoreContent()

@@ -174,7 +174,7 @@ struct ProfileView: View {
     }
 }
 
-struct SecondaryProfileView: View {
+/*struct SecondaryProfileView: View {
     @State var isComplete = false
     @State var shouldShowError = false
     
@@ -285,7 +285,7 @@ struct SecondaryProfileView: View {
             self.userInfo = nil
         }
     }
-}
+}*/
 
 public struct Header: View {
     var imageOpacity: Double

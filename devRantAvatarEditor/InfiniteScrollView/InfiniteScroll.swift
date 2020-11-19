@@ -23,7 +23,7 @@ class InfiniteScroll: UITableViewController {
         
         if useAutosizingCells && tableView.responds(to: #selector(getter: UIView.layoutMargins)) {
             tableView.estimatedRowHeight = 150
-            tableView.rowHeight = UITableView.automaticDimension
+            //tableView.rowHeight = UITableView.automaticDimension
         }
         
         tableView.infiniteScrollIndicatorView = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
@@ -31,7 +31,7 @@ class InfiniteScroll: UITableViewController {
         tableView.infiniteScrollIndicatorMargin = 40
         tableView.infiniteScrollTriggerOffset = 500
         
-        tableView.separatorStyle = .none
+        tableView.separatorStyle = .singleLine
         tableView.allowsSelection = false
         
         tableView.register(HostingCell<RantInFeedView>.self, forCellReuseIdentifier: "HostingCell")
@@ -166,20 +166,29 @@ extension InfiniteScroll {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "HostingCell", for: indexPath) as! HostingCell<RantInFeedView>
         
-        cell.set(rootView: RantInFeedView(rantContents: rant, parentTableView: tableView, uiImage: supplementalImages[indexPath.row]), parentController: self)
+        cell.set(rootView: RantInFeedView(rantContents: rant, parentTableView: tableView, uiImage: supplementalImages[indexPath.row]), parentController: self, shouldLoadIntoController: true)
         
-        print("FRAME HEIGHT BEFORE SET: \(cell.frame.size.height)")
+        //cell.frame.size.height = cell.hostingController.view.intrinsicContentSize.height
         
-        cell.frame.size.height = cell.hostingController.view.intrinsicContentSize.height
-        
-        print("FRAME HEIGHT AFTER SET: \(cell.frame.size.height)")
+        //print("FRAME HEIGHT AFTER SET: \(cell.frame.size.height)")
         
         return cell
     }
     
-    /*override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        guard !rantFeed.rantFeed.isEmpty else {
+            return .zero
+        }
         
-    }*/
+        let rant = $rantFeed.rantFeed[indexPath.row]
+        
+        let cell = HostingCell<RantInFeedView>()
+        
+        cell.set(rootView: RantInFeedView(rantContents: rant, parentTableView: tableView, uiImage: supplementalImages[indexPath.row]), parentController: self, shouldLoadIntoController: false)
+        
+        let finalHeight = cell.hostingController.view.intrinsicContentSize.height
+        return finalHeight
+    }
 }
 
 extension InfiniteScroll {
