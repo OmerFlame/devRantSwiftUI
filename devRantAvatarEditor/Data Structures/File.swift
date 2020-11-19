@@ -129,11 +129,6 @@ extension File {
             innerCompletionSemaphore.wait()
             let filename = UUID().uuidString + ".jpg"
             
-            print("URL: \(image.url)")
-            print("FILENAME: \(filename)")
-            
-            print("CURRENT ITERATION: \(idx)")
-            
             var previewURL = FileManager.default.temporaryDirectory.appendingPathComponent(filename)
             try! receivedData?.write(to: previewURL, options: .atomic)
             //previewURL.hasHiddenExtension = true

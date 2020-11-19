@@ -57,7 +57,7 @@ struct Rant: View {
         HStack {
             VStack {
                 HStack(alignment: .top) {
-                    VStack {
+                    VStack(spacing: 1) {
                         Button(action: {
                             var vote: Int {
                                 switch self.rantContents.vote_state {
@@ -172,7 +172,7 @@ struct Rant: View {
                         
                         NavigationLink(
                             destination: /*ProfileInfiniteScrollViewRepresentable(userID: self.rantContents.user_id).edgesIgnoringSafeArea(.top)*/ //SecondaryProfileRepresentable(userID: self.rantContents.user_id)
-                                TertiaryProfileScrollSwiftUI(userID: self.rantContents.user_id, profileData: self.profile, image: self.userImage)
+                                TertiaryProfileScrollSwiftUI(userID: self.rantContents.user_id, profileData: .constant(self.profile), image: .constant(self.userImage))
                                 .edgesIgnoringSafeArea(.top)
                                 .navigationBarHidden(true),
                             label: {
@@ -299,6 +299,21 @@ struct Rant: View {
         }
     }
 }
+
+/*class UIRant: UITableViewCell {
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func getImageResizeMultiplier(imageWidth: CGFloat, imageHeight: CGFloat, multiplier: Int) -> CGFloat {
+        if imageWidth / CGFloat(multiplier) < 315 && imageHeight / CGFloat(multiplier) < 420 {
+            return CGFloat(multiplier)
+        } else {
+            return getImageResizeMultiplier(imageWidth: imageWidth, imageHeight: imageHeight, multiplier: multiplier + 2)
+        }
+    }
+}*/
 
 class ImageLoader: ObservableObject {
     var didChange = PassthroughSubject<Data, Never>()

@@ -11,28 +11,77 @@ public struct Comment: View {
     let highlightColor: Color
     @State var commentContents: CommentModel
     
+    @State var profileData: Profile? = nil
+    @State var image: UIImage? = nil
+    
+    @State var shouldNavigate = false
+    
+    @State var shouldShowError = false
+    
     public var body: some View {
         HStack {
             VStack {
                 HStack(alignment: .top) {
-                    VStack {
-                        Button(action: {}, label: {
-                                if self.commentContents.vote_state == 1 {
-                                Image(systemName: "plus.circle.fill").font(.system(size: 25)).accentColor(Color(UIColor(hex: self.commentContents.user_avatar.b)!))
-                            } else if self.commentContents.vote_state == 0 {
-                                Image(systemName: "plus.circle.fill").accentColor(.gray).font(.system(size: 25))
+                    VStack(spacing: 1) {
+                        Button(action: {
+                            var vote: Int {
+                                switch self.commentContents.vote_state {
+                                case 0:
+                                    return 1
+                                    
+                                case 1:
+                                    return 0
+                                    
+                                default:
+                                    return 1
+                                }
+                            }
+                            
+                            let success = APIRequest().voteOnComment(commentID: self.commentContents.id, vote: vote)
+                            
+                            if !success {
+                                self.shouldShowError.toggle()
                             } else {
-                                Image(systemName: "plus.circle.fill").font(.system(size: 25))
+                                self.commentContents.vote_state = vote
+                            }
+                        }, label: {
+                            if self.commentContents.vote_state == 1 {
+                                Image("plusplus").font(.system(size: 25)).accentColor(Color(UIColor(hex: self.commentContents.user_avatar.b)!))
+                            } else if self.commentContents.vote_state == 0 {
+                                Image("plusplus").accentColor(.gray).font(.system(size: 25))
+                            } else {
+                                Image("plusplus").accentColor(.gray).font(.system(size: 25))
                             }
                         }).disabled(self.commentContents.vote_state == -2)
                         Text(String(self.commentContents.score)).font(.subheadline)
-                        Button(action: {}, label: {
-                            if self.commentContents.vote_state == -1 {
-                                Image(systemName: "minus.circle.fill").font(.system(size: 25)).accentColor(Color(UIColor(hex: self.commentContents.user_avatar.b)!))
-                            } else if self.commentContents.vote_state == 0 {
-                                Image(systemName: "minus.circle.fill").accentColor(.gray).font(.system(size: 25))
+                        Button(action: {
+                            var vote: Int {
+                                switch self.commentContents.vote_state {
+                                case 0:
+                                    return -1
+                                    
+                                case -1:
+                                    return 0
+                                    
+                                default:
+                                    return -1
+                                }
+                            }
+                            
+                            let success = APIRequest().voteOnComment(commentID: self.commentContents.id, vote: vote)
+                            
+                            if !success {
+                                self.shouldShowError.toggle()
                             } else {
-                                Image(systemName: "minus.circle.fill").accentColor(.gray).font(.system(size: 25))
+                                self.commentContents.vote_state = vote
+                            }
+                        }, label: {
+                            if self.commentContents.vote_state == -1 {
+                                Image("minusminus").font(.system(size: 25)).accentColor(Color(UIColor(hex: self.commentContents.user_avatar.b)!))
+                            } else if self.commentContents.vote_state == 0 {
+                                Image("minusminus").accentColor(.gray).font(.system(size: 25))
+                            } else {
+                                Image("minusminus").accentColor(.gray).font(.system(size: 25))
                             }
                         }).disabled(self.commentContents.vote_state == -2)
                     }
@@ -43,7 +92,13 @@ public struct Comment: View {
                     VStack {
                         NavigationLink(
                             
-                            destination: ProfileView(userID: self.commentContents.user_id),
+                            destination: LazyView(TertiaryProfileScrollSwiftUI(userID: self.commentContents.user_id, profileData: $profileData, image: $image))
+                                .edgesIgnoringSafeArea(.top)
+                                .navigationBarHidden(true)
+                                .navigationBarBackButtonHidden(true),
+                            
+                            isActive: $shouldNavigate,
+                            
                             label: {
                                 HStack {
                                     if self.commentContents.user_avatar.i == nil {
@@ -83,6 +138,18 @@ public struct Comment: View {
                                         
                                         Spacer()
                                     }
+                                }.onTapGesture {
+                                    self.getProfile()
+                                    
+                                    if self.profileData != nil {
+                                        if self.profileData!.avatar.i != nil {
+                                            self.getRanterImage()
+                                        }
+                                        
+                                        self.shouldNavigate.toggle()
+                                    } else {
+                                        self.shouldShowError.toggle()
+                                    }
                                 }
                             }
                         ).buttonStyle(PlainButtonStyle())
@@ -114,6 +181,29 @@ public struct Comment: View {
                         
                         //Spacer()
                 }.padding([.leading, .top])//.fixedSize(horizontal: false, vertical: true)
+            }
+        }
+    }
+    
+    private func getRanterImage() {
+        let completionSemaphore = DispatchSemaphore(value: 0)
+        
+        URLSession.shared.dataTask(with: URL(string: "https://avatars.devrant.com/\(self.profileData!.avatar.i!)")!) { data, _, _ in
+            self.image = UIImage(data: data!)
+            
+            completionSemaphore.signal()
+        }.resume()
+        
+        completionSemaphore.wait()
+        return
+    }
+    
+    private func getProfile() {
+        do {
+            self.profileData = try APIRequest().getProfileFromID(self.commentContents.user_id, userContentType: .rants, skip: 0)?.profile
+        } catch {
+            DispatchQueue.main.async {
+                self.shouldShowError.toggle()
             }
         }
     }

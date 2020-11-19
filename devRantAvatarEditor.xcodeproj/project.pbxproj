@@ -56,6 +56,8 @@
 		59B85B342534629000B2CAC9 /* FileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B85B332534629000B2CAC9 /* FileCell.swift */; };
 		59BC7B2125595D0600A3E549 /* Carbon in Frameworks */ = {isa = PBXBuildFile; productRef = 59BC7B2025595D0600A3E549 /* Carbon */; };
 		59D822CB2534EBD70015E2D5 /* RantResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D822CA2534EBD70015E2D5 /* RantResponse.swift */; };
+		59D950CE2563D9A500D5DD4E /* MultiplexerController in Frameworks */ = {isa = PBXBuildFile; productRef = 59D950CD2563D9A500D5DD4E /* MultiplexerController */; };
+		59D950D12563E86F00D5DD4E /* LazyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D950D02563E86F00D5DD4E /* LazyView.swift */; };
 		59EA61A125259F0D0084E712 /* RantFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59EA61A025259F0D0084E712 /* RantFeed.swift */; };
 		59EA62172525FA8F0084E712 /* RantInFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59EA62162525FA8F0084E712 /* RantInFeedView.swift */; };
 		59EA621F25265B9D0084E712 /* WrapStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59EA621E25265B9D0084E712 /* WrapStack.swift */; };
@@ -131,6 +133,7 @@
 		59B85B3025345BD500B2CAC9 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		59B85B332534629000B2CAC9 /* FileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCell.swift; sourceTree = "<group>"; };
 		59D822CA2534EBD70015E2D5 /* RantResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RantResponse.swift; sourceTree = "<group>"; };
+		59D950D02563E86F00D5DD4E /* LazyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazyView.swift; sourceTree = "<group>"; };
 		59EA61A025259F0D0084E712 /* RantFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RantFeed.swift; sourceTree = "<group>"; };
 		59EA62162525FA8F0084E712 /* RantInFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RantInFeedView.swift; sourceTree = "<group>"; };
 		59EA621E25265B9D0084E712 /* WrapStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrapStack.swift; sourceTree = "<group>"; };
@@ -170,6 +173,7 @@
 				590CB1892549649800972528 /* TinyConstraints in Frameworks */,
 				59BC7B2125595D0600A3E549 /* Carbon in Frameworks */,
 				594CA450255A8F7D00E7D009 /* TagListView in Frameworks */,
+				59D950CE2563D9A500D5DD4E /* MultiplexerController in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -239,6 +243,7 @@
 				598BE6E22535CCA000919439 /* Utils.swift */,
 				5986517F25399E83006B631F /* ContentDataSource.swift */,
 				591F5A33255BDC86005D3F20 /* RectGetter.swift */,
+				59D950D02563E86F00D5DD4E /* LazyView.swift */,
 				5983DC13254572570026B61B /* BridgingHeader.h */,
 				5948D921250E6D4700373317 /* Assets.xcassets */,
 				591F5A51255C0C3A005D3F20 /* pngTest.png */,
@@ -389,6 +394,7 @@
 				590CB1882549649800972528 /* TinyConstraints */,
 				59BC7B2025595D0600A3E549 /* Carbon */,
 				594CA44F255A8F7D00E7D009 /* TagListView */,
+				59D950CD2563D9A500D5DD4E /* MultiplexerController */,
 			);
 			productName = devRantAvatarEditor;
 			productReference = 5948D91A250E6D4200373317 /* devRantAvatarEditor.app */;
@@ -421,6 +427,7 @@
 				590CB1872549649800972528 /* XCRemoteSwiftPackageReference "TinyConstraints" */,
 				59BC7B1F25595D0600A3E549 /* XCRemoteSwiftPackageReference "Carbon" */,
 				594CA44E255A8F7D00E7D009 /* XCRemoteSwiftPackageReference "TagListView" */,
+				59D950CC2563D9A500D5DD4E /* XCRemoteSwiftPackageReference "MultiplexerController" */,
 			);
 			productRefGroup = 5948D91B250E6D4200373317 /* Products */;
 			projectDirPath = "";
@@ -512,6 +519,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5986518025399E83006B631F /* ContentDataSource.swift in Sources */,
+				59D950D12563E86F00D5DD4E /* LazyView.swift in Sources */,
 				59F20B4C253C6CB00028A3C6 /* FancyScrollView.swift in Sources */,
 				5948D920250E6D4200373317 /* ContentView.swift in Sources */,
 				59B85B342534629000B2CAC9 /* FileCell.swift in Sources */,
@@ -815,6 +823,14 @@
 				kind = branch;
 			};
 		};
+		59D950CC2563D9A500D5DD4E /* XCRemoteSwiftPackageReference "MultiplexerController" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/OmerFlame/MultiplexerController";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -832,6 +848,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 59BC7B1F25595D0600A3E549 /* XCRemoteSwiftPackageReference "Carbon" */;
 			productName = Carbon;
+		};
+		59D950CD2563D9A500D5DD4E /* MultiplexerController */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 59D950CC2563D9A500D5DD4E /* XCRemoteSwiftPackageReference "MultiplexerController" */;
+			productName = MultiplexerController;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -12,6 +12,7 @@ import SwiftUI
 
 struct RectGetter: View {
     @Binding var rect: CGRect
+    @State public var proxy: GeometryProxy? = nil
     
     var body: some View {
         GeometryReader { proxy in
@@ -22,8 +23,13 @@ struct RectGetter: View {
     func createView(proxy: GeometryProxy) -> some View {
         DispatchQueue.main.async {
             self.rect = proxy.frame(in: .global)
+            self.proxy = Optional(proxy)
         }
         
         return Rectangle().fill(Color.clear)
+    }
+    
+    public func getRect(proxy: GeometryProxy) -> CGRect {
+        return proxy.frame(in: .global)
     }
 }

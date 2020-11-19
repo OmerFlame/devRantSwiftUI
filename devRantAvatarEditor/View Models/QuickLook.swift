@@ -147,7 +147,7 @@ extension UIPreviewView: QLPreviewControllerDataSource {
     }
     
     func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
-        return files[index].previewItemURL as QLPreviewItem
+        return PreviewItem(url: files[index].previewItemURL, title: "Picture")
     }
 }
 
@@ -167,6 +167,16 @@ extension UIPreviewView: QLPreviewControllerDelegate {
             self.tappedCell?.update(with: file)
         }
     }*/
+}
+
+class PreviewItem: NSObject, QLPreviewItem {
+    var previewItemURL: URL?
+    var previewItemTitle: String?
+    
+    init(url: URL? = nil, title: String? = nil) {
+        previewItemURL = url
+        previewItemTitle = title
+    }
 }
 
 extension UIView {
@@ -247,7 +257,7 @@ struct SecondaryQLView: View {
             .scaledToFit()
             .frame(width: finalWidth,
                    height: finalHeight)
-            .quickLookPreview($url)
+            
             .onTapGesture {
                 self.url = self.pendingURL
             }

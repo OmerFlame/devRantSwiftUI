@@ -348,82 +348,7 @@ class SecondaryStretchyTableHeaderView: UIView {
         //imageView.backgroundColor = UIColor(hex: "d55161")
         imageView.contentMode = .scaleAspectFill
         imageContainer.addSubview(imageView)
-        
-        /*title = StretchyHeaderTitle(title: "OmerFlame", upvotes: 9999, height: 44, largeTitle: 1, frame: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: 200, height: 44)))
-        
-        title.bounds = title.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: (44 - 18) / 2, right: 0))*/
-        
-        //imageContainer.addSubview(title)
-        //imageContainer.bringSubviewToFront(title)
-        
-        /*largeLabel = UILabel()
-        largeLabel.text = "OmerFlame"
-        largeLabel.font = .systemFont(ofSize: 34, weight: .black)
-        largeLabel.textColor = .white
-        largeLabel.bounds = largeLabel.frame.insetBy(dx: 16, dy: 0)
-        largeLabel.minimumScaleFactor = 0.2
-        largeLabel.allowsDefaultTighteningForTruncation = true
-        largeLabel.numberOfLines = 1
-        largeLabel.adjustsFontSizeToFitWidth = true
-        
-        let scoreRect = UIView()
-        scoreRect.layer.cornerRadius = 5
-        scoreRect.backgroundColor = .white
-        scoreRect.bounds = scoreRect.frame.inset(by: UIEdgeInsets(top: 5, left: 0, bottom: 0, right: 0))
-        
-        let scoreLabel = UILabel()
-        scoreLabel.text = "+9999"
-        scoreLabel.bounds = scoreLabel.frame.insetBy(dx: 5, dy: 2.5)
-        scoreLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
-        scoreLabel.textColor = .black
-        
-        scoreRect.addSubview(scoreLabel)
-        
-        let stackView = UIStackView()
-        stackView.alignment = .center
-        stackView.axis = .horizontal
-        
-        stackView.addArrangedSubview(largeLabel)
-        stackView.addArrangedSubview(scoreRect)
-        stackView.bounds = stackView.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 8, right: 0))
-        
-        stackView.alpha = CGFloat(sqrt(largeTitleOpacity))
-        
-        //self.addSubview(stackView)
-        
-        imageContainer.addSubview(stackView)
-        imageContainer.bringSubviewToFront(stackView)
-        
-        stackView.sizeToFit()
-        stackView.frame = CGRect(x: 0, y: 0, width: 200, height: 34)*/
     }
-    
-    /*func setViewConstraints() {
-        // UIView Constraints
-        NSLayoutConstraint.activate([
-            self.widthAnchor.constraint(equalTo: containerView.widthAnchor),
-            self.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            self.heightAnchor.constraint(equalTo: containerView.heightAnchor)
-        ])
-        
-        // Container View Constraints
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        
-        //containerView.widthAnchor.constraint(equalTo: imageView.widthAnchor).isActive = true
-        imageView.widthAnchor.constraint(equalTo: containerView.widthAnchor, constant: -100).isActive = true
-        containerViewHeight = containerView.heightAnchor.constraint(equalTo: self.heightAnchor)
-        containerViewHeight.isActive = true
-        containerView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        
-        // ImageView Constraints
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        //imageViewBottom = imageView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-        //imageViewBottom.isActive = true
-        //imageViewHeight = imageView.heightAnchor.constraint(equalTo: containerView.heightAnchor)
-        imageViewHeight = imageView.heightAnchor.constraint(equalTo: self.heightAnchor, constant: -100)
-        imageView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        imageViewHeight.isActive = true
-    }*/
     
     func setViewConstraints() {
         // UIView Constraints
@@ -468,8 +393,6 @@ class SecondaryStretchyTableHeaderView: UIView {
         containerViewHeight.constant = scrollView.contentInset.top
         let offsetY = -(scrollView.contentOffset.y + scrollView.contentInset.top)
         
-        //print("Y OFFSET: \(-scrollView.contentOffset.y - scrollView.safeAreaInsets.top)")
-        
         containerView.clipsToBounds = offsetY <= 0
         imageContainerBottom.constant = offsetY >= 0 ? 0 : -offsetY / 2
         imageContainerHeight.constant = max(offsetY + scrollView.contentInset.top, scrollView.contentInset.top)
@@ -483,71 +406,6 @@ class SecondaryStretchyTableHeaderView: UIView {
         //imageViewTop.constant = (offsetY >= 0 ? 0 : -offsetY / 2) + 100
         
         //imageViewHeight.constant = max(offsetY + scrollView.contentInset.top, scrollView.contentInset.top) - 100
-    }
-}
-
-extension SecondaryStretchyTableHeaderView {
-    struct HeaderGeometry {
-        let width: CGFloat
-        let headerHeight: CGFloat
-        let elementsHeight: CGFloat
-        let headerOffset: CGFloat
-        let blurOffset: CGFloat
-        let elementsOffset: CGFloat
-        let largeTitleWeight: Double
-    }
-    
-    func geometry(scrollView: UIScrollView) -> HeaderGeometry {
-        let safeArea = scrollView.safeAreaInsets
-        
-        let minY = -(scrollView.contentOffset.y + scrollView.safeAreaInsets.top)
-        
-        print("TOP INSET: \(scrollView.safeAreaInsets.top)")
-        
-        print("MIN Y: \(minY)")
-        
-        let hasScrolledUp = minY > 0
-        
-        print("HAS SCROLLED UP: \(hasScrolledUp)")
-        
-        let hasScrolledToMinHeight = -minY >= 403 - navigationBarHeight - safeArea.top
-        
-        print("HAS SCROLLED TO MIN HEIGHT: \(hasScrolledToMinHeight)")
-
-        let headerHeight = hasScrolledUp ?
-            containerView.frame.size.height + minY + 38 : containerView.frame.size.height + 38
-        
-        print("CURRENT HEADER HEIGHT: \(imageContainer.frame.size.height)")
-        
-        print("NEW HEADER HEIGHT: \(headerHeight)")
-
-        let elementsHeight = self.frame.size.height + minY
-
-        let headerOffset: CGFloat
-        let blurOffset: CGFloat
-        let elementsOffset: CGFloat
-        let largeTitleWeight: Double
-
-        if hasScrolledUp {
-            headerOffset = -minY
-            print("HAS SCROLLED UP HEADER OFFSET: \(headerOffset)")
-            blurOffset = -minY
-            elementsOffset = -minY
-            largeTitleWeight = 1
-        } else if hasScrolledToMinHeight {
-            headerOffset = -minY - 403 + navigationBarHeight + safeArea.top
-            blurOffset = -minY - 403 + navigationBarHeight + safeArea.top
-            elementsOffset = headerOffset / 2 - minY / 2
-            largeTitleWeight = 0
-        } else {
-            headerOffset = 0
-            blurOffset = 0
-            elementsOffset = -minY / 2
-            let difference = 403 - navigationBarHeight - safeArea.top + minY
-            largeTitleWeight = difference <= navigationBarHeight + 1 ? Double(difference / (navigationBarHeight + 1)) : 1
-        }
-        
-        return HeaderGeometry(width: self.frame.size.width, headerHeight: headerHeight, elementsHeight: elementsHeight, headerOffset: headerOffset, blurOffset: blurOffset, elementsOffset: elementsOffset, largeTitleWeight: largeTitleWeight)
     }
 }
 

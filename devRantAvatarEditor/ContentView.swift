@@ -160,21 +160,12 @@ final class HostingCell<Content: View>: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func set(rootView: Content, parentController: UIViewController) {
+    func set(rootView: Content, parentController: UIViewController, shouldLoadIntoController: Bool) {
         self.hostingController.rootView = rootView
-        
-        print("INTRINSIC CONTENT SIZE WIDTH BEFORE INVALIDATING:  \(self.hostingController.view.intrinsicContentSize.width)")
-        print("INTRINSIC CONTENT SIZE HEIGHT BEFORE INVALIDATING: \(self.hostingController.view.intrinsicContentSize.height)")
-        
         self.hostingController.view.invalidateIntrinsicContentSize()
         
-        print("INTRINSIC CONTENT SIZE WIDTH AFTER INVALIDATING:  \(self.hostingController.view.intrinsicContentSize.width)")
-        print("INTRINSIC CONTENT SIZE HEIGHT AFTER INVALIDATING: \(self.hostingController.view.intrinsicContentSize.height)")
-        
-        //self.hostingController.view.sizeToFit()
-        
         let requiresControllerMove = hostingController.parent != parentController
-        if requiresControllerMove {
+        if requiresControllerMove && shouldLoadIntoController {
             parentController.addChild(hostingController)
         }
         
@@ -183,7 +174,6 @@ final class HostingCell<Content: View>: UITableViewCell {
             hostingController.view.translatesAutoresizingMaskIntoConstraints = false
             hostingController.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor).isActive = true
             hostingController.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor).isActive = true
-            //hostingController.view.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 10).isActive = true
             hostingController.view.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive = true
             hostingController.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
         }
@@ -197,26 +187,9 @@ final class HostingCell<Content: View>: UITableViewCell {
         
         hostingController.view.layoutIfNeeded()
         
-        /*if !self.contentView.subviews.contains(hostingController.view) {
-            self.contentView.addSubview(hostingController.view)
-            hostingController.view.translatesAutoresizingMaskIntoConstraints = false
-            self.contentView.translatesAutoresizingMaskIntoConstraints = false
-            
-            //hostingController.view.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor).isActive = true
-            //hostingController.view.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor).isActive = true
-            //hostingController.view.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive = true
-            //hostingController.view.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor).isActive = true
-            
-            self.contentView.leadingAnchor.constraint(equalTo: hostingController.view.leadingAnchor).isActive = true
-            self.contentView.trailingAnchor.constraint(equalTo: hostingController.view.trailingAnchor).isActive = true
-        }*/
-        
-        if requiresControllerMove {
+        if requiresControllerMove && shouldLoadIntoController {
             hostingController.didMove(toParent: parentController)
         }
-        
-        print("CONTENT VIEW WIDTH:  \(self.contentView.frame.size.width)")
-        print("CONTENT VIEW HEIGHT: \(self.contentView.frame.size.height)")
         
         height = self.contentView.frame.size.height
     }

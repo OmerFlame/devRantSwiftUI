@@ -15,7 +15,7 @@ struct CommentModel: Codable, Identifiable {
     let body: String
     let score: Int
     let created_time: Int
-    let vote_state: Int
+    var vote_state: Int
     let links: [Link]?
     let user_id: Int
     let user_username: String
