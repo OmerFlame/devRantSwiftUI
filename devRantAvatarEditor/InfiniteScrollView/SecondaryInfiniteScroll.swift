@@ -23,6 +23,8 @@ class profileViewData: ObservableObject {
 class TertiaryProfileScroll: UITableViewController {
     var profileData: Profile
     var userID: Int
+    
+    
     @ObservedObject var profile = profileViewData()
     var supplementalImages = [UIImage?]()
     var rowHeights = [CGFloat]()
@@ -34,7 +36,7 @@ class TertiaryProfileScroll: UITableViewController {
     var headerTitle: UIStackView!
     var blurView: UIVisualEffectView!
     var scoreRect: UIView!
-    var scoreLabel: UILabel!
+    var scoreLabel: PaddingLabel!
     
     var blurViewHeight = NSLayoutConstraint()
     
@@ -64,9 +66,9 @@ class TertiaryProfileScroll: UITableViewController {
         self.navigationController?.isNavigationBarHidden = true
         //self.navigationController?.setNavigationBarHidden(true, animated: false)
         
-        if useAutosizingCells && tableView.responds(to: #selector(getter: UIView.layoutMargins)) {
+        /*if useAutosizingCells && tableView.responds(to: #selector(getter: UIView.layoutMargins)) {
             tableView.estimatedRowHeight = 150
-        }
+        }*/
         
         let headerView = SecondaryStretchyTableHeaderView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 482))
         
@@ -91,7 +93,9 @@ class TertiaryProfileScroll: UITableViewController {
         blurView.contentView.isUserInteractionEnabled = true
         
         tableView.register(HostingCell<RantInFeedView>.self, forCellReuseIdentifier: "RantInFeedCell")
+        //tableView.register(SecondaryComment.self, forCellReuseIdentifier: "CommentCell")
         tableView.register(HostingCell<Comment>.self, forCellReuseIdentifier: "CommentCell")
+        //tableView.register(SecondaryHostingCell<Comment>.self, forCellReuseIdentifier: "CommentCell")
         
         tableView.infiniteScrollIndicatorView = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
         tableView.infiniteScrollIndicatorMargin = 40
@@ -228,6 +232,8 @@ class TertiaryProfileScroll: UITableViewController {
             
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "CommentCell", for: indexPath) as! HostingCell<Comment>
+            //let cell = tableView.dequeueReusableCell(withIdentifier: "CommentCell", for: indexPath) as! SecondaryComment
+            //cell.setData(commentContents: profile.comments[indexPath.row])
             cell.set(rootView: Comment(highlightColor: Color(UIColor(hex: profile.comments[indexPath.row].user_avatar.b)!), commentContents: profile.comments[indexPath.row]), parentController: self, shouldLoadIntoController: true)
             
             return cell
@@ -248,13 +254,13 @@ class TertiaryProfileScroll: UITableViewController {
             let cell = HostingCell<RantInFeedView>()
             cell.set(rootView: RantInFeedView(rantContents: $profile.rants[indexPath.row], parentTableView: tableView, uiImage: supplementalImages[indexPath.row]), parentController: self, shouldLoadIntoController: false)
             
-            return cell.hostingController.view.intrinsicContentSize.height
+            return cell.hostingController.view.intrinsicContentSize.height + 10
             
         case 1:
             let cell = HostingCell<RantInFeedView>()
             cell.set(rootView: RantInFeedView(rantContents: $profile.upvoted[indexPath.row], parentTableView: tableView, uiImage: supplementalImages[indexPath.row]), parentController: self, shouldLoadIntoController: false)
             
-            return cell.hostingController.view.intrinsicContentSize.height
+            return cell.hostingController.view.intrinsicContentSize.height + 10
             
         case 2:
             let cell = HostingCell<Comment>()
@@ -266,7 +272,7 @@ class TertiaryProfileScroll: UITableViewController {
             let cell = HostingCell<RantInFeedView>()
             cell.set(rootView: RantInFeedView(rantContents: $profile.favorites[indexPath.row], parentTableView: tableView, uiImage: supplementalImages[indexPath.row]), parentController: self, shouldLoadIntoController: false)
             
-            return cell.hostingController.view.intrinsicContentSize.height
+            return cell.hostingController.view.intrinsicContentSize.height + 10
             
         default:
             fatalError("Internal inconsistency, UISegmentedControl's selected segment index is out of bounds")
@@ -319,7 +325,12 @@ class TertiaryProfileScroll: UITableViewController {
         segmentedControl.addTarget(self, action: #selector(selectionChanged(_:)), for: .valueChanged)
         
         let scoreSize = "+\(String(profileData.score))".boundingRect(with: CGSize(width: UIScreen.main.bounds.size.width, height: CGFloat.greatestFiniteMagnitude), options: [.truncatesLastVisibleLine, .usesLineFragmentOrigin], attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption1)], context: nil).size
-        scoreLabel = PaddingLabel(withInsets: 2.5, 2.5, 5, 5)
+        //scoreLabel = PaddingLabel(withInsets: 2.5, 2.5, 5, 5)
+        scoreLabel = PaddingLabel()
+        scoreLabel.topInset = 2.5
+        scoreLabel.bottomInset = 2.5
+        scoreLabel.leftInset = 5
+        scoreLabel.rightInset = 5
         scoreLabel.text = "+\(String(profileData.score))"
         scoreLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
         scoreLabel.textColor = .black
@@ -327,7 +338,12 @@ class TertiaryProfileScroll: UITableViewController {
         scoreLabel.layer.masksToBounds = true
         scoreLabel.layer.cornerRadius = 5
         
-        let smallScoreLabel = PaddingLabel(withInsets: 2.5, 2.5, 5, 5)
+        //let smallScoreLabel = PaddingLabel(withInsets: 2.5, 2.5, 5, 5)
+        let smallScoreLabel = PaddingLabel()
+        smallScoreLabel.topInset = 2.5
+        smallScoreLabel.bottomInset = 2.5
+        smallScoreLabel.leftInset = 5
+        smallScoreLabel.rightInset = 5
         smallScoreLabel.text = "+\(String(profileData.score))"
         smallScoreLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
         smallScoreLabel.textColor = .black

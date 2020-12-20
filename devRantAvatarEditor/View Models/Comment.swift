@@ -8,6 +8,11 @@
 import SwiftUI
 
 public struct Comment: View {
+    @Environment(\.viewController) private var viewControllerHolder: ViewControllerHolder
+    private var viewController: UIViewController? {
+        self.viewControllerHolder.value
+    }
+    
     let highlightColor: Color
     @State var commentContents: CommentModel
     
@@ -167,20 +172,27 @@ public struct Comment: View {
                                 imageWidth: CGFloat(self.commentContents.attached_image!.width!),
                                 imageHeight: CGFloat(self.commentContents.attached_image!.height!), multiplier: 1)
                             
-                            let url = File.loadFiles(images: [self.commentContents.attached_image!])[0].url
+                            //let url = File.loadFiles(images: [self.commentContents.attached_image!])[0].url
+                            
+                            let finalWidth = CGFloat(commentContents.attached_image!.width!) / resizeMultiplier
+                            let finalHeight = CGFloat(commentContents.attached_image!.height!) / resizeMultiplier
+                            
+                            let file = File.loadFile(image: commentContents.attached_image!, size: CGSize(width: finalWidth, height: finalHeight))
                             
                             HStack {
-                                SecondaryQLView(attachedImage: self.commentContents.attached_image!, pendingURL: url)
+                                //SecondaryQLView(attachedImage: self.commentContents.attached_image!, pendingURL: url)
+                                
+                                QLView(file: file, parentViewController: self.viewController!)
                                 
                                 Spacer()
                             }
                         }
                         
-                        Divider()
+                        //Divider()
                     }
                         
                         //Spacer()
-                }.padding([.leading, .top])//.fixedSize(horizontal: false, vertical: true)
+                }.padding([.leading, .top]).fixedSize(horizontal: false, vertical: true)
             }
         }
     }
@@ -213,6 +225,121 @@ public struct Comment: View {
             return CGFloat(multiplier)
         } else {
             return getImageResizeMultiplier(imageWidth: imageWidth, imageHeight: imageHeight, multiplier: multiplier + 2)
+        }
+    }
+}
+
+final class SecondaryComment: UITableViewCell {
+    var highlightColor: UIColor?
+    var commentContents: CommentModel?
+    
+    var profileData: Profile?
+    var supplementalImage: UIImage?
+    
+    @State var shouldNavigate = false
+    
+    @State var shouldShowError = false
+    
+    var upvoteButton: UIButton!
+    var rantScoreLabel: UILabel!
+    var downvoteButton: UIButton!
+    var rantText: UILabel!
+    
+    var container = UIView()
+    
+    var rantScoreConstraint = NSLayoutConstraint()
+    
+    func setData(commentContents: CommentModel) {
+        self.commentContents = commentContents
+        self.highlightColor = UIColor(hex: commentContents.user_avatar.b)!
+        
+        for view in contentView.subviews {
+            view.removeFromSuperview()
+        }
+        
+        for view in container.subviews {
+            view.removeFromSuperview()
+        }
+        
+        container = UIView()
+        
+        contentView.addSubview(container)
+        
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
+        container.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+        container.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+        container.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+        
+        upvoteButton = UIButton()
+        upvoteButton.setImage(UIImage(named: "plusplus"), for: .normal)
+        upvoteButton.tintColor = .gray
+        
+        if !self.container.subviews.contains(upvoteButton) {
+            container.addSubview(upvoteButton)
+            
+            upvoteButton.translatesAutoresizingMaskIntoConstraints = false
+            upvoteButton.topAnchor.constraint(equalTo: container.topAnchor, constant: 4).isActive = true
+            upvoteButton.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 8).isActive = true
+            upvoteButton.heightAnchor.constraint(equalToConstant: UIImage(named: "plusplus")!.size.height).isActive = true
+        }
+        
+        rantScoreLabel = UILabel()
+        rantScoreLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        rantScoreLabel.text = String(commentContents.score)
+        
+        if !self.container.subviews.contains(rantScoreLabel) {
+            container.addSubview(rantScoreLabel)
+            
+            rantScoreLabel.translatesAutoresizingMaskIntoConstraints = false
+            
+            rantScoreLabel.topAnchor.constraint(equalTo: upvoteButton.bottomAnchor).isActive = true
+            rantScoreLabel.centerXAnchor.constraint(equalTo: upvoteButton.centerXAnchor).isActive = true
+            rantScoreConstraint = rantScoreLabel.heightAnchor.constraint(equalToConstant: 24)
+            rantScoreConstraint.isActive = true
+            rantScoreConstraint.priority = UILayoutPriority.init(999)
+        }
+        
+        
+        downvoteButton = UIButton()
+        downvoteButton.setImage(UIImage(named: "minusminus"), for: .normal)
+        downvoteButton.tintColor = .gray
+        
+        downvoteButton.frame.size.height = UIImage(named: "minusminus")!.size.height
+        
+        if !self.container.subviews.contains(downvoteButton) {
+            container.addSubview(downvoteButton)
+            
+            downvoteButton.translatesAutoresizingMaskIntoConstraints = false
+            
+            downvoteButton.topAnchor.constraint(equalTo: rantScoreLabel.bottomAnchor).isActive = true
+            downvoteButton.centerXAnchor.constraint(equalTo: upvoteButton.centerXAnchor).isActive = true
+            //downvoteButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4).isActive = true
+            //downvoteButton.heightAnchor.constraint(equalToConstant: UIImage(named: "minusminus")!.size.height).isActive = true
+            downvoteButton.frame = downvoteButton.imageView!.frame
+        }
+        
+        rantText = UILabel()
+        rantText.font = UIFont.preferredFont(forTextStyle: .body)
+        rantText.lineBreakMode = .byWordWrapping
+        rantText.numberOfLines = .max
+        rantText.text = commentContents.body
+        
+        if !self.container.subviews.contains(rantText) {
+            container.addSubview(rantText)
+            
+            rantText.translatesAutoresizingMaskIntoConstraints = false
+            
+            rantText.topAnchor.constraint(equalTo: container.topAnchor, constant: 4).isActive = true
+            rantText.leadingAnchor.constraint(equalTo: upvoteButton.trailingAnchor, constant: 4).isActive = true
+            rantText.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -8).isActive = true
+            //rantText.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -4).isActive = true
+        }
+        
+        if downvoteButton.frame.maxY > rantText.frame.maxY {
+            downvoteButton.bottomAnchor.constraint(equalTo: container.bottomAnchor).isActive = true
+        } else {
+            rantText.bottomAnchor.constraint(equalTo: container.bottomAnchor).isActive = true
         }
     }
 }

@@ -237,3 +237,25 @@ public struct Weekly: Codable {
     let topic: String
     let week: Int
 }
+
+public struct RantPOSTResponse: Codable {
+    let success: Bool
+    let rantID: Int?
+    
+    enum CodingKeys: String, CodingKey {
+        case success,
+             rantID = "rant_id"
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        success = try container.decode(Bool.self, forKey: .success)
+        
+        do {
+            rantID = try container.decode(Int.self, forKey: .rantID)
+        } catch {
+            rantID = -1
+        }
+    }
+}

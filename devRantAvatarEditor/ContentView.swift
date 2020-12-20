@@ -9,6 +9,12 @@ import SwiftUI
 import Combine
 import QuickLook
 
+enum SheetTypes: Int {
+    case settings
+    case login
+    case compose
+}
+
 struct ContentView: View {
     @State var shouldShowLogin = false
     @State var shouldShowEditor = false
@@ -25,10 +31,13 @@ struct ContentView: View {
     
     @State var isBottomSheetShown = false
     
-    @State var shouldShowSettings = false
+    @State var sheetPage: SheetTypes = .compose
+    @State var showSheet = false
+    
     @State var shouldShowLoadingRing = true
     
     @State var shouldShowError = false
+    @State var shouldShowCompose = false
     @State var shouldLoadContinuously = false
     @State var shouldRenderLoadingRectangle = false
     
@@ -76,13 +85,21 @@ struct ContentView: View {
                                     })
                                 
                                     Button(action: {
-                                        
+                                        self.sheetPage = SheetTypes.init(rawValue: 1)!
+                                        //self.shouldShowLogin.toggle()
                                     }, label: {
                                         HStack {
                                             Text("Log Out")
                                             Image(systemName: "lock.fill")
                                         }
-                                    })
+                                    }).sheet(isPresented: $shouldShowLogin, onDismiss: {
+                                        if self.sheetPage == .login {
+                                            self.shouldShowLogin = false
+                                            self.shouldShowEditor = true
+                                        }
+                                    }) {
+                                        LoginScreen(showVar: $showSheet, apiRequest: self.apiRequest).presentation(isSheet: $isSheet)
+                                    }
                                 }, label: { Image(systemName: "ellipsis.circle.fill").font(.system(size: 25)) }
                                 )
                             }
@@ -110,6 +127,20 @@ struct ContentView: View {
                                     //containerController.present(previewController, animated: true)
                                 }
                             }*/
+                            
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                Button(action: {
+                                    self.shouldShowCompose = true
+                                    //self.shouldShowSettings = false
+                                    self.shouldShowLogin = false
+                                    
+                                    //self.showSheet.toggle()
+                                    //print("pressed")
+                                }, label: { Image(systemName: "square.and.pencil") })
+                                .sheet(isPresented: $shouldShowCompose) {
+                                    ComposeView(shouldShow: $shouldShowCompose, isComment: false, rantID: nil).presentation(isSheet: .constant(true))
+                                }
+                            }
                         }
                 }
             }
@@ -121,18 +152,29 @@ struct ContentView: View {
                     PreviewTester()
                 }
             }*/
-        }.onAppear {
+        }
+        .onAppear {
             if self.userID == 0 || self.tokenID == 0 || self.tokenKey == nil || self.username == nil || self.password == nil {
-                self.shouldShowLogin.toggle()
+                self.sheetPage = .login
+                //self.showSheet.toggle()
             } else {
                 self.shouldShowEditor.toggle()
             }
         }
-        .sheet(isPresented: $shouldShowLogin, onDismiss: {
-            self.shouldShowLogin = false
-            self.shouldShowEditor = true
+        .onChange(of: self.sheetPage) { _ in
+            self.showSheet.toggle()
+        }
+        .sheet(isPresented: $showSheet, onDismiss: {
+            if self.sheetPage == .login {
+                self.shouldShowLogin = false
+                self.shouldShowEditor = true
+            }
         }) {
-            LoginScreen(showVar: $shouldShowLogin, apiRequest: self.apiRequest).presentation(isSheet: $isSheet)
+            if self.sheetPage == .login {
+                LoginScreen(showVar: $showSheet, apiRequest: self.apiRequest).presentation(isSheet: .constant(true))
+            } else if self.sheetPage == .compose {
+                ComposeView(shouldShow: $showSheet, isComment: false, rantID: nil).presentation(isSheet: .constant(true))
+            }
         }
     }
 }

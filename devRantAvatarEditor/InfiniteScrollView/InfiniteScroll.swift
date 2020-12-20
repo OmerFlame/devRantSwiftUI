@@ -186,7 +186,7 @@ extension InfiniteScroll {
         
         cell.set(rootView: RantInFeedView(rantContents: rant, parentTableView: tableView, uiImage: supplementalImages[indexPath.row]), parentController: self, shouldLoadIntoController: false)
         
-        let finalHeight = cell.hostingController.view.intrinsicContentSize.height
+        let finalHeight = cell.hostingController.view.intrinsicContentSize.height + 10
         return finalHeight
     }
 }

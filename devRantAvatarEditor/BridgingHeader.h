@@ -10,5 +10,6 @@
 
 #import <UIScrollView_InfiniteScroll/UIScrollView+InfiniteScroll.h>
 #import "DMHorizontalView/UIView+HorizontalView.h"
+#import "UITextView+Placeholder.h"
 
 #endif /* BridgingHeader_h */

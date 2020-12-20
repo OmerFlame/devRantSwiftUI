@@ -16,6 +16,8 @@ struct RantView: View {
     @State var shouldShowRing = true
     @State var shouldShowError = false
     
+    @State var shouldShowCompose = false
+    
     @State var ranterImage: UIImage? = nil
     @State var profile: Profile? = nil
     
@@ -104,8 +106,20 @@ struct RantView: View {
             }
             .navigationBarTitle("Rant")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        self.shouldShowCompose.toggle()
+                    }, label: {
+                        Image(systemName: "square.and.pencil")
+                    })
+                }
+            }
             .onAppear {
                 print("View appeared!")
+            }
+            .sheet(isPresented: $shouldShowCompose) {
+                ComposeView(shouldShow: $shouldShowCompose, isComment: true, rantID: self.rantID).presentation(isSheet: .constant(true))
             }
         }
     }

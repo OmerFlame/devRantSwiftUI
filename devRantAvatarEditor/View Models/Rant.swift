@@ -16,7 +16,7 @@ struct Rant: View {
     }
     @State var shouldShowLoadingRing = true
     @State var rantContents: RantModel
-    @Binding var rantInFeed: RantInFeed
+    var rantInFeed: Binding<RantInFeed>?
     let userImage: UIImage?
     let profile: Profile
     
@@ -29,9 +29,9 @@ struct Rant: View {
     
     @State private var thumbnailRect: CGRect = .zero
     
-    init(rantContents: RantModel, rantInFeed: Binding<RantInFeed>, userImage: UIImage?, profile: Profile) {
+    init(rantContents: RantModel, rantInFeed: Binding<RantInFeed>?, userImage: UIImage?, profile: Profile) {
         self._rantContents = State(initialValue: rantContents)
-        self._rantInFeed = rantInFeed
+        self.rantInFeed = rantInFeed
         self.userImage = userImage
         self.profile = profile
         self.file = nil
@@ -80,7 +80,9 @@ struct Rant: View {
                                 self.rantContents.vote_state = vote
                             }
                             
-                            self.rantInFeed.vote_state = self.rantContents.vote_state
+                            if let rantInFeed = self.rantInFeed {
+                                rantInFeed.wrappedValue.vote_state = self.rantContents.vote_state
+                            }
                         }, label: {
                             if self.rantContents.vote_state == 1 {
                                 //Image(systemName: "plus.circle.fill").font(.system(size: 25)).accentColor(Color(UIColor(hex: self.rantContents.user_avatar.b)!))
@@ -114,7 +116,9 @@ struct Rant: View {
                                 self.rantContents.vote_state = vote
                             }
                             
-                            self.rantInFeed.vote_state = self.rantContents.vote_state
+                            if let rantInFeed = self.rantInFeed {
+                                rantInFeed.wrappedValue.vote_state = self.rantContents.vote_state
+                            }
                         }, label: {
                             if self.rantContents.vote_state == -1 {
                                 Image("minusminus").font(.system(size: 25)).accentColor(Color(UIColor(hex: self.rantContents.user_avatar.b)!))
@@ -172,7 +176,10 @@ struct Rant: View {
                         
                         NavigationLink(
                             destination: /*ProfileInfiniteScrollViewRepresentable(userID: self.rantContents.user_id).edgesIgnoringSafeArea(.top)*/ //SecondaryProfileRepresentable(userID: self.rantContents.user_id)
-                                TertiaryProfileScrollSwiftUI(userID: self.rantContents.user_id, profileData: .constant(self.profile), image: .constant(self.userImage))
+                                /*TertiaryProfileScrollSwiftUI(userID: self.rantContents.user_id, profileData: .constant(self.profile), image: .constant(self.userImage))
+                                .edgesIgnoringSafeArea(.top)
+                                .navigationBarHidden(true)*/
+                                ProfileScreenRepresentable(userID: rantContents.user_id, profileData: .constant(self.profile), image: .constant(self.userImage))
                                 .edgesIgnoringSafeArea(.top)
                                 .navigationBarHidden(true),
                             label: {
@@ -332,6 +339,15 @@ class ImageLoader: ObservableObject {
             }
         }
         task.resume()
+    }
+}
+
+struct Rant_Previews: PreviewProvider {
+    var rantContents = try! APIRequest().getRantFromID(id: 3580212)!.rant
+    
+    static var previews: some View {
+        Rant(rantContents: try! APIRequest().getRantFromID(id: 3580212)!.rant, rantInFeed: nil, userImage: nil, profile: try! APIRequest().getProfileFromID(449087, userContentType: .rants, skip: 0)!.profile)
+            .environment(\.viewController, ViewControllerKey.defaultValue)
     }
 }
 

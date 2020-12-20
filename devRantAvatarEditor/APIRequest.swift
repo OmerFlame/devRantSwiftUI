@@ -7,11 +7,22 @@
 
 import Foundation
 import SwiftUI
+import UIKit
 
 enum APIError: Error {
     case responseError
     case decodingError
     case otherError
+}
+
+enum RantType: Int {
+    case rant = 1
+    case collab = 2
+    case meme = 3
+    case question = 4
+    case devRant = 5
+    case random = 6
+    case undefined = 7
 }
 
 class APIRequest {
@@ -147,7 +158,7 @@ class APIRequest {
                     
                     if let data = data, let body = String(data: data, encoding: .utf8) {
                         receivedRawJSON = body
-                        print(body)
+                        //print(body)
                         
                         let dataFromString = receivedRawJSON.data(using: .utf8)
                         
@@ -350,5 +361,206 @@ class APIRequest {
         }
         
         //return nil
+    }
+    
+    func postRant(postType: RantType, content: String, tags: String?, image: UIImage?) -> Int {
+        if Double(UserDefaults.standard.integer(forKey: "DRTokenExpireTime")) - Double(Date().timeIntervalSince1970) <= 0 {
+            logIn(username: UserDefaults.standard.string(forKey: "DRUsername")!, password: UserDefaults.standard.string(forKey: "DRPassword")!)
+        }
+        
+        let url = URL(string: "https://devrant.com/api/devrant/rants?cb=\(String(Int(Date().timeIntervalSince1970)).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)")!
+        
+        var request = URLRequest(url: url)
+        
+        let boundary = UUID().uuidString
+        
+        request.addValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        
+        request.httpMethod = "POST"
+        
+        /*let body =
+            """
+--\(boundary)
+Content-Disposition: form-data; name="app"
+
+3
+--\(boundary)
+Content-Disposition: form-data; name="type"
+
+\(String(postType.rawValue))
+--\(boundary)
+Content-Disposition: form-data; name="plat"
+
+1
+--\(boundary)
+Content-Disposition: form-data; name="nari"
+
+-1
+--\(boundary)
+Content-Disposition: form-data; name="rant"
+
+\(content)
+--\(boundary)
+Content-Disposition: form-data; name="tags"
+
+\(tags != nil ? tags : "")
+--\(boundary)
+Content-Disposition: form-data; name="user_id"
+
+\(String(UserDefaults.standard.integer(forKey: "DRUserID")))
+--\(boundary)
+Content-Disposition: form-data; name="token_id"
+
+\(String(UserDefaults.standard.integer(forKey: "DRTokenID")))
+--\(boundary)
+Content-Disposition: form-data; name="token_key"
+
+\(UserDefaults.standard.string(forKey: "DRTokenKey")!)
+--\(boundary)--
+""".data(using: .utf8)*/
+        
+        let paramList: [String: String] = [
+            "app": "3",
+            "rant": content,
+            "tags": (tags != nil ? tags! : ""),
+            "token_id": String(UserDefaults.standard.integer(forKey: "DRTokenID")),
+            "token_key": UserDefaults.standard.string(forKey: "DRTokenKey")!,
+            "user_id": String(UserDefaults.standard.integer(forKey: "DRUserID")),
+            "type": String(postType.rawValue),
+            //"plat": "1",
+            //"nari": "-1",
+        ]
+        
+        request.httpBody = createBody(parameters: paramList, boundary: boundary, data: image?.jpegData(compressionQuality: 1.0))
+        
+        print("REQUEST BODY:")
+        //print(String(data: request.httpBody!, encoding: .utf8))
+        print(String(decoding: request.httpBody!, as: UTF8.self))
+        
+        let completionSemaphore = DispatchSemaphore(value: 0)
+        
+        var postID = 0
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            let body = String(data: data!, encoding: .utf8)!
+            
+            print("RESPONSE BODY: ")
+            print(body)
+            
+            //receivedRawJSON = body
+            
+            let decoder = JSONDecoder()
+            let result = try! decoder.decode(RantPOSTResponse.self, from: data!)
+            
+            postID = result.rantID!
+            
+            completionSemaphore.signal()
+        }
+        
+        task.resume()
+        
+        completionSemaphore.wait()
+        return postID
+    }
+    
+    func postComment(rantID: Int, content: String, image: UIImage?) -> Bool {
+        if Double(UserDefaults.standard.integer(forKey: "DRTokenExpireTime")) - Double(Date().timeIntervalSince1970) <= 0 {
+            logIn(username: UserDefaults.standard.string(forKey: "DRUsername")!, password: UserDefaults.standard.string(forKey: "DRPassword")!)
+        }
+        
+        let resourceURL = URL(string: "https://devrant.com/api/devrant/rants/\(String(rantID))/comments?cb=\(String(Int(Date().timeIntervalSince1970)))".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)!
+        
+        var request = URLRequest(url: resourceURL)
+        request.httpMethod = "POST"
+        
+        let boundary = UUID().uuidString
+        
+        request.addValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        
+        let paramList: [String: String] = [
+            "app": "3",
+            "comment": content,
+            "token_id": String(UserDefaults.standard.integer(forKey: "DRTokenID")),
+            "token_key": UserDefaults.standard.string(forKey: "DRTokenKey")!,
+            "user_id": String(UserDefaults.standard.integer(forKey: "DRUserID"))
+        ]
+        
+        let body = createBody(parameters: paramList, boundary: boundary, data: image?.pngData())
+        
+        request.httpBody = body
+        
+        //print(String(decoding: image!.pngData()!, as: UTF8.self))
+        //print(String(decoding: request.httpBody!, as: UTF8.self))
+        
+        //print(String(data: request.httpBody!, encoding: .utf8)!)
+        
+        let completionSemaphore = DispatchSemaphore(value: 0)
+        
+        var success = false
+        
+        /*let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            let body = String(data: data!, encoding: .utf8)!
+            
+            print(body)
+            
+            if (200..<300).contains((response as? HTTPURLResponse)!.statusCode) {
+                success = true
+            } else {
+                success = false
+            }
+            
+            completionSemaphore.signal()
+        }*/
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            let body = String(data: data!, encoding: .utf8)!
+            
+            print(body)
+            
+            if (200..<300).contains((response as? HTTPURLResponse)!.statusCode) {
+                success = true
+            } else {
+                success = false
+            }
+            
+            completionSemaphore.signal()
+        }.resume()
+        
+        completionSemaphore.wait()
+        return success
+    }
+    
+    private func createBody(parameters: [String: String],
+                    boundary: String,
+                    data: Data?) -> Data {
+        var body = Data()
+        
+        let boundaryPrefix = "--\(boundary)\r\n"
+        
+        for (key, value) in parameters {
+            body.appendString(boundaryPrefix)
+            body.appendString("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n")
+            body.appendString("\(value)\r\n")
+        }
+        
+        if data != nil {
+            body.appendString(boundaryPrefix)
+            body.appendString("Content-Disposition: form-data; name=\"image\"; filename=\"image.png\"\r\n")
+            body.appendString("Content-Type: image/png\r\n\r\n")
+            body.append(data!)
+            body.appendString("\r\n")
+        }
+        
+        body.appendString("--".appending(boundary.appending("--")))
+        
+        return body
+    }
+
+}
+
+extension Data {
+    mutating func appendString(_ string: String) {
+        let data = string.data(using: .utf8, allowLossyConversion: false)
+        append(data!)
     }
 }

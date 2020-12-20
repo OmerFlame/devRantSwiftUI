@@ -11,7 +11,8 @@ import SwiftUI
 // This is useful for sharing compatible SwiftUI rect data with UIKit UIViews or UIViewControllers without interrupting normal SwiftUI operations.
 
 struct RectGetter: View {
-    @Binding var rect: CGRect
+    var rect: UnsafeMutablePointer<CGRect>
+    @State var localRect: CGRect? = nil
     @State public var proxy: GeometryProxy? = nil
     
     var body: some View {
@@ -22,8 +23,10 @@ struct RectGetter: View {
     
     func createView(proxy: GeometryProxy) -> some View {
         DispatchQueue.main.async {
-            self.rect = proxy.frame(in: .global)
+            //self.rect = Optional(proxy.frame(in: .global))
+            self.rect.pointee = proxy.frame(in: .global)
             self.proxy = Optional(proxy)
+            self.localRect = Optional(proxy.frame(in: .global))
         }
         
         return Rectangle().fill(Color.clear)
